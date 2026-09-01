@@ -1,2 +1,0 @@
-# valorlog-dashboard
-Compras
