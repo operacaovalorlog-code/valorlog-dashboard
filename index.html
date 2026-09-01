@@ -679,7 +679,7 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
 
 <script>
 // ── Variáveis globais — definidas primeiro via var (hoisting) ──
-var DATA_VERSION = '23';
+var DATA_VERSION = '30';
 var DATA_JSON_URL = 'https://operacaovalorlog-code.github.io/valorlog-dashboard/data.json';
 // Token via botão Admin
 // Configuração inicial do admin
@@ -736,27 +736,27 @@ Chart.defaults.plugins.legend.labels.boxHeight=12;
 // ═══════════════════════════════════════════════════
 //  HELPERS
 // ═══════════════════════════════════════════════════
-var fmt=n=>{
+var fmt=function(n){
   if(n==null||isNaN(n))return'R$ 0,00';
   if(n>=1e6)return'R$ '+(n/1e6).toFixed(2).replace('.',',')+'M';
   if(n>=1e3)return'R$ '+(n/1e3).toFixed(1).replace('.',',')+'k';
   return'R$ '+n.toFixed(2).replace('.',',');
 };
-var fmtF=n=>{
+var fmtF=function(n){
   if(n==null||isNaN(n))return'R$ 0,00';
   return'R$ '+(+n).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
 };
-var toast=(m,t='')=>{
+var toast=function(m,t){if(t===undefined)t='';
   const el=document.getElementById('toast');
   el.textContent=m;el.className='toast '+(t||'');
   void el.offsetWidth;el.classList.add('show');
   setTimeout(()=>el.classList.remove('show'),3000);
 };
-var loading=on=>{
+var loading=function(on){
   const b=document.getElementById('lb');b.style.width=on?'72%':'100%';
   if(!on)setTimeout(()=>b.style.width='0',400);
 };
-var destroy=id=>{if(charts[id]){charts[id].destroy();delete charts[id];}};
+var destroy=function(id){if(charts[id]){charts[id].destroy();delete charts[id];}};
 
 // ═══════════════════════════════════════════════════
 //  POPULATE FILTER DROPDOWNS
@@ -780,7 +780,7 @@ function populateFilters(){
   // Natureza
   const fn=document.getElementById('fNatureza');
   fn.innerHTML='<option value="">Todas</option>';
-  const allN=[...new Set([...Object.keys(S.naturezaTotals),...(S.allNaturezas||[])])].sort();
+  const allN=Object.keys(S.naturezaTotals||{}).concat(S.allNaturezas||[]).filter(function(v,i,a){return a.indexOf(v)===i;}).sort();
   allN.forEach(n=>{const o=document.createElement('option');o.value=n;o.textContent=n;fn.appendChild(o);});
 
   // Fornecedor
@@ -803,13 +803,13 @@ function getSlice(){
   const nat       = document.getElementById('fNatureza').value;
   const forn      = document.getElementById('fFornecedor').value;
   // Multi-select status
-  const statusChecked=[...document.querySelectorAll('#statusCheckboxes input:checked')].map(el=>el.value);
+  const statusChecked=Array.prototype.slice.call(document.querySelectorAll('#statusCheckboxes input:checked')).map(el=>el.value);
   const status=statusChecked.length?statusChecked:[];
   const mesIdx    = mes===''?-1:parseInt(mes);
 
-  let months=[...S.months];
-  let totals=[...S.totals];
-  let orders=[...S.orders];
+  let months=S.months.slice();
+  let totals=S.totals.slice();
+  let orders=S.orders.slice();
 
   // Priority: status > fornecedor > natureza > familia > grupo > total
   if(status.length>0 && S.statusMes){
@@ -844,7 +844,8 @@ function applyFilters(){
   // Guard: garantir que S tem todos os campos necessários
   if(!S.totals||!S.months||!S.familias){ console.warn('S incompleto'); return; }
   const sl=getSlice();
-  const {months:fMonths,totals:fTotals,orders:fOrders,mesIdx,mes,grupo,familia,nat,forn,status}=sl;
+  var fMonths=sl.months,fTotals=sl.totals,fOrders=sl.orders;
+  var mesIdx=sl.mesIdx,mes=sl.mes,grupo=sl.grupo,familia=sl.familia,nat=sl.nat,forn=sl.forn,status=sl.status;
   const grand=S.totals.reduce((a,b)=>a+b,0);
   const hasFilter=mes||grupo||familia||nat||forn||status.length>0;
 
@@ -855,7 +856,7 @@ function applyFilters(){
     d.innerHTML=`${label} <span class="rm" onclick="${clearFn}">✕</span>`;
     tagsEl.appendChild(d);
   };
-  const mn2=[...S.months]; // dinâmico
+  const mn2=S.months.slice(); // dinâmico
   if(mes)   addTag('Mês: '+mn2[mes],"document.getElementById('fMes').value='';applyFilters()");
   if(grupo) addTag('Grupo: '+grupo.substring(0,18),"document.getElementById('fGrupo').value='';applyFilters()");
   if(familia)addTag('Família: '+familia.substring(0,18),"document.getElementById('fFamilia').value='';applyFilters()");
@@ -884,7 +885,7 @@ function applyFilters(){
 
   // ── Line chart ──
   destroy('line');
-  const safeTotals=fTotals.map(v=>isNaN(v)||v==null?0:v);
+  const safeTotals=(fTotals||[]).map(v=>isNaN(v)||v==null?0:v);
   const nonZero=safeTotals.map((v,i)=>v>0?i:-1).filter(i=>i>=0);
   const lineL=nonZero.length?nonZero.map(i=>fMonths[i]):fMonths;
   const lineD=nonZero.length?nonZero.map(i=>safeTotals[i]):safeTotals;
@@ -932,13 +933,13 @@ function applyFilters(){
   // ── Família stacked bar ──
   destroy('fambar');
   const famEntries2=Object.entries(S.familias);
-  const famLabels2=mesIdx>=0?[S.months[mesIdx]]:[...S.months];
+  const famLabels2=mesIdx>=0?[S.months[mesIdx]]:S.months.slice();
   const nMonths=S.months.length;
   const famDs=famEntries2.map(([k,v],i)=>{
     const isHL=familia&&k===familia;
     // Garantir que v tem o mesmo tamanho que months (padding com 0 se necessário)
     const vPad=Array.isArray(v)?(v.length>=nMonths?v.slice(0,nMonths):[...v,...Array(nMonths-v.length).fill(0)]):Array(nMonths).fill(0);
-    const data=mesIdx>=0?[vPad[mesIdx]||0]:[...vPad];
+    const data=mesIdx>=0?[vPad[mesIdx]||0]:(vPad||[]).slice();
     return{label:k.length>22?k.substring(0,22)+'…':k,data,
       backgroundColor:isHL?'#f4a261':C[i%C.length]+(familia&&!isHL?'55':''),
       borderRadius:2,borderWidth:isHL?2:0,borderColor:'#ffffff'};
@@ -978,18 +979,19 @@ function applyFilters(){
 
   // ── Status polar — dinâmico: lê labels direto de statusTotals ──
   destroy('status');
-  const stFullLabels=Object.keys(S.statusTotals||S.status&&{[S.status.labels[0]]:1}||{});
-  const stFullVals=stFullLabels.map(l=>{
+  var _stf={};if(S.status&&S.status.labels&&S.status.labels[0])_stf[S.status.labels[0]]=1;
+  var stFullLabels=Object.keys(S.statusTotals||_stf);
+  const stFullVals=(stFullLabels||[]).map(l=>{
     if(!S.statusMes||!S.statusMes[l])return S.statusTotals[l]||0;
     return mesIdx>=0?S.statusMes[l][mesIdx]||0:S.statusTotals[l]||0;
   });
   const stColorMap=getStatusColorMap();
-  const stColors=stFullLabels.map(l=>stColorMap[l]||'rgba(150,150,150,.8)');
-  const stBorderW=stFullLabels.map(l=>status.includes(l)?3:0);
-  const stBorderC=stFullLabels.map(l=>status.includes(l)?'#ffffff':'transparent');
+  const stColors=(stFullLabels||[]).map(l=>stColorMap[l]||'rgba(150,150,150,.8)');
+  const stBorderW=(stFullLabels||[]).map(l=>status.includes(l)?3:0);
+  const stBorderC=(stFullLabels||[]).map(l=>status.includes(l)?'#ffffff':'transparent');
   charts.status=new Chart(document.getElementById('cStatus').getContext('2d'),{
     type:'polarArea',
-    data:{labels:stFullLabels.map(l=>l.length>18?l.substring(0,18)+'…':l),
+    data:{labels:(stFullLabels||[]).map(l=>l.length>18?l.substring(0,18)+'…':l),
           datasets:[{data:stFullVals,backgroundColor:stColors,borderWidth:stBorderW,borderColor:stBorderC}]},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{
@@ -1047,12 +1049,12 @@ function applyFilters(){
   charts.count=new Chart(document.getElementById('cCount').getContext('2d'),{
     type:'bar',
     data:{labels:fMonths,datasets:[{data:fOrders,
-      backgroundColor:fMonths.map((_,i)=>i===peakI3?'#f4a261':'rgba(0,180,216,.65)'),
+      backgroundColor:(fMonths||[]).map((_,i)=>i===peakI3?'#f4a261':'rgba(0,180,216,.65)'),
       borderRadius:5}]},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.raw} pedidos`}}},
       scales:{x:{grid:{display:false},ticks:{font:{size:10}}},
-              y:{grid:{color:'#1e1e1e'},ticks:{stepSize:Math.max(1,Math.round((Math.max(...fOrders.map(v=>isNaN(v)?0:v))||1)/4)),font:{size:10}},border:{display:false}}}}
+              y:{grid:{color:'#1e1e1e'},ticks:{stepSize:Math.max(1,Math.round((Math.max(...(fOrders||[]).map(v=>isNaN(v)?0:v))||1)/4)),font:{size:10}},border:{display:false}}}}
   });
 
   // ── Detail panel ──
@@ -1098,8 +1100,8 @@ function resetFilters(){
 function buildLine(){
   destroy('line');
   // Todos os meses — sem filtro
-  const lineMonths=[...S.months];
-  const lineTotals=[...S.totals];
+  const lineMonths=S.months.slice();
+  const lineTotals=S.totals.slice();
   charts.line=new Chart(document.getElementById('cLine').getContext('2d'),{
     type:'line',
     data:{labels:lineMonths,datasets:[{
@@ -1565,7 +1567,7 @@ function exportExcel(){
 function exportPDF(){
   document.getElementById('expMsg').classList.add('open');
   try{
-    const{jsPDF}=window.jspdf;
+    if(!window.jspdf||!window.jspdf.jsPDF){loading(false);return;}var jsPDF=window.jspdf.jsPDF;
     html2canvas(document.getElementById('dashMain'),{
       scale:1.3,useCORS:true,backgroundColor:'#0d1b2a',logging:false,windowWidth:1280
     }).then(function(canvas){
@@ -1648,34 +1650,51 @@ function saveToken(){
 }
 
 function publishToGitHub(dataJson){
-  var token = localStorage.getItem('vl_admin_token');
+  var token=localStorage.getItem('vl_admin_token');
   if(!token){
-    document.getElementById('publishBanner').style.display='flex';
+    var pb=document.getElementById('publishBanner');
+    if(pb)pb.style.display='flex';
+    toast('Configure token em Admin','err');
     return Promise.resolve(false);
   }
-  toast('📤 Publicando...');
-  var apiUrl = 'https://api.github.com/repos/operacaovalorlog-code/valorlog-dashboard/contents/data.json';
-  // Buscar SHA atual
-  return fetch(apiUrl, {
-    headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json'}
-  }).then(function(r){ return r.ok?r.json():{sha:''}; })
+  toast('Publicando dados...');
+  var apiUrl='https://api.github.com/repos/operacaovalorlog-code/valorlog-dashboard/contents/index.html';
+  return fetch(apiUrl,{headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json'}})
+  .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
   .then(function(f){
-    var body = {
-      message: 'Dados '+new Date().toLocaleDateString('pt-BR')+' '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),
-      content: btoa(unescape(encodeURIComponent(JSON.stringify(dataJson))))
-    };
-    if(f.sha) body.sha = f.sha;
+    var bin=atob(f.content.replace(/
+/g,''));
+    var arr=new Uint8Array(bin.length);
+    for(var i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);
+    var curHtml=new TextDecoder('utf-8').decode(arr);
+    var newRaw='var RAW = '+JSON.stringify({
+      months:dataJson.months,totals:dataJson.totals,orders:dataJson.orders,
+      totalOrders:dataJson.totalOrders,records:dataJson.records,
+      familias:dataJson.familias,familiaTotals:dataJson.familiaTotals,
+      naturezas:dataJson.naturezas,naturezaTotals:dataJson.naturezaTotals,
+      allNaturezas:dataJson.allNaturezas||[],grupos:dataJson.grupos,
+      grupoMes:dataJson.grupoMes,grupoTotals:dataJson.grupoTotals,
+      fornecedorMes:dataJson.fornecedorMes,fornecedorTotals:dataJson.fornecedorTotals,
+      catPie:dataJson.catPie,suppliers:dataJson.suppliers,
+      status:dataJson.status,statusMes:dataJson.statusMes,statusTotals:dataJson.statusTotals,
+      sourceLabel:dataJson.sourceLabel||'BIMER',
+      savedAt:new Date().toISOString(),version:DATA_VERSION
+    })+';';
+    var updated=curHtml.replace(/var RAW = \{[\s\S]*?\};/,newRaw);
+    if(updated===curHtml)throw new Error('RAW block não encontrado');
+    var enc=new TextEncoder();
+    var eb=enc.encode(updated);
+    var s='';for(var j=0;j<eb.length;j++)s+=String.fromCharCode(eb[j]);
     return fetch(apiUrl,{
       method:'PUT',
       headers:{'Authorization':'token '+token,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'},
-      body:JSON.stringify(body)
+      body:JSON.stringify({message:'Dados '+new Date().toLocaleDateString('pt-BR'),content:btoa(s),sha:f.sha})
     });
   }).then(function(r){
-    if(r.ok){ toast('✅ Dados publicados! Todos verão os dados atualizados.'); return true; }
-    return r.json().then(function(e){ toast('Erro: '+(e.message||r.status),'err'); return false; });
-  }).catch(function(e){ toast('Erro: '+e.message,'err'); return false; });
+    if(r.ok){toast('Dados publicados! Todos veem em ~2 min.');return true;}
+    return r.json().then(function(e){throw new Error(e.message||r.status);});
+  }).catch(function(e){console.error('Publish:',e.message);toast('Erro: '+e.message,'err');return false;});
 }
-
 
 function clearSaved(){
   if(!confirm('Remover dados importados e voltar para os dados padrão?')) return;
@@ -1686,7 +1705,7 @@ function clearSaved(){
   } catch(e){}
   // Restaurar RAW padrão
   Object.assign(S, JSON.parse(JSON.stringify(RAW)));
-  ABERTOS_DATA = [...ABERTOS_ALL];
+  ABERTOS_DATA=(ABERTOS_ALL||[]).slice();
   document.getElementById('dataSource').textContent = 'Dados padrão';
   document.getElementById('hdrPeriod').textContent = 'Gasto Total · ' + S.months[0] + ' – ' + S.months[S.months.length-1];
   resetFilters();
@@ -1709,11 +1728,8 @@ function copyField(id){const e=document.getElementById(id);e.select();document.e
 // ═══════════════════════════════════════════════════
 populateAbertosGrupo();
 populateFilters();
-loadFromFirebase().then(function(ok){
-  if(ok){ populateAbertosGrupo(); populateFilters(); }
-  renderAll();
-  renderAbertos();
-});
+renderAll();
+renderAbertos();
 // ═══════════════════════════════════════════════════
 //  FILTERED TABLES
 // ═══════════════════════════════════════════════════
@@ -1849,7 +1865,7 @@ function populateStatusFilter(){
   const colorMap=getStatusColorMap();
   const statuses=Object.keys(S.statusTotals||{});
   // Manter checked state dos itens existentes
-  const wasChecked=new Set([...document.querySelectorAll('#statusCheckboxes input:checked')].map(el=>el.value));
+  const wasChecked=new Set(Array.prototype.slice.call(document.querySelectorAll('#statusCheckboxes input:checked')).map(el=>el.value));
 
   statuses.forEach((s,i)=>{
     const dotColor=getStatusDotColor(s);
@@ -1875,7 +1891,7 @@ document.addEventListener('click',function(e){
   }
 });
 function updateStatusBtn(){
-  const checked=[...document.querySelectorAll('#statusCheckboxes input:checked')].map(el=>el.value);
+  const checked=Array.prototype.slice.call(document.querySelectorAll('#statusCheckboxes input:checked')).map(el=>el.value);
   const btn=document.getElementById('statusBtnLabel');
   if(!btn)return;
   if(!checked.length)btn.textContent='Todos';
@@ -1915,16 +1931,19 @@ var ABERTOS_ALL=[
 ];
 
 // Abertos: começa com dados padrão, substituído ao importar
-ABERTOS_DATA=[...ABERTOS_ALL]; // inicializar com dados padrão
+ABERTOS_DATA=(ABERTOS_ALL||[]).slice(); // inicializar com dados padrão
 var abSortCol='dias',abSortDir='desc';
 
 function diasClass(d){return d>120?'dias-critico':d>60?'dias-alto':d>30?'dias-medio':'dias-normal';}
 
 function populateAbertosGrupo(){
-  const sel=document.getElementById('abGrupo');if(!sel)return;
-  const grupos=[...new Set(ABERTOS_ALL.map(r=>r.grupo))].sort();
+  var sel=document.getElementById('abGrupo');
+  if(!sel||!ABERTOS_ALL||!ABERTOS_ALL.length)return;
+  var _set={};
+  ABERTOS_ALL.forEach(function(r){if(r&&r.grupo)_set[r.grupo]=1;});
+  var grupos=Object.keys(_set).sort();
   sel.innerHTML='<option value="">Todos</option>';
-  grupos.forEach(g=>{const o=document.createElement('option');o.value=g;o.textContent=g;sel.appendChild(o);});
+  grupos.forEach(function(g){var o=document.createElement('option');o.value=g;o.textContent=g;sel.appendChild(o);});
 }
 
 function sortAbertos(col){
@@ -1943,9 +1962,9 @@ function renderAbertos(){
   const fGrupo=document.getElementById('fGrupo').value;
   const fFamilia=document.getElementById('fFamilia').value;
   const fForn=document.getElementById('fFornecedor').value;
-  const fStatus=[...document.querySelectorAll('#statusCheckboxes input:checked')].map(el=>el.value);
+  const fStatus=Array.prototype.slice.call(document.querySelectorAll('#statusCheckboxes input:checked')).map(el=>el.value);
 
-  let data=[...ABERTOS_DATA];
+  var data=(ABERTOS_DATA||[]).slice();
 
   // Se filtro de status for diferente de Aberto, esconde o painel
   if(fStatus.length>0&&!fStatus.includes('Aberto')){
@@ -2037,17 +2056,7 @@ function saveToFirebase(){
 }
 
 
-function loadFromFirebase(){
-  return fetch(DATA_JSON_URL + '?t=' + Date.now())
-  .then(function(r){ return r.ok ? r.json() : null; })
-  .then(function(d){
-    if(!d||!d.months||!d.familias) return false;
-    for(var k in d){ if(d.hasOwnProperty(k)) S[k]=d[k]; }
-    ABERTOS_DATA = d.abertos||[];
-    console.log('✅ Dados carregados: R$'+S.totals.reduce(function(a,b){return a+b;},0).toFixed(2));
-    return true;
-  }).catch(function(e){ console.log('Fetch erro:', e.message); return false; });
-}
+function loadFromFirebase(){return Promise.resolve(false);}
 
 function initFirebase(){ /* não usado */ }
 
