@@ -1508,10 +1508,10 @@ function parseImport(rows,fname){
   // Publicar no GitHub para todos os usuários
   var _token = localStorage.getItem('vl_admin_token');
   var payload = JSON.parse(JSON.stringify(S));
-  // totalOrders = pedidos únicos (calculado via pedFirstMonth no parseImport)
   payload.totalOrders = S.totalOrders || payload.orders.reduce(function(a,b){return a+b;},0);
   payload.savedAt = new Date().toISOString();
   payload.version = DATA_VERSION;
+  payload.abertos = ABERTOS_DATA || [];
   payload.abertos = ABERTOS_DATA;
   if(_token){
     toast('📤 Publicando dados para todos os usuários...');
@@ -1688,6 +1688,7 @@ function publishToGitHub(dataJson){
       catPie:dataJson.catPie, suppliers:dataJson.suppliers,
       status:dataJson.status, statusMes:dataJson.statusMes, statusTotals:dataJson.statusTotals,
       sourceLabel:dataJson.sourceLabel||'BIMER',
+      abertos:dataJson.abertos||[],
       savedAt:new Date().toISOString(), version:DATA_VERSION
     };
 
