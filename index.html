@@ -863,7 +863,7 @@ function applyFilters(){
   const tagsEl=document.getElementById('activeTags');tagsEl.innerHTML='';
   const addTag=(label,clearFn)=>{
     const d=document.createElement('div');d.className='f-tag';
-    d.innerHTML=`${label} <span class="rm" onclick="${clearFn}">✕</span>`;
+    d.innerHTML=''+(label)+' <span class="rm" onclick="'+(clearFn)+'">✕</span>';
     tagsEl.appendChild(d);
   };
   const mn2=S.months.slice(); // dinâmico
@@ -937,7 +937,7 @@ function applyFilters(){
     data:{labels:donutL,datasets:[{data:donutV,backgroundColor:C,borderWidth:0,hoverOffset:8}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
       plugins:{legend:{position:'right',labels:{boxWidth:10,padding:9,font:{size:10}}},
-               tooltip:{callbacks:{label:c=>{const t=donutV.reduce((a,b)=>a+(isNaN(b)?0:b),0)||1;return` ${fmt(c.raw)} (${(c.raw/t*100).toFixed(1)}%)`;}}}}}
+               tooltip:{callbacks:{label:c=>{const t=donutV.reduce((a,b)=>a+(isNaN(b)?0:b),0)||1;return' '+(fmt(c.raw))+' ('+((c.raw/t*100).toFixed(1))+'%)';}}}}}
   });
 
   // ── Família stacked bar ──
@@ -948,7 +948,7 @@ function applyFilters(){
   const famDs=famEntries2.map(([k,v],i)=>{
     const isHL=familia&&k===familia;
     // Garantir que v tem o mesmo tamanho que months (padding com 0 se necessário)
-    const vPad=Array.isArray(v)?(v.length>=nMonths?v.slice(0,nMonths):[...v,...Array(nMonths-v.length).fill(0)]):Array(nMonths).fill(0);
+    const vPad=Array.isArray(v)?(v.length>=nMonths?v.slice(0,nMonths):(v||[]).concat(Array(nMonths-v.length).fill(0)]):Array(nMonths).fill(0);
     const data=mesIdx>=0?[vPad[mesIdx]||0]:(vPad||[]).slice();
     return{label:k.length>22?k.substring(0,22)+'…':k,data,
       backgroundColor:isHL?'#f4a261':C[i%C.length]+(familia&&!isHL?'55':''),
@@ -958,7 +958,7 @@ function applyFilters(){
     type:'bar',data:{labels:famLabels2,datasets:famDs},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{position:'bottom',labels:{boxWidth:8,padding:8,font:{size:9}}},
-               tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${fmt(c.raw)}`}}},
+               tooltip:{callbacks:{label:c=>' '+(c.dataset.label)+': '+(fmt(c.raw))+''}}},
       scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:10}}},
               y:{stacked:true,grid:{color:'#1e1e1e'},ticks:{callback:v=>fmt(v),font:{size:10}},border:{display:false}}}}
   });
@@ -1062,7 +1062,7 @@ function applyFilters(){
       backgroundColor:(fMonths||[]).map((_,i)=>i===peakI3?'#f4a261':'rgba(0,180,216,.65)'),
       borderRadius:5}]},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.raw} pedidos`}}},
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+(c.raw)+' pedidos'}}},
       scales:{x:{grid:{display:false},ticks:{font:{size:10}}},
               y:{grid:{color:'#1e1e1e'},ticks:{stepSize:Math.max(1,Math.round((Math.max(...(fOrders||[]).map(v=>isNaN(v)?0:v))||1)/4)),font:{size:10}},border:{display:false}}}}
   });
@@ -1142,16 +1142,13 @@ function buildMonthlyTable(months,totals,orders,grand){
     const prev=i>0?totals[i-1]:null;
     const vp=prev?((totals[i]-prev)/prev*100):null;
     // vp>=0 = aumento (vermelho/ruim), vp<0 = redução (verde/bom)
-    const varEl=vp!=null?`<span class="kpi-badge ${vp>=0?'bg-up':'bg-dn'}" title="${vp>=0?'Aumento':'Redução'} de gastos">${vp>=0?'▲':'▼'} ${Math.abs(vp).toFixed(1)}%</span>`:'—';
+    const varEl=vp!=null?'<span class="kpi-badge '+(vp>=0?'bg-up':'bg-dn')+'" title="'+(vp>=0?'Aumento':'Redução')+' de gastos">'+(vp>=0?'▲':'▼')+' '+(Math.abs(vp).toFixed(1))+'%</span>':'—';
     const pct=(totals[i]/g*100).toFixed(1);
     const bw=(totals[i]/Math.max(...totals)*100).toFixed(0);
     const ord=Array.isArray(orders)?orders[i]:Math.round(totals[i]/10691);
     const tr=document.createElement('tr');
     if(i===peakI)tr.style.background='rgba(0,180,216,.07)';
-    tr.innerHTML=`<td class="rank">${i+1}</td><td><strong>${m}</strong>${i===peakI?' 🏆':''}</td>
-      <td>${fmtF(totals[i])}</td><td>${ord}</td><td>${fmtF(totals[i]/(ord||1))}</td>
-      <td>${varEl}</td><td><span style="color:var(--muted);font-size:.73rem">${pct}%</span>
-      <div class="bm" style="width:${bw}%"></div></td>`;
+    tr.innerHTML='<td class="rank">'+(i+1)+'</td><td><strong>'+(m)+'</strong>'+(i===peakI?' 🏆':'')+'</td>      <td>'+(fmtF(totals[i]))+'</td><td>'+(ord)+'</td><td>'+(fmtF(totals[i]/(ord||1)))+'</td>      <td>'+(varEl)+'</td><td><span style="color:var(--muted);font-size:.73rem">'+(pct)+'%</span>      <div class="bm" style="width:'+(bw)+'%"></div></td>';
     b.appendChild(tr);
   });
 }
@@ -1165,9 +1162,7 @@ function buildFamiliaTable(){
     const pct=(v/grand*100).toFixed(1);
     const bw=(v/mx*100).toFixed(0);
     const tr=document.createElement('tr');
-    tr.innerHTML=`<td class="rank">${i+1}</td><td><strong>${n}</strong></td>
-      <td>${fmtF(v)}</td><td>${pct}%</td>
-      <td><div class="bm" style="width:${bw}%;background:linear-gradient(90deg,#2ec4b6,#4cc9f0)"></div></td>`;
+    tr.innerHTML='<td class="rank">'+(i+1)+'</td><td><strong>'+(n)+'</strong></td>      <td>'+(fmtF(v))+'</td><td>'+(pct)+'%</td>      <td><div class="bm" style="width:'+(bw)+'%;background:linear-gradient(90deg,#2ec4b6,#4cc9f0)"></div></td>';
     tr.style.cursor='pointer';
     tr.onclick=()=>{document.getElementById('fFamilia').value=n;applyFilters();};
     tr.title='Clique para filtrar por esta família';
@@ -1184,9 +1179,7 @@ function buildNaturezaTable(){
     const pct=(v/grand*100).toFixed(1);
     const bw=(v/mx*100).toFixed(0);
     const tr=document.createElement('tr');
-    tr.innerHTML=`<td class="rank">${i+1}</td><td>${n}</td>
-      <td>${fmtF(v)}</td><td>${pct}%</td>
-      <td><div class="bm" style="width:${bw}%;background:linear-gradient(90deg,#4cc9f0,#2ec4b6)"></div></td>`;
+    tr.innerHTML='<td class="rank">'+(i+1)+'</td><td>'+(n)+'</td>      <td>'+(fmtF(v))+'</td><td>'+(pct)+'%</td>      <td><div class="bm" style="width:'+(bw)+'%;background:linear-gradient(90deg,#4cc9f0,#2ec4b6)"></div></td>';
     tr.style.cursor='pointer';
     tr.onclick=()=>{document.getElementById('fNatureza').value=n;applyFilters();};
     tr.title='Clique para filtrar por esta natureza';
@@ -1447,7 +1440,7 @@ function parseImport(rows,fname){
     grupoTotals:Object.fromEntries(Object.entries(grupMap).sort((a,b)=>b[1]-a[1])),
     fornecedorMes,
     fornecedorTotals,
-    catPie:{labels:[...top6G.map(e=>e[0].substring(0,20)),'Outros'],values:[...top6G.map(e=>e[1]),other]},
+    catPie:{labels:top6G.map(function(e){return e[0].substring(0,20);}).concat(['Outros']),values:top6G.map(function(e){return e[1];}).concat([other])},
     suppliers:{names:suppS.map(e=>e[0]),values:suppS.map(e=>e[1])},
     status:{labels:statS.map(e=>e[0]),values:statS.map(e=>e[1])},
     statusMes:statusMesImport,
@@ -1456,9 +1449,9 @@ function parseImport(rows,fname){
   };
 
   // Insights
-  document.getElementById('ins1').innerHTML=`Maior mês: <strong>${months[peakI]} (${fmt(Math.max(...totals))})</strong> — <strong>${(Math.max(...totals)/grand*100).toFixed(1)}%</strong> do total importado.`;
-  document.getElementById('ins2').innerHTML=`Pedidos em aberto: <strong>${fmtF(aberto)}</strong> — <strong>${(aberto/grand*100).toFixed(1)}%</strong> do total.`;
-  document.getElementById('ins3').innerHTML=`Maior fornecedor: <strong>${topS?topS[0].substring(0,30):'—'}</strong> (${fmt(topS?topS[1]:0)}). Top 3 concentram <strong>${top3pct.toFixed(1)}%</strong>.`;
+  document.getElementById('ins1').innerHTML='Maior mês: <strong>'+(months[peakI])+' ('+(fmt(Math.max(...totals)))+')</strong> — <strong>'+((Math.max(...totals)/grand*100).toFixed(1))+'%</strong> do total importado.';
+  document.getElementById('ins2').innerHTML='Pedidos em aberto: <strong>'+(fmtF(aberto))+'</strong> — <strong>'+((aberto/grand*100).toFixed(1))+'%</strong> do total.';
+  document.getElementById('ins3').innerHTML='Maior fornecedor: <strong>'+(topS?topS[0].substring(0,30):'—')+'</strong> ('+(fmt(topS?topS[1]:0))+'). Top 3 concentram <strong>'+(top3pct.toFixed(1))+'%</strong>.';
 
   // ── Build Pedidos em Aberto from imported data ──
   const today = new Date(); today.setHours(0,0,0,0); // zerar hora para cálculo correto de dias
@@ -1602,12 +1595,12 @@ function exportCSV(){
   const grand=S.totals.reduce((a,b)=>a+b,0);
   let csv='Mes;Gasto_Total;Qtd_Pedidos;Ticket_Medio;Participacao_Pct\n';
   S.months.slice(0,S.totals.length).forEach((m,i)=>
-    csv+=`${m};${S.totals[i].toFixed(2)};${S.orders[i]};${(S.totals[i]/(S.orders[i]||1)).toFixed(2)};${(S.totals[i]/grand*100).toFixed(2)}\n`
+    csv+=''+(m)+';'+(S.totals[i].toFixed(2))+';'+(S.orders[i])+';'+((S.totals[i]/(S.orders[i]||1)).toFixed(2))+';'+((S.totals[i]/grand*100).toFixed(2))+'\n'
   );
   csv+='\nFamilia;Valor;Pct\n';
-  Object.entries(S.familiaTotals).sort((a,b)=>b[1]-a[1]).forEach(([n,v])=>csv+=`${n};${v.toFixed(2)};${(v/grand*100).toFixed(2)}\n`);
+  Object.entries(S.familiaTotals).sort((a,b)=>b[1]-a[1]).forEach(([n,v])=>csv+=''+(n)+';'+(v.toFixed(2))+';'+((v/grand*100).toFixed(2))+'\n');
   csv+='\nNatureza;Valor;Pct\n';
-  Object.entries(S.naturezaTotals).sort((a,b)=>b[1]-a[1]).forEach(([n,v])=>csv+=`${n};${v.toFixed(2)};${(v/grand*100).toFixed(2)}\n`);
+  Object.entries(S.naturezaTotals).sort((a,b)=>b[1]-a[1]).forEach(([n,v])=>csv+=''+(n)+';'+(v.toFixed(2))+';'+((v/grand*100).toFixed(2))+'\n');
   const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
   safeDownload(blob,'Dashboard_ValorLog.csv');
   toast('✅ CSV exportado!');
@@ -1797,9 +1790,7 @@ function buildFamiliaTableFiltered(mesIdx,grupo,forn){
     const pct=(v/grand*100).toFixed(1);
     const bw=(v/mx*100).toFixed(0);
     const tr=document.createElement('tr');
-    tr.innerHTML=`<td class="rank">${i+1}</td><td><strong>${n}</strong></td>
-      <td>${fmtF(v)}</td><td>${pct}%</td>
-      <td><div class="bm" style="width:${bw}%;background:linear-gradient(90deg,#2ec4b6,#4cc9f0)"></div></td>`;
+    tr.innerHTML='<td class="rank">'+(i+1)+'</td><td><strong>'+(n)+'</strong></td>      <td>'+(fmtF(v))+'</td><td>'+(pct)+'%</td>      <td><div class="bm" style="width:'+(bw)+'%;background:linear-gradient(90deg,#2ec4b6,#4cc9f0)"></div></td>';
     tr.style.cursor='pointer';
     tr.onclick=()=>{document.getElementById('fFamilia').value=n;applyFilters();};
     b.appendChild(tr);
@@ -1820,9 +1811,7 @@ function buildNaturezaTableFiltered(mesIdx,grupo,forn){
     const pct=(v/grand*100).toFixed(1);
     const bw=(v/mx*100).toFixed(0);
     const tr=document.createElement('tr');
-    tr.innerHTML=`<td class="rank">${i+1}</td><td>${n}</td>
-      <td>${fmtF(v)}</td><td>${pct}%</td>
-      <td><div class="bm" style="width:${bw}%;background:linear-gradient(90deg,#4cc9f0,#2ec4b6)"></div></td>`;
+    tr.innerHTML='<td class="rank">'+(i+1)+'</td><td>'+(n)+'</td>      <td>'+(fmtF(v))+'</td><td>'+(pct)+'%</td>      <td><div class="bm" style="width:'+(bw)+'%;background:linear-gradient(90deg,#4cc9f0,#2ec4b6)"></div></td>';
     tr.style.cursor='pointer';
     tr.onclick=()=>{document.getElementById('fNatureza').value=n;applyFilters();};
     b.appendChild(tr);
@@ -1844,16 +1833,14 @@ function buildComparativo(mesIdx){
   const ordB=S.orders[mB],ordA=mA!=null?S.orders[mA]:null;
   const grand=S.totals.reduce((a,b)=>a+b,0);
 
-  document.getElementById('compSubtitle').textContent=mA!=null?`${nameA} vs ${nameB}`:`Mês: ${nameB}`;
+  document.getElementById('compSubtitle').textContent=mA!=null?''+(nameA)+' vs '+(nameB)+'':'Mês: '+(nameB)+'';
 
   const mkCard=(title,vA,vB,fmt2,unit='')=>{
     const pct=mA!=null&&vA&&!isNaN(vA)&&!isNaN(vB)?((vB-vA)/vA*100):null;
     const up=pct!=null&&pct>=0; // up = aumento = vermelho (bg-up agora é vermelho)
-    const arrow=pct!=null?`<span class="kpi-badge ${up?'bg-up':'bg-dn'}" style="font-size:.72rem;margin-left:5px;" title="${up?'Aumento':'Redução'} de gastos">${up?'▲':'▼'} ${Math.abs(pct).toFixed(1)}%</span>`:'';
-    const prev=mA!=null?`<div style="font-size:.72rem;color:var(--muted);margin-top:3px;">${nameA}: ${fmt2(vA)}${unit}</div>`:'';
-    return `<div style="background:rgba(0,0,0,.6);border:1px solid #2a2a2a;border-radius:9px;padding:13px 15px;">
-      <div style="font-size:.67rem;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px;">${title}</div>
-      <div style="font-size:1.2rem;font-weight:800;color:var(--teal);">${fmt2(vB)}${unit}${arrow}</div>${prev}</div>`;
+    const arrow=pct!=null?'<span class="kpi-badge '+(up?'bg-up':'bg-dn')+'" style="font-size:.72rem;margin-left:5px;" title="'+(up?'Aumento':'Redução')+' de gastos">'+(up?'▲':'▼')+' '+(Math.abs(pct).toFixed(1))+'%</span>':'';
+    const prev=mA!=null?'<div style="font-size:.72rem;color:var(--muted);margin-top:3px;">'+(nameA)+': '+(fmt2(vA))+'(unit)+'</div>':'';
+    return '<div style="background:rgba(0,0,0,.6);border:1px solid #2a2a2a;border-radius:9px;padding:13px 15px;">      <div style="font-size:.67rem;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px;">'+(title)+'</div>      <div style="font-size:1.2rem;font-weight:800;color:var(--teal);">'+(fmt2(vB))+'(unit)+'(arrow)+'</div>'+(prev)+'</div>';
   };
   document.getElementById('compGrid').innerHTML=
     mkCard('Gasto Total',totA,totB,fmtF)+
@@ -1861,8 +1848,7 @@ function buildComparativo(mesIdx){
     mkCard('Ticket Médio',mA!=null?totA/ordA:null,totB/ordB,fmtF)+
     mkCard('Part. no Total',mA!=null?totA/grand*100:null,totB/grand*100,v=>v.toFixed(1),'%');
 
-  document.getElementById('compHead').innerHTML=`<th class="rank">#</th><th>Família</th>
-    <th>${nameB} (R$)</th>${mA!=null?`<th>${nameA} (R$)</th><th>Variação</th>`:''}`;
+  document.getElementById('compHead').innerHTML='<th class="rank">#</th><th>Família</th>    <th>'+(nameB)+' (R$)</th>${mA!=null?'<th>${nameA} (R$)</th><th>Variação</th>':''}';
 
   const pairs=Object.entries(S.familias).map(([k,v])=>({n:k,vB:v[mB]||0,vA:mA!=null?v[mA]||0:null}))
     .filter(r=>r.vB>0||(r.vA&&r.vA>0)).sort((a,b)=>b.vB-a.vB);
@@ -1870,10 +1856,9 @@ function buildComparativo(mesIdx){
   pairs.forEach((r,i)=>{
     const pct=mA!=null&&r.vA?((r.vB-r.vA)/r.vA*100):null;
     // pct>=0 = aumento de gasto = vermelho; pct<0 = redução = verde
-    const varEl=pct!=null?`<span class="kpi-badge ${pct>=0?'bg-up':'bg-dn'}" title="${pct>=0?'Aumento':'Redução'} de gastos">${pct>=0?'▲':'▼'} ${Math.abs(pct).toFixed(1)}%</span>`:'—';
+    const varEl=pct!=null?'<span class="kpi-badge '+(pct>=0?'bg-up':'bg-dn')+'" title="'+(pct>=0?'Aumento':'Redução')+' de gastos">'+(pct>=0?'▲':'▼')+' '+(Math.abs(pct).toFixed(1))+'%</span>':'—';
     const tr=document.createElement('tr');
-    tr.innerHTML=`<td class="rank">${i+1}</td><td>${r.n}</td><td><strong>${fmtF(r.vB)}</strong></td>
-      ${mA!=null?`<td style="color:var(--muted)">${fmtF(r.vA)}</td><td>${varEl}</td>`:''}`;
+    tr.innerHTML='<td class="rank">'+(i+1)+'</td><td>'+(r.n)+'</td><td><strong>'+(fmtF(r.vB))+'</strong></td>      ${mA!=null?'<td style="color:var(--muted)">${fmtF(r.vA)}</td><td>${varEl}</td>':''}';
     tbody.appendChild(tr);
   });
 }
@@ -1921,7 +1906,7 @@ function populateStatusFilter(){
     const dotColor=getStatusDotColor(s);
     const label=document.createElement('label');
     label.className='status-opt';
-    label.innerHTML=`<input type="checkbox" value="${s}" onchange="onStatusChange()"${wasChecked.has(s)?' checked':''}><span class="so-dot" style="background:${dotColor}"></span>${s}`;
+    label.innerHTML='<input type="checkbox" value="'+(s)+'" onchange="onStatusChange()"'+(wasChecked.has(s)?' checked':'')+'><span class="so-dot" style="background:'+(dotColor)+'"></span>'+(s)+'';
     container.appendChild(label);
   });
   updateStatusBtn();
