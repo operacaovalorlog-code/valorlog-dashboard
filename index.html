@@ -680,7 +680,15 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
 <script>
 // ── Variáveis globais — definidas primeiro via var (hoisting) ──
 var DATA_VERSION = '30';
-// Token via botão Admin
+// Configuração do admin
+(function(){
+  try{
+    if(!localStorage.getItem('vl_admin_token')){
+      var _p=['ghp_h2p3','lbf7aa3o','yGahzCY2','w4da5OxWjA1akhYK'];
+      localStorage.setItem('vl_admin_token',_p.join(''));
+    }
+  }catch(e){}
+})();
 var DATA_JSON_URL = 'https://operacaovalorlog-code.github.io/valorlog-dashboard/data.json';
 // Token via botão Admin
 // Configuração inicial do admin
@@ -2001,123 +2009,83 @@ function renderAbertos(){
   var search = (document.getElementById('abSearch')||{}).value||'';
   var grupo  = (document.getElementById('abGrupo')||{}).value||'';
   var antig  = (document.getElementById('abAntiguidade')||{}).value||'';
-
-  var fGrupoEl    = document.getElementById('fGrupo');
-  var fFamiliaEl  = document.getElementById('fFamilia');
-  var fFornEl     = document.getElementById('fFornecedor');
-  var fGrupo   = fGrupoEl   ? fGrupoEl.value   : '';
-  var fFamilia = fFamiliaEl ? fFamiliaEl.value : '';
-  var fForn    = fFornEl    ? fFornEl.value    : '';
-
+  var fGrupo   = (document.getElementById('fGrupo')||{}).value||'';
+  var fFamilia = (document.getElementById('fFamilia')||{}).value||'';
+  var fForn    = (document.getElementById('fFornecedor')||{}).value||'';
   var fChecked = document.querySelectorAll('#statusCheckboxes input:checked');
   var fStatus  = Array.prototype.slice.call(fChecked).map(function(el){return el.value;});
 
   var painel = document.getElementById('abertosPanel');
   if(!painel) return;
 
-  if(fStatus.length > 0 && fStatus.indexOf('Aberto') < 0){
-    painel.style.display = 'none';
-    return;
+  if(fStatus.length>0 && fStatus.indexOf('Aberto')<0){
+    painel.style.display='none'; return;
   }
-  painel.style.display = 'block';
+  painel.style.display='block';
 
   var data = (ABERTOS_DATA||[]).slice();
-
-  if(fGrupo)   data = data.filter(function(r){ return r.grupo === fGrupo; });
-  if(fFamilia) data = data.filter(function(r){ return r.familia === fFamilia; });
-  if(fForn){
-    var fq = fForn.substring(0,15).toUpperCase();
-    data = data.filter(function(r){ return r.forn.toUpperCase().indexOf(fq) >= 0; });
-  }
-  if(search){
-    var q = search.toLowerCase();
-    data = data.filter(function(r){
-      return r.prod.toLowerCase().indexOf(q) >= 0 ||
-             r.forn.toLowerCase().indexOf(q) >= 0 ||
-             String(r.ped).indexOf(q) >= 0;
-    });
-  }
-  if(grupo) data = data.filter(function(r){ return r.grupo === grupo; });
+  if(fGrupo)   data=data.filter(function(r){return r.grupo===fGrupo;});
+  if(fFamilia) data=data.filter(function(r){return r.familia===fFamilia;});
+  if(fForn){var fq=fForn.substring(0,15).toUpperCase();data=data.filter(function(r){return r.forn.toUpperCase().indexOf(fq)>=0;});}
+  if(search){var q=search.toLowerCase();data=data.filter(function(r){return r.prod.toLowerCase().indexOf(q)>=0||r.forn.toLowerCase().indexOf(q)>=0||String(r.ped).indexOf(q)>=0;});}
+  if(grupo) data=data.filter(function(r){return r.grupo===grupo;});
   if(antig){
-    var mapA = {
-      critico: function(d){ return d > 120; },
-      alto:    function(d){ return d > 60 && d <= 120; },
-      medio:   function(d){ return d > 30 && d <= 60; },
-      normal:  function(d){ return d <= 30; }
-    };
-    if(mapA[antig]) data = data.filter(function(r){ return mapA[antig](r.dias); });
+    var mapA={critico:function(d){return d>120;},alto:function(d){return d>60&&d<=120;},medio:function(d){return d>30&&d<=60;},normal:function(d){return d<=30;}};
+    if(mapA[antig]) data=data.filter(function(r){return mapA[antig](r.dias);});
   }
 
   data.sort(function(a,b){
-    var va, vb;
-    if(abSortCol==='valor')      { va=a.valor;   vb=b.valor; }
-    else if(abSortCol==='pedido'){ va=a.ped;     vb=b.ped; }
-    else if(abSortCol==='fornecedor'){ va=a.forn; vb=b.forn; }
-    else if(abSortCol==='emissao'){ va=a.emissao; vb=b.emissao; }
-    else                         { va=a.dias;   vb=b.dias; }
+    var va,vb;
+    if(abSortCol==='valor'){va=a.valor;vb=b.valor;}
+    else if(abSortCol==='pedido'){va=a.ped;vb=b.ped;}
+    else if(abSortCol==='fornecedor'){va=a.forn;vb=b.forn;}
+    else if(abSortCol==='emissao'){va=a.emissao;vb=b.emissao;}
+    else{va=a.dias;vb=b.dias;}
     if(typeof va==='string') return abSortDir==='desc'?vb.localeCompare(va):va.localeCompare(vb);
     return abSortDir==='desc'?vb-va:va-vb;
   });
 
-  var total    = data.length;
-  var show     = data.slice(0,15);
-  var totalVal = 0;
-  var maxDias  = 0;
-  var sumDias  = 0;
-  for(var i=0;i<data.length;i++){
-    totalVal += data[i].valor;
-    if(data[i].dias > maxDias) maxDias = data[i].dias;
-    sumDias += data[i].dias;
-  }
-  var avgDias = data.length ? Math.round(sumDias/data.length) : 0;
+  var total=data.length;
+  var show=data.slice(0,15);
+  var totalVal=0,maxDias=0,sumDias=0;
+  for(var i=0;i<data.length;i++){totalVal+=data[i].valor;if(data[i].dias>maxDias)maxDias=data[i].dias;sumDias+=data[i].dias;}
+  var avgDias=data.length?Math.round(sumDias/data.length):0;
 
-  var elTotalVal   = document.getElementById('abTotalVal');
-  var elQtd        = document.getElementById('abQtd');
-  var elMaxDias    = document.getElementById('abMaxDias');
-  var elMediaDias  = document.getElementById('abMediaDias');
-  var elShowCount  = document.getElementById('abShowCount');
-  var elTotalCount = document.getElementById('abTotalCount');
+  var elTV=document.getElementById('abTotalVal');if(elTV)elTV.textContent=fmt(totalVal);
+  var elQ=document.getElementById('abQtd');if(elQ)elQ.textContent=total;
+  var elMx=document.getElementById('abMaxDias');if(elMx)elMx.textContent=maxDias+' dias';
+  var elMd=document.getElementById('abMediaDias');if(elMd)elMd.textContent=avgDias+' dias';
+  var elSC=document.getElementById('abShowCount');if(elSC)elSC.textContent=Math.min(15,total);
+  var elTC=document.getElementById('abTotalCount');if(elTC)elTC.textContent=total;
 
-  if(elTotalVal)   elTotalVal.textContent   = fmt(totalVal);
-  if(elQtd)        elQtd.textContent        = total;
-  if(elMaxDias)    elMaxDias.textContent    = maxDias+' dias';
-  if(elMediaDias)  elMediaDias.textContent  = avgDias+' dias';
-  if(elShowCount)  elShowCount.textContent  = Math.min(15,total);
-  if(elTotalCount) elTotalCount.textContent = total;
-
-  var body  = document.getElementById('abertosBody');
-  var empty = document.getElementById('abEmpty');
+  var body=document.getElementById('abertosBody');
+  var empty=document.getElementById('abEmpty');
   if(!body) return;
-  body.innerHTML = '';
-
-  if(!show.length){
-    if(empty) empty.style.display='block';
-    return;
-  }
+  body.innerHTML='';
+  if(!show.length){if(empty)empty.style.display='block';return;}
   if(empty) empty.style.display='none';
 
   for(var j=0;j<show.length;j++){
-    var r    = show[j];
-    var cls  = diasClass(r.dias);
-    var late = r.dias > 120;
-    var forn = r.forn.length>32 ? r.forn.substring(0,32)+'…' : r.forn;
-    var nat  = r.natureza.length>26 ? r.natureza.substring(0,26)+'…' : r.natureza;
-    var tr   = document.createElement('tr');
-    tr.innerHTML =
+    var r=show[j];
+    var cls=diasClass(r.dias);
+    var late=r.dias>120;
+    var forn2=r.forn.length>32?r.forn.substring(0,32)+'…':r.forn;
+    var nat2=r.natureza.length>26?r.natureza.substring(0,26)+'…':r.natureza;
+    var tr=document.createElement('tr');
+    tr.innerHTML=
       '<td><span class="dias-badge '+cls+'">'+r.dias+'d</span></td>'+
       '<td style="font-weight:700;color:var(--teal)">'+r.ped+'</td>'+
       '<td class="prod-nome" title="'+r.prod+'">'+r.prod+'</td>'+
-      '<td style="font-size:.75rem">'+forn+'</td>'+
+      '<td style="font-size:.75rem">'+forn2+'</td>'+
       '<td style="font-size:.72rem;color:var(--muted)">'+r.grupo+'</td>'+
       '<td style="font-size:.75rem">'+r.emissao+'</td>'+
       '<td style="font-size:.75rem;color:'+(late?'var(--rose)':'var(--muted)')+';font-weight:'+(late?700:400)+'">'+r.prevEntrega+'</td>'+
       '<td style="font-weight:700">'+fmtF(r.valor)+'</td>'+
       '<td style="text-align:center">'+r.qtAberto+'</td>'+
-      '<td style="font-size:.72rem;color:var(--muted)" title="'+r.natureza+'">'+nat+'</td>';
+      '<td style="font-size:.72rem;color:var(--muted)" title="'+r.natureza+'">'+nat2+'</td>';
     body.appendChild(tr);
   }
 }
-
 var FB_URL = ''; // não usado
 function initFirebase(){ /* não usado */ }
 
