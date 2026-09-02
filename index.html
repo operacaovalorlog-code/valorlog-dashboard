@@ -1388,7 +1388,7 @@ function parseImport(rows,fname){
   const top3pct=suppS.slice(0,3).reduce((a,b)=>a+b[1],0)/grand*100;
 
   // Build statusMes and statusTotals dynamically from imported data
-  const allStatuses=[...new Set(parsed.map(r=>r.status).filter(Boolean))];
+  const allStatuses=parsed.map(function(r){return r.status;}).filter(Boolean).filter(function(v,i,a){return a.indexOf(v)===i;});
   const statusMesImport={};
   const statusTotalsImport={};
   allStatuses.forEach(st=>{
