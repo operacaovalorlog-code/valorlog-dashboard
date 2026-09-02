@@ -1998,6 +1998,7 @@ function sortAbertos(col){
 }
 
 function renderAbertos(){
+  try {
   var search=(document.getElementById('abSearch')||{}).value||'';
   var grupo=(document.getElementById('abGrupo')||{}).value||'';
   var antig=(document.getElementById('abAntiguidade')||{}).value||'';
@@ -2082,6 +2083,11 @@ function renderAbertos(){
     body.appendChild(tr);
   });
 }
+  } catch(e) {
+    console.error('renderAbertos ERRO:', e.message, 'stack:', e.stack);
+    var body2=document.getElementById('abertosBody');
+    if(body2) body2.innerHTML='<tr><td colspan="10" style="color:red;padding:10px">Erro: '+e.message+'</td></tr>';
+  }
 
 // ── Carregar dados salvos do localStorage ──
 // ── Versão dos dados — escopo global ──
