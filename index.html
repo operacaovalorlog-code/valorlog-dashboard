@@ -1230,7 +1230,7 @@ function processFile(file){
   ext==='csv'?reader.readAsText(file,'UTF-8'):reader.readAsArrayBuffer(file);
 }
 
-function col(row,keys){for(const k of keys)if(row[k]!==undefined&&row[k]!==''&&row[k]!==null)return row[k];return '';}
+function col(row,keys){for(var _ci=0;_ci<keys.length;_ci++){var k=keys[_ci];if(row[k]!==undefined&&row[k]!==''&&row[k]!==null)return row[k];}return '';}
 
 // Download seguro — compatível com GitHub Pages e navegadores modernos
 function safeDownload(blob, filename){
