@@ -680,15 +680,7 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
 <script>
 // ── Variáveis globais — definidas primeiro via var (hoisting) ──
 var DATA_VERSION = '30';
-// Configuração do admin
-(function(){
-  try{
-    if(!localStorage.getItem('vl_admin_token')){
-      var _p=['ghp_h2p3','lbf7aa3o','yGahzCY2','w4da5OxWjA1akhYK'];
-      localStorage.setItem('vl_admin_token',_p.join(''));
-    }
-  }catch(e){}
-})();
+// Token via botão Admin
 var DATA_JSON_URL = 'https://operacaovalorlog-code.github.io/valorlog-dashboard/data.json';
 // Token via botão Admin
 // Configuração inicial do admin
