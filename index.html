@@ -317,7 +317,7 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
 <!-- SHARE MODAL -->
 <div class="modal-overlay" id="shareModal">
   <div class="modal" style="max-width:520px">
-    <button class="modal-x" onclick="closeModal()">✕</button>
+    <button class="modal-x" id="btn-close-modal">✕</button>
     <h2>🌐 Compartilhar Dashboard</h2>
     <div class="modal-sub">Compartilhe o link do relatório</div>
 
@@ -326,15 +326,15 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
       <div class="s-ico">🔗</div>
       <div class="s-info" style="flex:1">
         <h4>Link do Dashboard</h4>
-        <div class="copy-row" onclick="event.stopPropagation()" style="margin-top:6px">
+        <div class="copy-row" style="margin-top:6px">
           <input id="dashLink" value="https://operacaovalorlog-code.github.io/valorlog-dashboard/" readonly style="font-size:.75rem">
-          <button class="btn btn-primary" onclick="copyField('dashLink')">Copiar</button>
+          <button class="btn btn-primary" id="btn-copy-dash">Copiar</button>
         </div>
       </div>
     </div>
 
     <!-- WHATSAPP -->
-    <div class="share-opt" onclick="shareWhatsApp()" style="background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.3)">
+    <div class="share-opt" id="btn-whatsapp" style="background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.3)">
       <div class="s-ico" style="background:rgba(37,211,102,.15)">
         <span style="font-size:1.5rem">💬</span>
       </div>
@@ -346,7 +346,7 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
     </div>
 
     <!-- EMAIL -->
-    <div class="share-opt" onclick="shareEmail()" style="background:rgba(66,133,244,.08);border:1px solid rgba(66,133,244,.3)">
+    <div class="share-opt" id="btn-email" style="background:rgba(66,133,244,.08);border:1px solid rgba(66,133,244,.3)">
       <div class="s-ico" style="background:rgba(66,133,244,.15)">
         <span style="font-size:1.5rem">✉️</span>
       </div>
@@ -358,7 +358,7 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
     </div>
 
     <!-- DOWNLOAD -->
-    <div class="share-opt" onclick="downloadSelfContained()">
+    <div class="share-opt" id="btn-download">
       <div class="s-ico">📄</div>
       <div class="s-info"><h4>Arquivo HTML Autônomo</h4><p>Baixar o dashboard para enviar por qualquer canal</p></div>
       <div class="s-act"><button class="btn btn-ghost">Baixar</button></div>
@@ -366,13 +366,13 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
     <div class="share-opt">
       <div class="s-ico">🔗</div>
       <div class="s-info"><h4>GitHub Pages (Gratuito)</h4><p>Crie um repositório, suba o HTML e ative o Pages — link público permanente.</p>
-        <div class="copy-row" onclick="event.stopPropagation()">
+        <div class="copy-row">
           <input id="ghLink" value="https://seuusuario.github.io/valorlog-dashboard/" readonly>
-          <button class="btn btn-ghost" onclick="copyField('ghLink')">Copiar</button>
+          <button class="btn btn-ghost" id="btn-copy-gh">Copiar</button>
         </div>
       </div>
     </div>
-    <div class="share-opt" onclick="window.open('https://app.netlify.com/drop','_blank');closeModal()">
+    <div class="share-opt" id="btn-netlify">
       <div class="s-ico">☁️</div>
       <div class="s-info"><h4>Netlify Drop (Arraste &amp; Solte)</h4><p>Acesse <strong style="color:#f47c20">app.netlify.com/drop</strong>, arraste o HTML e obtenha link público em segundos. Gratuito, sem login.</p></div>
       <div class="s-act"><button class="btn btn-ghost">Abrir ↗</button></div>
@@ -380,7 +380,7 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
     <div class="share-opt">
       <div class="s-ico">📊</div>
       <div class="s-info"><h4>Google Drive / SharePoint</h4><p>Suba o .html e compartilhe o link com permissão de visualização.</p></div>
-      <div class="s-act"><button class="btn btn-ghost" onclick="downloadSelfContained()">Baixar HTML</button></div>
+      <div class="s-act"><button class="btn btn-ghost" id="btn-download">Baixar HTML</button></div>
     </div>
   </div>
 </div>
@@ -400,20 +400,20 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
 <!-- TOOLBAR -->
 <div class="toolbar">
   <span class="tb-label">📂 Importar:</span>
-  <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">⬆ XLSX / CSV</button>
-  <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" onchange="handleFile(event)">
-  <button class="btn btn-ghost" onclick="toggleZone()">Arraste aqui</button>
+  <button class="btn btn-primary" id="btn-import">⬆ XLSX / CSV</button>
+  <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" >
+  <button class="btn btn-ghost" id="btn-zone">Arraste aqui</button>
   <div class="tb-div"></div>
   <span class="tb-label">⬇ Exportar:</span>
-  <button class="btn btn-success" onclick="exportExcel()">📊 Excel</button>
-  <button class="btn btn-amber" onclick="exportPDF()">📄 PDF</button>
-  <button class="btn btn-violet" onclick="exportCSV()">📋 CSV</button>
-  <button class="btn btn-ghost" onclick="window.print()">🖨 Imprimir</button>
+  <button class="btn btn-success" id="btn-excel">📊 Excel</button>
+  <button class="btn btn-amber" id="btn-pdf">📄 PDF</button>
+  <button class="btn btn-violet" id="btn-csv">📋 CSV</button>
+  <button class="btn btn-ghost" id="btn-print">🖨 Imprimir</button>
   <div class="tb-div"></div>
-  <button class="btn btn-rose" onclick="document.getElementById('shareModal').classList.add('open')" title="Compartilhar dashboard">🌐 Compartilhar</button>
-  <button class="btn" id="publishBtn" onclick="saveToFirebase()" title="Republicar dados para todos" style="display:none;font-size:.75rem;background:rgba(46,196,182,.15);color:#2ec4b6;border:1px solid rgba(46,196,182,.4);font-weight:700">🔄 Republicar</button>
-  <button class="btn btn-ghost" onclick="clearSaved()" title="Voltar para dados padrão" style="font-size:.72rem">🗑 Limpar dados</button>
-  <button class="btn btn-ghost" onclick="showTokenModal()" title="Configurar token de admin" style="font-size:.72rem;opacity:.7">🔑 Admin</button>
+  <button class="btn btn-rose" id="btn-share" title="Compartilhar dashboard">🌐 Compartilhar</button>
+  <button class="btn" id="publishBtn" id="btn-firebase" title="Republicar dados para todos" style="display:none;font-size:.75rem;background:rgba(46,196,182,.15);color:#2ec4b6;border:1px solid rgba(46,196,182,.4);font-weight:700">🔄 Republicar</button>
+  <button class="btn btn-ghost"id="btn-clear" title="Voltar para dados padrão" style="font-size:.72rem">🗑 Limpar dados</button>
+  <button class="btn btn-ghost" id="btn-admin" title="Configurar token de admin" style="font-size:.72rem;opacity:.7">🔑 Admin</button>
 
 </div>
 
@@ -422,48 +422,48 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
   <!-- Row 1: Mês + Categoria + Grupo -->
   <div class="filter-row">
     <label>Mês:</label>
-    <select id="fMes" onchange="applyFilters()">
+    <select id="fMes">
       <option value="">Todos</option>
       <!-- Meses preenchidos dinamicamente por populateFilters() -->
     </select>
     <div class="filter-sep"></div>
     <label>Grupo:</label>
-    <select id="fGrupo" onchange="applyFilters()">
+    <select id="fGrupo">
       <option value="">Todos</option>
     </select>
     <div class="filter-sep"></div>
     <label>Status:</label>
     <div class="status-dropdown" id="statusDropdown">
-      <button class="status-btn" id="statusBtn" onclick="toggleStatusDropdown(event)">
+      <button class="status-btn" id="statusBtn" id="btn-status-dd">
         <span id="statusBtnLabel">Todos</span> <span style="opacity:.6;font-size:.75rem">▾</span>
       </button>
       <div class="status-options" id="statusOptions">
         <!-- Preenchido dinamicamente por populateStatusFilter() -->
         <div id="statusCheckboxes"></div>
         <div style="border-top:1px solid var(--border);margin-top:6px;padding-top:6px;display:flex;gap:8px;">
-          <button onclick="selectAllStatus(true)" style="flex:1;padding:4px;font-size:.72rem;background:rgba(244,124,32,.15);color:#f47c20;border:none;border-radius:5px;cursor:pointer;">Todos</button>
-          <button onclick="selectAllStatus(false)" style="flex:1;padding:4px;font-size:.72rem;background:rgba(255,255,255,.05);color:var(--muted);border:none;border-radius:5px;cursor:pointer;">Nenhum</button>
+          <button id="btn-status-all" style="flex:1;padding:4px;font-size:.72rem;background:rgba(244,124,32,.15);color:#f47c20;border:none;border-radius:5px;cursor:pointer;">Todos</button>
+          <button id="btn-status-none" style="flex:1;padding:4px;font-size:.72rem;background:rgba(255,255,255,.05);color:var(--muted);border:none;border-radius:5px;cursor:pointer;">Nenhum</button>
         </div>
       </div>
     </div>
     <div class="filter-sep"></div>
-    <button class="btn btn-ghost" style="font-size:.75rem" onclick="resetFilters()">↺ Limpar filtros</button>
+    <button class="btn btn-ghost" style="font-size:.75rem" id="btn-reset">↺ Limpar filtros</button>
     <div class="records-badge"><div class="dot-pulse"></div><span id="recCount">1.483 registros</span></div>
   </div>
   <!-- Row 2: Família + Natureza -->
   <div class="filter-row">
     <label>Família do Produto:</label>
-    <select id="fFamilia" onchange="applyFilters()">
+    <select id="fFamilia">
       <option value="">Todas</option>
     </select>
     <div class="filter-sep"></div>
     <label>Natureza de Lançamento:</label>
-    <select id="fNatureza" onchange="applyFilters()">
+    <select id="fNatureza">
       <option value="">Todas</option>
     </select>
     <div class="filter-sep"></div>
     <label>Fornecedor:</label>
-    <select id="fFornecedor" onchange="applyFilters()" style="min-width:190px">
+    <select id="fFornecedor" style="min-width:190px">
       <option value="">Todos</option>
     </select>
     <div class="filter-sep"></div>
@@ -474,7 +474,7 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
 
 <!-- IMPORT ZONE -->
 <div class="import-zone" id="importZone"
-  onclick="document.getElementById('fileInput').click()"
+  id="btn-import"
   ondragover="event.preventDefault();this.classList.add('drag-over')"
   ondragleave="this.classList.remove('drag-over')"
   ondrop="handleDrop(event)">
@@ -493,7 +493,7 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
 <div id="detailPanel" class="detail-panel" style="margin:0 28px 18px;">
   <div class="dp-head">
     <span class="dp-title" id="dpTitle">Detalhes do Filtro</span>
-    <button class="btn btn-ghost" style="font-size:.72rem" onclick="resetFilters()">✕ Remover filtro</button>
+    <button class="btn btn-ghost" style="font-size:.72rem" id="btn-reset">✕ Remover filtro</button>
   </div>
   <div class="dp-grid">
     <div class="dp-stat"><div class="ds-label">Total Filtrado</div><div class="ds-val" id="dpTotal">—</div><div class="ds-sub" id="dpPct">—</div></div>
@@ -605,13 +605,13 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
   </div>
   <div class="abertos-filters">
     <label>Buscar produto / fornecedor:</label>
-    <input type="text" id="abSearch" placeholder="Digite para filtrar…" oninput="renderAbertos()">
+    <input type="text" id="abSearch" placeholder="Digite para filtrar…">
     <label style="margin-left:8px">Grupo:</label>
-    <select id="abGrupo" onchange="renderAbertos()">
+    <select id="abGrupo">
       <option value="">Todos</option>
     </select>
     <label style="margin-left:8px">Antiguidade:</label>
-    <select id="abAntiguidade" onchange="renderAbertos()">
+    <select id="abAntiguidade">
       <option value="">Todos</option>
       <option value="critico">Crítico (+120 dias)</option>
       <option value="alto">Alto (60-120 dias)</option>
@@ -624,14 +624,14 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
     <table class="ab-table">
       <thead>
         <tr>
-          <th onclick="sortAbertos('dias')" id="thDias">Dias Aberto</th>
-          <th onclick="sortAbertos('pedido')">Cód. Pedido</th>
+          <th data-sort="dias" id="thDias">Dias Aberto</th>
+          <th data-sort="pedido">Cód. Pedido</th>
           <th>Produto</th>
-          <th onclick="sortAbertos('fornecedor')">Fornecedor</th>
+          <th data-sort="fornecedor">Fornecedor</th>
           <th>Grupo</th>
-          <th onclick="sortAbertos('emissao')">Dt. Emissão</th>
+          <th data-sort="emissao">Dt. Emissão</th>
           <th>Prev. Entrega</th>
-          <th onclick="sortAbertos('valor')" id="thValor">Valor (R$)</th>
+          <th data-sort="valor" id="thValor">Valor (R$)</th>
           <th>Qtd. Aberta</th>
           <th>Natureza</th>
         </tr>
@@ -666,9 +666,9 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
   background:#151515;border:2px solid #f47c20;border-radius:10px;padding:12px 20px;
   z-index:9998;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,.5);">
   <span style="color:#f0ece4;font-size:.85rem">Dados importados! Publique para todos verem:</span>
-  <button onclick="doPublish()" style="background:#f47c20;border:none;color:#000;border-radius:7px;
+  <buttonid="btn-do-publish" style="background:#f47c20;border:none;color:#000;border-radius:7px;
     padding:7px 16px;cursor:pointer;font-weight:700;font-size:.82rem">🔄 Publicar para todos</button>
-  <button onclick="document.getElementById('publishBanner').style.display='none'"
+  <button id="btn-hide-banner"
     style="background:transparent;border:none;color:#888;cursor:pointer;font-size:1rem;padding:0 4px">✕</button>
 </div>
 
@@ -1889,7 +1889,7 @@ function populateStatusFilter(){
     const dotColor=getStatusDotColor(s);
     const label=document.createElement('label');
     label.className='status-opt';
-    label.innerHTML='<input type="checkbox" value="'+(s)+'" onchange="onStatusChange()"'+(wasChecked.has(s)?' checked':'')+'><span class="so-dot" style="background:'+(dotColor)+'"></span>'+(s)+'';
+    label.innerHTML='<input type="checkbox" value="'+(s)+'" '+(wasChecked.has(s)?' checked':'')+'><span class="so-dot" style="background:'+(dotColor)+'"></span>'+(s)+'';
     container.appendChild(label);
   });
   updateStatusBtn();
@@ -2168,29 +2168,111 @@ window.closeModal      = typeof closeModal      === 'function' ? closeModal     
 window.shareWhatsApp   = typeof shareWhatsApp   === 'function' ? shareWhatsApp   : function(){};
 window.shareEmail      = typeof shareEmail      === 'function' ? shareEmail      : function(){};
 window.doPublish       = typeof doPublish       === 'function' ? doPublish       : function(){};
-window.selectAllStatus = typeof selectAllStatus === 'function' ? selectAllStatus : function(){};
 window.downloadSelfContained=typeof downloadSelfContained==='function'?downloadSelfContained:function(){};
 window.toggleBlock     = typeof toggleBlock     === 'function' ? toggleBlock     : function(){};
-window.showAccessPanel = typeof showAccessPanel === 'function' ? showAccessPanel : function(){};
 window.saveToken       = typeof saveToken       === 'function' ? saveToken       : function(){};
 window.copyField       = typeof copyField       === 'function' ? copyField       : function(){};
 window.toggleZone      = typeof toggleZone      === 'function' ? toggleZone      : function(){};
 window.handleFile = handleFile;
 window.processFile = processFile;
-window.exportExcel = typeof exportExcel === 'function' ? exportExcel : function(){};
 window.exportPDF = typeof exportPDF === 'function' ? exportPDF : function(){};
-window.exportCSV = typeof exportCSV === 'function' ? exportCSV : function(){};
 window.resetFilters = typeof resetFilters === 'function' ? resetFilters : function(){};
-window.clearSaved = typeof clearSaved === 'function' ? clearSaved : function(){};
 window.showTokenModal = typeof showTokenModal === 'function' ? showTokenModal : function(){};
-window.sortAbertos = typeof sortAbertos === 'function' ? sortAbertos : function(){};
 window.closeModal = typeof closeModal === 'function' ? closeModal : function(){};
-window.shareWhatsApp = typeof shareWhatsApp === 'function' ? shareWhatsApp : function(){};
 window.shareEmail = typeof shareEmail === 'function' ? shareEmail : function(){};
-window.selectAllStatus = typeof selectAllStatus === 'function' ? selectAllStatus : function(){};
 window.copyField = typeof copyField === 'function' ? copyField : function(){};
-window.toggleZone = typeof toggleZone === 'function' ? toggleZone : function(){};
 window.doPublish = typeof doPublish === 'function' ? doPublish : function(){};
+// =====================================================
+// EVENTOS VIA addEventListener   sem inline no HTML
+// =====================================================
+document.addEventListener('DOMContentLoaded', function() {
+  function bind(id, ev, fn) {
+    var el = document.getElementById(id);
+    if(el) el.addEventListener(ev, fn);
+  }
+  function bindAll(sel, ev, fn) {
+    var els = document.querySelectorAll(sel);
+    for(var i=0;i<els.length;i++) els[i].addEventListener(ev, fn);
+  }
+
+  // Import
+  bind('fileInput',  'change', handleFile);
+  bind('btn-import', 'click',  function(){ var f=document.getElementById('fileInput'); if(f) f.click(); });
+
+  // Exportar
+  bind('btn-excel', 'click', function(){ if(typeof exportExcel==='function') exportExcel(); });
+  bind('btn-pdf',   'click', function(){ if(typeof exportPDF==='function') exportPDF(); });
+  bind('btn-csv',   'click', function(){ if(typeof exportCSV==='function') exportCSV(); });
+  bind('btn-print', 'click', function(){ window.print(); });
+
+  // Compartilhar
+  bind('btn-share', 'click', function(){
+    var m=document.getElementById('shareModal'); if(m) m.classList.add('open');
+  });
+  bind('btn-whatsapp',  'click', function(){ if(typeof shareWhatsApp==='function') shareWhatsApp(); });
+  bind('btn-email',     'click', function(){ if(typeof shareEmail==='function') shareEmail(); });
+  bind('btn-download',  'click', function(){ if(typeof downloadSelfContained==='function') downloadSelfContained(); });
+  bind('btn-copy-dash', 'click', function(){ if(typeof copyField==='function') copyField('dashLink'); });
+  bind('btn-copy-gh',   'click', function(){ if(typeof copyField==='function') copyField('ghLink'); });
+
+  // Admin / Acesso
+  bind('btn-admin',    'click', function(){ if(typeof showTokenModal==='function') showTokenModal(); });
+  bind('btn-firebase', 'click', function(){ if(typeof saveToFirebase==='function') saveToFirebase(); });
+  bind('btn-access',   'click', function(){ if(typeof showAccessPanel==='function') showAccessPanel(); });
+
+  // Filtros
+  bind('btn-reset', 'click',  function(){ if(typeof resetFilters==='function') resetFilters(); });
+  bind('btn-zone',  'click',  function(){ if(typeof toggleZone==='function') toggleZone(); });
+  bind('btn-do-publish', 'click', function(){ if(typeof doPublish==='function') doPublish(); });
+  bind('btn-clear', 'click',  function(){ if(typeof clearSaved==='function') clearSaved(); });
+
+  // Modal
+  bind('btn-close-modal', 'click', function(){ if(typeof closeModal==='function') closeModal(); });
+  var modals = document.querySelectorAll('.modal-overlay');
+  for(var i=0;i<modals.length;i++){
+    modals[i].addEventListener('click', function(e){ if(e.target===this && typeof closeModal==='function') closeModal(); });
+  }
+
+  // Status
+  bind('btn-status-all',  'click', function(){ if(typeof selectAllStatus==='function') selectAllStatus(true); });
+  bind('btn-status-none', 'click', function(){ if(typeof selectAllStatus==='function') selectAllStatus(false); });
+
+  // Sort abertos
+  bindAll('[data-sort]', 'click', function(){
+    if(typeof sortAbertos==='function') sortAbertos(this.getAttribute('data-sort'));
+  });
+
+  // Selects de filtro
+  bind('fGrupo',       'change', function(){ if(typeof applyFilters==='function') applyFilters(); });
+  bind('fFamilia',     'change', function(){ if(typeof applyFilters==='function') applyFilters(); });
+  bind('fFornecedor',  'change', function(){ if(typeof applyFilters==='function') applyFilters(); });
+  bind('fMes',         'change', function(){ if(typeof applyFilters==='function') applyFilters(); });
+  bind('abSearch',     'input',  function(){ if(typeof renderAbertos==='function') renderAbertos(); });
+  bind('abGrupo',      'change', function(){ if(typeof renderAbertos==='function') renderAbertos(); });
+  bind('abAntiguidade','change', function(){ if(typeof renderAbertos==='function') renderAbertos(); });
+
+  // Netlify
+  bind('btn-netlify', 'click', function(){
+    window.open('https://app.netlify.com/drop','_blank');
+    if(typeof closeModal==='function') closeModal();
+  });
+  // Status dropdown
+  bind('btn-status-dd', 'click', function(e){
+    if(typeof toggleStatusDropdown==='function') toggleStatusDropdown(e);
+  });
+  // Hide publish banner
+  bind('btn-hide-banner', 'click', function(){
+    var b=document.getElementById('publishBanner'); if(b) b.style.display='none';
+  });
+  // onStatusChange nos checkboxes de status
+  var statusCbs = document.querySelectorAll('#statusCheckboxes input[type=checkbox]');
+  for(var si=0;si<statusCbs.length;si++){
+    statusCbs[si].addEventListener('change', function(){
+      if(typeof onStatusChange==='function') onStatusChange();
+      else if(typeof applyFilters==='function') applyFilters();
+    });
+  }
+});
 </script>
 </body>
 </html>
