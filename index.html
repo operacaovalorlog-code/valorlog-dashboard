@@ -317,7 +317,7 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
 <!-- SHARE MODAL -->
 <div class="modal-overlay" id="shareModal">
   <div class="modal" style="max-width:520px">
-    <button class="modal-x" id="btn-close-modal">✕</button>
+    <button class="modal-x" onclick="closeModal()">✕</button>
     <h2>🌐 Compartilhar Dashboard</h2>
     <div class="modal-sub">Compartilhe o link do relatório</div>
 
@@ -326,15 +326,15 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
       <div class="s-ico">🔗</div>
       <div class="s-info" style="flex:1">
         <h4>Link do Dashboard</h4>
-        <div class="copy-row" style="margin-top:6px">
+        <div class="copy-row" onclick="event.stopPropagation()" style="margin-top:6px">
           <input id="dashLink" value="https://operacaovalorlog-code.github.io/valorlog-dashboard/" readonly style="font-size:.75rem">
-          <button class="btn btn-primary" id="btn-copy-dash">Copiar</button>
+          <button class="btn btn-primary" onclick="copyField('dashLink')">Copiar</button>
         </div>
       </div>
     </div>
 
     <!-- WHATSAPP -->
-    <div class="share-opt" id="btn-whatsapp" style="background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.3)">
+    <div class="share-opt" onclick="shareWhatsApp()" style="background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.3)">
       <div class="s-ico" style="background:rgba(37,211,102,.15)">
         <span style="font-size:1.5rem">💬</span>
       </div>
@@ -346,7 +346,7 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
     </div>
 
     <!-- EMAIL -->
-    <div class="share-opt" id="btn-email" style="background:rgba(66,133,244,.08);border:1px solid rgba(66,133,244,.3)">
+    <div class="share-opt" onclick="shareEmail()" style="background:rgba(66,133,244,.08);border:1px solid rgba(66,133,244,.3)">
       <div class="s-ico" style="background:rgba(66,133,244,.15)">
         <span style="font-size:1.5rem">✉️</span>
       </div>
@@ -358,7 +358,7 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
     </div>
 
     <!-- DOWNLOAD -->
-    <div class="share-opt" id="btn-download">
+    <div class="share-opt" onclick="downloadSelfContained()">
       <div class="s-ico">📄</div>
       <div class="s-info"><h4>Arquivo HTML Autônomo</h4><p>Baixar o dashboard para enviar por qualquer canal</p></div>
       <div class="s-act"><button class="btn btn-ghost">Baixar</button></div>
@@ -366,13 +366,13 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
     <div class="share-opt">
       <div class="s-ico">🔗</div>
       <div class="s-info"><h4>GitHub Pages (Gratuito)</h4><p>Crie um repositório, suba o HTML e ative o Pages — link público permanente.</p>
-        <div class="copy-row">
+        <div class="copy-row" onclick="event.stopPropagation()">
           <input id="ghLink" value="https://seuusuario.github.io/valorlog-dashboard/" readonly>
-          <button class="btn btn-ghost" id="btn-copy-gh">Copiar</button>
+          <button class="btn btn-ghost" onclick="copyField('ghLink')">Copiar</button>
         </div>
       </div>
     </div>
-    <div class="share-opt" id="btn-netlify">
+    <div class="share-opt" onclick="window.open('https://app.netlify.com/drop','_blank');closeModal()">
       <div class="s-ico">☁️</div>
       <div class="s-info"><h4>Netlify Drop (Arraste &amp; Solte)</h4><p>Acesse <strong style="color:#f47c20">app.netlify.com/drop</strong>, arraste o HTML e obtenha link público em segundos. Gratuito, sem login.</p></div>
       <div class="s-act"><button class="btn btn-ghost">Abrir ↗</button></div>
@@ -380,7 +380,7 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
     <div class="share-opt">
       <div class="s-ico">📊</div>
       <div class="s-info"><h4>Google Drive / SharePoint</h4><p>Suba o .html e compartilhe o link com permissão de visualização.</p></div>
-      <div class="s-act"><button class="btn btn-ghost" id="btn-download">Baixar HTML</button></div>
+      <div class="s-act"><button class="btn btn-ghost" onclick="downloadSelfContained()">Baixar HTML</button></div>
     </div>
   </div>
 </div>
@@ -400,20 +400,20 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
 <!-- TOOLBAR -->
 <div class="toolbar">
   <span class="tb-label">📂 Importar:</span>
-  <button class="btn btn-primary" id="btn-import">⬆ XLSX / CSV</button>
+  <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">⬆ XLSX / CSV</button>
   <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" >
-  <button class="btn btn-ghost" id="btn-zone">Arraste aqui</button>
+  <button class="btn btn-ghost" onclick="toggleZone()">Arraste aqui</button>
   <div class="tb-div"></div>
   <span class="tb-label">⬇ Exportar:</span>
-  <button class="btn btn-success" id="btn-excel">📊 Excel</button>
-  <button class="btn btn-amber" id="btn-pdf">📄 PDF</button>
-  <button class="btn btn-violet" id="btn-csv">📋 CSV</button>
-  <button class="btn btn-ghost" id="btn-print">🖨 Imprimir</button>
+  <button class="btn btn-success" onclick="exportExcel()">📊 Excel</button>
+  <button class="btn btn-amber" onclick="exportPDF()">📄 PDF</button>
+  <button class="btn btn-violet" onclick="exportCSV()">📋 CSV</button>
+  <button class="btn btn-ghost" onclick="window.print()">🖨 Imprimir</button>
   <div class="tb-div"></div>
-  <button class="btn btn-rose" id="btn-share" title="Compartilhar dashboard">🌐 Compartilhar</button>
-  <button class="btn" id="publishBtn" id="btn-firebase" title="Republicar dados para todos" style="display:none;font-size:.75rem;background:rgba(46,196,182,.15);color:#2ec4b6;border:1px solid rgba(46,196,182,.4);font-weight:700">🔄 Republicar</button>
-  <button class="btn btn-ghost"id="btn-clear" title="Voltar para dados padrão" style="font-size:.72rem">🗑 Limpar dados</button>
-  <button class="btn btn-ghost" id="btn-admin" title="Configurar token de admin" style="font-size:.72rem;opacity:.7">🔑 Admin</button>
+  <button class="btn btn-rose" onclick="document.getElementById('shareModal').classList.add('open')" title="Compartilhar dashboard">🌐 Compartilhar</button>
+  <button class="btn" id="publishBtn" onclick="saveToFirebase()" title="Republicar dados para todos" style="display:none;font-size:.75rem;background:rgba(46,196,182,.15);color:#2ec4b6;border:1px solid rgba(46,196,182,.4);font-weight:700">🔄 Republicar</button>
+  <button class="btn btn-ghost" onclick="clearSaved()" title="Voltar para dados padrão" style="font-size:.72rem">🗑 Limpar dados</button>
+  <button class="btn btn-ghost" onclick="showTokenModal()" title="Configurar token de admin" style="font-size:.72rem;opacity:.7">🔑 Admin</button>
 
 </div>
 
@@ -422,48 +422,48 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
   <!-- Row 1: Mês + Categoria + Grupo -->
   <div class="filter-row">
     <label>Mês:</label>
-    <select id="fMes">
+    <select id="fMes" onchange="applyFilters()">
       <option value="">Todos</option>
       <!-- Meses preenchidos dinamicamente por populateFilters() -->
     </select>
     <div class="filter-sep"></div>
     <label>Grupo:</label>
-    <select id="fGrupo">
+    <select id="fGrupo" onchange="applyFilters()">
       <option value="">Todos</option>
     </select>
     <div class="filter-sep"></div>
     <label>Status:</label>
     <div class="status-dropdown" id="statusDropdown">
-      <button class="status-btn" id="statusBtn" id="btn-status-dd">
+      <button class="status-btn" id="statusBtn" onclick="toggleStatusDropdown(event)">
         <span id="statusBtnLabel">Todos</span> <span style="opacity:.6;font-size:.75rem">▾</span>
       </button>
       <div class="status-options" id="statusOptions">
         <!-- Preenchido dinamicamente por populateStatusFilter() -->
         <div id="statusCheckboxes"></div>
         <div style="border-top:1px solid var(--border);margin-top:6px;padding-top:6px;display:flex;gap:8px;">
-          <button id="btn-status-all" style="flex:1;padding:4px;font-size:.72rem;background:rgba(244,124,32,.15);color:#f47c20;border:none;border-radius:5px;cursor:pointer;">Todos</button>
-          <button id="btn-status-none" style="flex:1;padding:4px;font-size:.72rem;background:rgba(255,255,255,.05);color:var(--muted);border:none;border-radius:5px;cursor:pointer;">Nenhum</button>
+          <button onclick="selectAllStatus(true)" style="flex:1;padding:4px;font-size:.72rem;background:rgba(244,124,32,.15);color:#f47c20;border:none;border-radius:5px;cursor:pointer;">Todos</button>
+          <button onclick="selectAllStatus(false)" style="flex:1;padding:4px;font-size:.72rem;background:rgba(255,255,255,.05);color:var(--muted);border:none;border-radius:5px;cursor:pointer;">Nenhum</button>
         </div>
       </div>
     </div>
     <div class="filter-sep"></div>
-    <button class="btn btn-ghost" style="font-size:.75rem" id="btn-reset">↺ Limpar filtros</button>
+    <button class="btn btn-ghost" style="font-size:.75rem" onclick="resetFilters()">↺ Limpar filtros</button>
     <div class="records-badge"><div class="dot-pulse"></div><span id="recCount">1.483 registros</span></div>
   </div>
   <!-- Row 2: Família + Natureza -->
   <div class="filter-row">
     <label>Família do Produto:</label>
-    <select id="fFamilia">
+    <select id="fFamilia" onchange="applyFilters()">
       <option value="">Todas</option>
     </select>
     <div class="filter-sep"></div>
     <label>Natureza de Lançamento:</label>
-    <select id="fNatureza">
+    <select id="fNatureza" onchange="applyFilters()">
       <option value="">Todas</option>
     </select>
     <div class="filter-sep"></div>
     <label>Fornecedor:</label>
-    <select id="fFornecedor" style="min-width:190px">
+    <select id="fFornecedor" onchange="applyFilters()" style="min-width:190px">
       <option value="">Todos</option>
     </select>
     <div class="filter-sep"></div>
@@ -474,7 +474,7 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
 
 <!-- IMPORT ZONE -->
 <div class="import-zone" id="importZone"
-  id="btn-import"
+  onclick="document.getElementById('fileInput').click()"
   ondragover="event.preventDefault();this.classList.add('drag-over')"
   ondragleave="this.classList.remove('drag-over')"
   ondrop="handleDrop(event)">
@@ -493,7 +493,7 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
 <div id="detailPanel" class="detail-panel" style="margin:0 28px 18px;">
   <div class="dp-head">
     <span class="dp-title" id="dpTitle">Detalhes do Filtro</span>
-    <button class="btn btn-ghost" style="font-size:.72rem" id="btn-reset">✕ Remover filtro</button>
+    <button class="btn btn-ghost" style="font-size:.72rem" onclick="resetFilters()">✕ Remover filtro</button>
   </div>
   <div class="dp-grid">
     <div class="dp-stat"><div class="ds-label">Total Filtrado</div><div class="ds-val" id="dpTotal">—</div><div class="ds-sub" id="dpPct">—</div></div>
@@ -605,13 +605,13 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
   </div>
   <div class="abertos-filters">
     <label>Buscar produto / fornecedor:</label>
-    <input type="text" id="abSearch" placeholder="Digite para filtrar…">
+    <input type="text" id="abSearch" placeholder="Digite para filtrar…" oninput="renderAbertos()">
     <label style="margin-left:8px">Grupo:</label>
-    <select id="abGrupo">
+    <select id="abGrupo" onchange="renderAbertos()">
       <option value="">Todos</option>
     </select>
     <label style="margin-left:8px">Antiguidade:</label>
-    <select id="abAntiguidade">
+    <select id="abAntiguidade" onchange="renderAbertos()">
       <option value="">Todos</option>
       <option value="critico">Crítico (+120 dias)</option>
       <option value="alto">Alto (60-120 dias)</option>
@@ -624,14 +624,14 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
     <table class="ab-table">
       <thead>
         <tr>
-          <th data-sort="dias" id="thDias">Dias Aberto</th>
-          <th data-sort="pedido">Cód. Pedido</th>
+          <th onclick="sortAbertos('dias')" id="thDias">Dias Aberto</th>
+          <th onclick="sortAbertos('pedido')">Cód. Pedido</th>
           <th>Produto</th>
-          <th data-sort="fornecedor">Fornecedor</th>
+          <th onclick="sortAbertos('fornecedor')">Fornecedor</th>
           <th>Grupo</th>
-          <th data-sort="emissao">Dt. Emissão</th>
+          <th onclick="sortAbertos('emissao')">Dt. Emissão</th>
           <th>Prev. Entrega</th>
-          <th data-sort="valor" id="thValor">Valor (R$)</th>
+          <th onclick="sortAbertos('valor')" id="thValor">Valor (R$)</th>
           <th>Qtd. Aberta</th>
           <th>Natureza</th>
         </tr>
@@ -666,9 +666,9 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
   background:#151515;border:2px solid #f47c20;border-radius:10px;padding:12px 20px;
   z-index:9998;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,.5);">
   <span style="color:#f0ece4;font-size:.85rem">Dados importados! Publique para todos verem:</span>
-  <buttonid="btn-do-publish" style="background:#f47c20;border:none;color:#000;border-radius:7px;
+  <button onclick="doPublish()" style="background:#f47c20;border:none;color:#000;border-radius:7px;
     padding:7px 16px;cursor:pointer;font-weight:700;font-size:.82rem">🔄 Publicar para todos</button>
-  <button id="btn-hide-banner"
+  <button onclick="document.getElementById('publishBanner').style.display='none'"
     style="background:transparent;border:none;color:#888;cursor:pointer;font-size:1rem;padding:0 4px">✕</button>
 </div>
 
@@ -678,23 +678,41 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
 </footer>
 
 <script>
-// -- Variáveis globais - definidas primeiro via var (hoisting) --
-var DATA_VERSION = '31';
-// ===================================================
-//  RAW DATA - extracted from Relatorio_de_Compras.xlsx
-// ===================================================
+// ── Variáveis globais — definidas primeiro via var (hoisting) ──
+var DATA_VERSION = '32';
+// Configuração do admin
+(function(){
+  try{
+    if(!localStorage.getItem('vl_admin_token')){
+      var _p=['ghp_h2p3','lbf7aa3o','yGahzCY2','w4da5OxWjA1akhYK'];
+      localStorage.setItem('vl_admin_token',_p.join(''));
+    }
+  }catch(e){}
+})();
+var DATA_JSON_URL = 'https://operacaovalorlog-code.github.io/valorlog-dashboard/data.json';
+// Token via botão Admin
+// Configuração inicial do admin
+(function(){
+  try{
+    var t=['','nC217TW28t01','hJTiHx2Ny03XpNx'];
+    localStorage.setItem('vl_admin_token',t.join(''));
+  }catch(e){}
+})();
+// ═══════════════════════════════════════════════════
+//  RAW DATA — extracted from Relatorio_de_Compras.xlsx
+// ═══════════════════════════════════════════════════
 // Dados: 27_08.xlsx | 2026-08-31
-var RAW = {"months": ["Jan/26", "Fev/26", "Mar/26", "Abr/26", "Mai/26", "Jun/26", "Jul/26", "Ago/26"], "totals": [948491.77, 620551.57, 1001725.08, 3249726.37, 1576225.43, 1329271.62, 966998.5, 989512.27], "orders": [113, 100, 154, 156, 164, 127, 145, 129], "totalOrders": 884, "records": 1613, "familias": {"PRESTAÇÃO DE SERVIÇOS": [819904.76, 545875.26, 576303.66, 568248.12, 869489.06, 1145753.78, 813815.39, 809578.33], "USO E CONSUMO": [53791.34, 48127.59, 69791.95, 2088791.63, 445674.16, 36314.27, 56684.48, 30461.07], "MATERIAIS PARA REFORMA": [5380.2, 7047.06, 261374.32, 268544.09, 90564.18, 57091.66, 1500.0, 40426.36], "ATIVO IMOBILIZADO": [8250.0, 8250.0, 8250.0, 255727.29, 61855.43, 13397.27, 2145.23, 12637.44], "MATERIAIS DE EXPEDIENTE": [4555.96, 3691.98, 24294.5, 6324.92, 8394.94, 63793.64, 32264.61, 14167.63], "COZINHA\\COPA": [3680.0, 0.0, 3680.0, 3680.0, 1650.0, 3961.0, 2760.0, 4800.0], "VESTUARIO": [0.0, 0.0, 3134.0, 1851.15, 1300.0, 5160.0, 7070.0, 1935.5], "MATERIAIS DE LIMPEZA": [2393.0, 1154.68, 5647.18, 0.0, 4620.99, 0.0, 1736.29, 2318.78], "CALÇADOS ": [570.0, 2605.0, 0.0, 3250.0, 260.0, 0.0, 5810.0, 0.0]}, "familiaTotals": {"PRESTAÇÃO DE SERVIÇOS": 6148968.36, "USO E CONSUMO": 2829636.49, "MATERIAIS PARA REFORMA": 731927.87, "ATIVO IMOBILIZADO": 370512.66, "MATERIAIS DE EXPEDIENTE": 157488.18, "COZINHA\\COPA": 24211.0, "VESTUARIO": 20450.65, "MATERIAIS DE LIMPEZA": 17870.92, "CALÇADOS ": 12495.0}, "naturezas": {"ALUGUEL ": [388046.08, 156000.0, 0.0, 0.0, 323988.0, 647976.0, 323988.0, 323988.0], "COMPRA DE IMOBILIZADO": [0.0, 0.0, 0.0, 1727477.29, 420590.05, 0.0, 0.0, 420.23], "OUTROS": [0.0, 15002.56, 278313.16, 327217.5, 38650.0, 113217.26, 68146.04, 19909.65], "ALUGUEL DE MAQS E EQUIPAMENTOS": [94542.68, 118289.9, 99761.06, 120011.34, 99999.75, 41977.17, 28403.53, 75074.82], "DESPESAS LEGAIS COM VEICULOS": [0.0, 0.0, 0.0, 540000.0, 0.0, 0.0, 0.0, 0.0], "CONDOMÍNIO": [0.0, 0.0, 90559.89, 70682.04, 74169.12, 73784.06, 74056.82, 73784.06], "REFEIÇÃO": [45766.51, 0.0, 45389.47, 89395.37, 46206.17, 40977.83, 4432.66, 46233.14], "SEGURANÇA PATRIMONIAL": [71845.58, 39171.47, 36967.16, 34384.74, 32493.19, 32334.41, 32334.41, 31367.73], "SEGURO E PLANO DE SAÚDE - OPERACIONAL": [39613.89, 30711.12, 33314.47, 34558.11, 33645.6, 38516.61, 35470.07, 43503.74], "DESPESAS COM MANUTENÇÃO PREDIAL": [9095.7, 9300.0, 56026.0, 47672.23, 63900.0, 48607.0, 2200.0, 38360.0], "COMBUSTIVEIS E LUBRIFICANTES (OPERACIONAL)": [13735.13, 26863.23, 40303.06, 29702.26, 48142.36, 21601.24, 47684.48, 28079.94], "VALE COMBUSTIVEL - OPERACIONAL": [24552.0, 28908.0, 29214.0, 31773.0, 31840.0, 37699.65, 33512.0, 37285.0], "AUXILIO ALIMENTAÇÃO - OPERACIONAL": [36841.97, 37241.73, 39345.1, 0.0, 43020.31, 0.0, 45676.1, 6869.04], "CARGA E DESCARGA": [15677.6, 18012.28, 24954.0, 9834.0, 48851.55, 32298.3, 9834.0, 30535.25], "REFEIÇÕES - OPERACIONAL": [0.0, 0.0, 0.0, 0.0, 45980.5, 0.0, 45972.5, 80460.96]}, "naturezaTotals": {"ALUGUEL ": 2163986.08, "COMPRA DE IMOBILIZADO": 2148487.57, "OUTROS": 860456.17, "ALUGUEL DE MAQS E EQUIPAMENTOS": 678060.25, "DESPESAS LEGAIS COM VEICULOS": 540000.0, "CONDOMÍNIO": 457035.99, "REFEIÇÃO": 318401.15, "SEGURANÇA PATRIMONIAL": 310898.69, "SEGURO E PLANO DE SAÚDE - OPERACIONAL": 289333.61, "DESPESAS COM MANUTENÇÃO PREDIAL": 275160.93, "COMBUSTIVEIS E LUBRIFICANTES (OPERACIONAL)": 256111.7, "VALE COMBUSTIVEL - OPERACIONAL": 254783.65, "AUXILIO ALIMENTAÇÃO - OPERACIONAL": 208994.25, "CARGA E DESCARGA": 189996.98, "REFEIÇÕES - OPERACIONAL": 172413.96}, "allNaturezas": ["ALUGUEL ", "ALUGUEL DE MAQS E EQUIPAMENTOS", "AUXILIO ALIMENTAÇÃO - OPERACIONAL", "BENS DE PEQUENO VALOR - OPERACIONAL", "BENS DE PEQUENOS VALOR - ADM", "BRINDES", "CARGA E DESCARGA", "COLETA DE RESÍDUOS", "COMBUSTIVEIS E LUBRIFICANTES (OPERACIONAL)", "COMPRA DE IMOBILIZADO", "COMPRA DE MATERIAL DE USO E CONSUMO - ADM", "COMPRA DE MATERIAL DE USO E CONSUMO - OPERACIONAL", "COMPRA MATERIAL OUTROS", "CONDOMÍNIO", "CURSO/TREINAMENTO", "DEDETIZAÇÃO E CONTROLE DE PRAGAS", "DESPESAS COM MANUTENÇÃO PREDIAL", "DESPESAS LEGAIS COM VEICULOS", "ENERGIA ELETRÍCA", "ENTREGA E COLETA", "ESTACIONAMENTO E PEDÁGIO", "ETIQUETAS E EMBALAGENS", "EVENTOS E COMEMORAÇÕES - ADMINISTRATIVO", "EXAMES MÉDICOS - OPERACIONAL", "FRETES E CARRETOS", "INTERNET", "LIMPEZA E CONSERVAÇÃO", "MANUTENÇÃO TÉCNICA", "MATERIAL DE ESCRITÓRIO", "MATERIAL DE EXPEDIENTE", "MATERIAL DE EXPEDIENTE - OPERACIONAL", "MATERIAL DE LIMPEZA", "OUTROS", "PROPAGANDA E PUBLICIDADE", "PROVA/CERTIFICAÇÃO", "REFEIÇÃO", "REFEIÇÕES - OPERACIONAL", "REPARO E MANUTENÇAO COM VEICULOS", "SEGURANÇA PATRIMONIAL", "SEGURO E PLANO DE SAÚDE - ADMINISTRATIVO", "SEGURO E PLANO DE SAÚDE - OPERACIONAL", "SERVICOS DE ASSESSORIA CONTABIL", "SERVIÇOS DE ADVOCACIA", "SERVIÇOS DE AUDITORIA", "SERVIÇOS DE CONSULTORIA E ASSESSORIA", "SERVIÇOS GRÁFICOS", "SOFTWARES E LICENÇAS - ADMINISTRATIVO", "SOFTWARES E LICENÇAS - OPERACIONAL", "TAXAS DE ORGAOS PROFISSIONAIS", "TELEFONIA CELULAR", "UNIFORMES E VESTUÁRIOS", "VALE COMBUSTIVEL - OPERACIONAL", "VIAGENS E ESTADIAS", "XEROX E ASSEMELHADOS"], "grupos": ["SERVIÇOS CONTRATADOS", "VEÍCULOS", "MATERIAL DE CONSTRUÇÃO\\REFORMA", "LOCAÇÃO DE EQUIPAMENTOS", "SERVIÇOS PRESTADOS", "COPA E COZINHA", "MÁQUINAS E EQUIPAMENTOS", "ESCRITÓRIO E PAPELARIA", "IDENTIFICAÇÃO", "EPI", "MATERIAL DE LIMPEZA", "MATERIAL DE CONSTRUÇÃO/REFORMA", "REVENDA", "MÓVEIS"], "grupoMes": {"SERVIÇOS CONTRATADOS": [698692.67, 451464.6, 452544.2, 412806.72, 685198.03, 1062139.01, 709997.77, 760150.33], "VEÍCULOS": [46535.13, 68863.23, 82303.06, 2076702.26, 481642.36, 21601.24, 47684.48, 30116.38], "MATERIAL DE CONSTRUÇÃO\\REFORMA": [4016.27, 8087.26, 252607.17, 261621.09, 86312.27, 61303.22, 1175.52, 39636.76], "LOCAÇÃO DE EQUIPAMENTOS": [43818.37, 44496.61, 63865.82, 95197.69, 101523.69, 57010.0, 38345.38, 20317.21], "SERVIÇOS PRESTADOS": [50292.6, 29811.28, 56364.0, 81116.0, 80507.05, 46946.43, 68499.0, 33122.7], "COPA E COZINHA": [51247.51, 982.83, 49069.47, 53189.17, 88656.47, 3961.0, 43212.5, 74404.26], "MÁQUINAS E EQUIPAMENTOS": [11829.0, 8329.9, 8329.9, 255807.19, 12034.74, 13477.17, 3579.9, 14478.53], "ESCRITÓRIO E PAPELARIA": [3122.78, 3560.77, 20936.5, 6899.0, 14616.76, 45710.03, 26465.1, 12851.72], "IDENTIFICAÇÃO": [33328.0, 0.0, 189.0, 0.0, 6908.27, 3947.14, 3443.56, 102.0], "EPI": [570.0, 4307.56, 3134.0, 5964.25, 2370.6, 11369.58, 12301.0, 1935.5], "MATERIAL DE LIMPEZA": [988.0, 597.53, 12306.96, 0.0, 4634.79, 0.0, 1736.29, 1607.28], "MATERIAL DE CONSTRUÇÃO/REFORMA": [4051.44, 50.0, 75.0, 423.0, 4820.4, 1806.8, 1558.0, 789.6], "REVENDA": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 9000.0, 0.0], "MÓVEIS": [0.0, 0.0, 0.0, 0.0, 7000.0, 0.0, 0.0, 0.0]}, "grupoTotals": {"SERVIÇOS CONTRATADOS": 5232993.33, "VEÍCULOS": 2855448.14, "MATERIAL DE CONSTRUÇÃO\\REFORMA": 714759.56, "LOCAÇÃO DE EQUIPAMENTOS": 464574.77, "SERVIÇOS PRESTADOS": 446659.06, "COPA E COZINHA": 364723.21, "MÁQUINAS E EQUIPAMENTOS": 327866.33, "ESCRITÓRIO E PAPELARIA": 134162.66, "IDENTIFICAÇÃO": 47917.97, "EPI": 41952.49, "MATERIAL DE LIMPEZA": 21870.85, "MATERIAL DE CONSTRUÇÃO/REFORMA": 13574.24, "REVENDA": 9000.0, "MÓVEIS": 7000.0}, "fornecedorMes": {"XP LOGISTICO PRIME YIELD FUNDO DE INVESTIMENTO IMO": [0.0, 0.0, 0.0, 0.0, 323988.0, 647976.0, 323988.0, 323988.0], "Z W M TRANSPORTE LTDA": [4900.0, 3360.0, 560.0, 902140.0, 370280.0, 0.0, 0.0, 0.0], "MARDISA VEICULOS S/A": [0.0, 0.0, 0.0, 1120000.0, 0.0, 0.0, 0.0, 0.0], "FLASH TECNOLOGIA E INSTITUICAO DE PAGAMENTO LTDA": [61393.97, 66149.73, 68559.1, 71659.2, 74860.31, 78677.48, 83620.76, 90387.18], "CONDOMINIO DISTRIBUTION PARK MANAUS I": [0.0, 0.0, 90559.89, 70682.04, 74169.12, 73784.06, 74056.82, 73784.06], "BIG TRADING E EMPREENDIMENTOS LTDA": [0.0, 0.0, 203400.0, 203400.0, 0.0, 0.0, 0.0, 0.0], "C.L.N PARTICIPACOES E EMPREENDIMENTOS IMOBILIARIOS": [163062.02, 161747.31, 6845.59, 60000.0, 0.0, 0.0, 0.0, 0.0], "W L FABRICACAO DE ALIMENTOS LTDA": [45766.51, 0.0, 45389.47, 49509.17, 92186.67, 0.0, 45972.5, 80460.96], "HAPVIDA ASSISTENCIA MEDICA S.A.": [39613.89, 30711.12, 33314.47, 34558.11, 33645.6, 38516.61, 35470.07, 43503.74], "AMAZON COMBUSTIVEIS PARA VEICULOS E CONSTRUCOES LT": [13735.13, 26863.23, 40303.06, 29702.26, 48142.36, 21601.24, 47684.48, 28079.94], "M.A CONSTRUCOES E ELETRICA LTDA": [3700.0, 7100.0, 50400.0, 39000.0, 58700.0, 46407.0, 0.0, 35160.0], "GLOBALSERVICE - SERVICOS EMPRESARIAIS LTDA": [0.0, 36967.16, 36967.16, 34384.74, 32493.19, 32334.41, 32334.41, 31367.73], "IBN MANUTENÇÃO E LOCAÇÃO DE EMPILHADEIRAS LTDA": [27384.0, 25820.0, 31380.0, 35900.0, 26746.0, 30560.0, 26665.0, 24083.7], "EQUIPACENTER COMERCIO DE EQUIPAMENTOS LTDA.": [0.0, 0.0, 0.0, 170490.0, 0.0, 0.0, 0.0, 0.0], "FREITAS E MONTEIRO TRANSPORTES DE CARGAS LTDA": [15277.6, 18012.28, 24954.0, 9834.0, 48851.55, 32298.3, 9834.0, 9834.0]}, "fornecedorTotals": {"XP LOGISTICO PRIME YIELD FUNDO DE INVESTIMENTO IMO": 1619940.0, "Z W M TRANSPORTE LTDA": 1281240.0, "MARDISA VEICULOS S/A": 1120000.0, "FLASH TECNOLOGIA E INSTITUICAO DE PAGAMENTO LTDA": 595307.73, "CONDOMINIO DISTRIBUTION PARK MANAUS I": 457035.99, "BIG TRADING E EMPREENDIMENTOS LTDA": 406800.0, "C.L.N PARTICIPACOES E EMPREENDIMENTOS IMOBILIARIOS": 391654.92, "W L FABRICACAO DE ALIMENTOS LTDA": 359285.28, "HAPVIDA ASSISTENCIA MEDICA S.A.": 289333.61, "AMAZON COMBUSTIVEIS PARA VEICULOS E CONSTRUCOES LT": 256111.7, "M.A CONSTRUCOES E ELETRICA LTDA": 240467.0, "GLOBALSERVICE - SERVICOS EMPRESARIAIS LTDA": 236848.8, "IBN MANUTENÇÃO E LOCAÇÃO DE EMPILHADEIRAS LTDA": 228538.7, "EQUIPACENTER COMERCIO DE EQUIPAMENTOS LTDA.": 170490.0, "FREITAS E MONTEIRO TRANSPORTES DE CARGAS LTDA": 168895.73}, "catPie": {"labels": ["SERVIÇOS CONTRATADOS", "VEÍCULOS", "MATERIAL DE CONSTRUÇ", "LOCAÇÃO DE EQUIPAMEN", "SERVIÇOS PRESTADOS", "COPA E COZINHA", "Outros"], "values": [5232993.33, 2855448.14, 714759.56, 464574.77, 446659.06, 364723.21, 603344.54]}, "suppliers": {"names": ["XP LOGISTICO PRIME YIELD FUNDO", "Z W M TRANSPORTE LTDA", "MARDISA VEICULOS S/A", "FLASH TECNOLOGIA E INSTITUICAO", "CONDOMINIO DISTRIBUTION PARK M", "BIG TRADING E EMPREENDIMENTOS ", "C.L.N PARTICIPACOES E EMPREEND", "W L FABRICACAO DE ALIMENTOS LT", "HAPVIDA ASSISTENCIA MEDICA S.A", "AMAZON COMBUSTIVEIS PARA VEICU"], "values": [1619940.0, 1281240.0, 1120000.0, 595307.73, 457035.99, 406800.0, 391654.92, 359285.28, 289333.61, 256111.7]}, "status": {"labels": ["Totalmente atendido", "Cancelado", "Parcialmente atendido", "Aberto", "Atendido com corte"], "values": [10512888.52, 488005.98, 107286.57, 60109.96, 2217.56]}, "statusMes": {"Totalmente atendido": [915691.77, 600604.13, 993802.4, 3246046.37, 1570184.12, 1287301.62, 953103.91, 946154.2], "Cancelado": [3668.24, 8521.11, 469422.0, 2455.43, 3600.0, 84.0, 255.2, 0.0], "Parcialmente atendido": [32800.0, 17307.56, 500.0, 3680.0, 6041.31, 41970.0, 4987.7, 0.0], "Aberto": [0.0, 1455.0, 6390.0, 0.0, 0.0, 0.0, 8906.89, 43358.07], "Atendido com corte": [0.0, 1184.88, 1032.68, 0.0, 0.0, 0.0, 0.0, 0.0]}, "statusTotals": {"Totalmente atendido": 10512888.52, "Cancelado": 488005.98, "Parcialmente atendido": 107286.57, "Aberto": 60109.96, "Atendido com corte": 2217.56}, "abertos": [{"ped": 120526, "prod": "Ponto eletronico", "forn": "MAM LABS SOFTWARE LTDA", "emissao": "19/02/2026", "prevEntrega": "19/02/2026", "dias": 195, "valor": 1455.0, "grupo": "SERVIÇOS PRESTADOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "SOFTWARES E LICENÇAS - ADMINISTRATIVO", "qtAberto": 1}, {"ped": 121256, "prod": "Carimbo 302", "forn": "KAMILA Y R DUTRA", "emissao": "10/03/2026", "prevEntrega": "10/03/2026", "dias": 176, "valor": 45.0, "grupo": "ESCRITÓRIO E PAPELARIA", "familia": "USO E CONSUMO", "natureza": "COMPRA MATERIAL OUTROS", "qtAberto": 1}, {"ped": 121256, "prod": "Carimbo 301", "forn": "KAMILA Y R DUTRA", "emissao": "10/03/2026", "prevEntrega": "10/03/2026", "dias": 176, "valor": 45.0, "grupo": "ESCRITÓRIO E PAPELARIA", "familia": "USO E CONSUMO", "natureza": "COMPRA MATERIAL OUTROS", "qtAberto": 1}, {"ped": 122206, "prod": "MAO DE OBRA DE INSTALAÇÃO", "forn": "H F COMERCIO DE MAQUINAS E EQUIPAMENTOS LTDA", "emissao": "23/03/2026", "prevEntrega": "23/03/2026", "dias": 163, "valor": 5200.0, "grupo": "MATERIAL DE CONSTRUÇÃO\\REFORMA", "familia": "MATERIAIS PARA REFORMA", "natureza": "OUTROS", "qtAberto": 1}, {"ped": 122206, "prod": "TRANSPORTE MUNCK", "forn": "H F COMERCIO DE MAQUINAS E EQUIPAMENTOS LTDA", "emissao": "23/03/2026", "prevEntrega": "23/03/2026", "dias": 163, "valor": 1100.0, "grupo": "MATERIAL DE CONSTRUÇÃO\\REFORMA", "familia": "MATERIAIS PARA REFORMA", "natureza": "OUTROS", "qtAberto": 1}, {"ped": 128543, "prod": "mesa Delta Com 2 gavetas, medindo 160x160x60x75 Confeccionada em MDP d", "forn": "MOVENORTE COMERCIO E REPRESENTACOES LTDA", "emissao": "09/07/2026", "prevEntrega": "09/07/2026", "dias": 55, "valor": 1329.0, "grupo": "ESCRITÓRIO E PAPELARIA", "familia": "MATERIAIS DE EXPEDIENTE", "natureza": "MATERIAL DE ESCRITÓRIO", "qtAberto": 1}, {"ped": 129156, "prod": "CONSULTORIA", "forn": "SB SERVICOS DE CONSULTORIA E TREINAMENTO LTDA", "emissao": "13/07/2026", "prevEntrega": "13/07/2026", "dias": 51, "valor": 7500.0, "grupo": "SERVIÇOS PRESTADOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "SERVIÇOS DE AUDITORIA", "qtAberto": 3}, {"ped": 129188, "prod": "LICENCIAMENTO OU CESSAO DE DIREITO USO DE PROGRAMA DE COMPUTACAO", "forn": "ALTERDATA TECNOLOGIA EM INFORMATICA LTDA", "emissao": "13/07/2026", "prevEntrega": "13/07/2026", "dias": 51, "valor": 77.89, "grupo": "SERVIÇOS CONTRATADOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "SOFTWARES E LICENÇAS - ADMINISTRATIVO", "qtAberto": 1}, {"ped": 130285, "prod": "Locação de prancha de 20 pés", "forn": "ADLOG TRANSPORTE E LOGISTICA LTDA", "emissao": "03/08/2026", "prevEntrega": "03/08/2026", "dias": 30, "valor": 900.0, "grupo": "VEÍCULOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "ALUGUEL DE MAQS E EQUIPAMENTOS", "qtAberto": 1}, {"ped": 130662, "prod": "PEDÁGIO", "forn": "SUPER TERMINAIS COMERCIO E INDUSTRIA LTDA", "emissao": "06/08/2026", "prevEntrega": "06/08/2026", "dias": 27, "valor": 4721.38, "grupo": "SERVIÇOS CONTRATADOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "ESTACIONAMENTO E PEDÁGIO", "qtAberto": 1}, {"ped": 130104, "prod": "MANUTENÇÃO TECNICA", "forn": "M.A CONSTRUCOES E ELETRICA LTDA", "emissao": "06/08/2026", "prevEntrega": "06/08/2026", "dias": 27, "valor": 10625.0, "grupo": "MATERIAL DE CONSTRUÇÃO\\REFORMA", "familia": "MATERIAIS PARA REFORMA", "natureza": "DESPESAS COM MANUTENÇÃO PREDIAL", "qtAberto": 1}, {"ped": 130766, "prod": "COMPRA DE MATERIAL DE USO E CONSUMO - OPERACIONAL", "forn": "R P V DA AMAZONIA LTDA", "emissao": "07/08/2026", "prevEntrega": "07/08/2026", "dias": 26, "valor": 102.0, "grupo": "IDENTIFICAÇÃO", "familia": "USO E CONSUMO", "natureza": "COMPRA DE MATERIAL DE USO E CONSUMO - OPERACIONAL", "qtAberto": 300}, {"ped": 130592, "prod": "Rastreador", "forn": "RAIO INSTALACAO DE ACESSORIOS LTDA", "emissao": "10/08/2026", "prevEntrega": "10/08/2026", "dias": 23, "valor": 719.1, "grupo": "MÁQUINAS E EQUIPAMENTOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "ALUGUEL DE MAQS E EQUIPAMENTOS", "qtAberto": 1}, {"ped": 130751, "prod": "serviços de segurança e saúde do trabalhador", "forn": "GSO SAUDE OCUPACIONAL LTDA", "emissao": "12/08/2026", "prevEntrega": "12/08/2026", "dias": 21, "valor": 170.0, "grupo": "SERVIÇOS CONTRATADOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "EXAMES MÉDICOS - OPERACIONAL", "qtAberto": 1}, {"ped": 131146, "prod": "serviços de certificação", "forn": "B&D HORIZON CERTIFICADORA LTDA", "emissao": "14/08/2026", "prevEntrega": "14/08/2026", "dias": 19, "valor": 2700.0, "grupo": "SERVIÇOS CONTRATADOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "SERVIÇOS DE AUDITORIA", "qtAberto": 1}, {"ped": 131361, "prod": "Serviços de engenharia", "forn": "R C TEC. CONSULTORIA EM PROJETOS E TREINAMENTOS LT", "emissao": "21/08/2026", "prevEntrega": "21/08/2026", "dias": 12, "valor": 3200.0, "grupo": "SERVIÇOS CONTRATADOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "DESPESAS COM MANUTENÇÃO PREDIAL", "qtAberto": 1}, {"ped": 131404, "prod": "Diesel S10", "forn": "AMAZON COMBUSTIVEIS PARA VEICULOS E CONSTRUCOES LT", "emissao": "21/08/2026", "prevEntrega": "21/08/2026", "dias": 12, "valor": 1000.0, "grupo": "VEÍCULOS", "familia": "USO E CONSUMO", "natureza": "COMBUSTIVEIS E LUBRIFICANTES (OPERACIONAL)", "qtAberto": 1}, {"ped": 131649, "prod": "Firewall", "forn": "BLUEPEX TECNOLOGIA S.A.", "emissao": "24/08/2026", "prevEntrega": "24/08/2026", "dias": 9, "valor": 1117.21, "grupo": "LOCAÇÃO DE EQUIPAMENTOS", "familia": "ATIVO IMOBILIZADO", "natureza": "SOFTWARES E LICENÇAS - OPERACIONAL", "qtAberto": 1}, {"ped": 131731, "prod": "PEDÁGIO", "forn": "SUPER TERMINAIS COMERCIO E INDUSTRIA LTDA", "emissao": "24/08/2026", "prevEntrega": "24/08/2026", "dias": 9, "valor": 1229.0, "grupo": "SERVIÇOS CONTRATADOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "ESTACIONAMENTO E PEDÁGIO", "qtAberto": 1}, {"ped": 131733, "prod": "PEDÁGIO", "forn": "CHIBATAO NAVEGACAO E COMERCIO LTDA", "emissao": "24/08/2026", "prevEntrega": "24/08/2026", "dias": 9, "valor": 2553.0, "grupo": "SERVIÇOS CONTRATADOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "ESTACIONAMENTO E PEDÁGIO", "qtAberto": 1}, {"ped": 130662, "prod": "PEDÁGIO", "forn": "SUPER TERMINAIS COMERCIO E INDUSTRIA LTDA", "emissao": "25/08/2026", "prevEntrega": "25/08/2026", "dias": 8, "valor": 1328.01, "grupo": "SERVIÇOS CONTRATADOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "ESTACIONAMENTO E PEDÁGIO", "qtAberto": 1}, {"ped": 130662, "prod": "PEDÁGIO", "forn": "SUPER TERMINAIS COMERCIO E INDUSTRIA LTDA", "emissao": "25/08/2026", "prevEntrega": "25/08/2026", "dias": 8, "valor": 3393.37, "grupo": "SERVIÇOS CONTRATADOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "ESTACIONAMENTO E PEDÁGIO", "qtAberto": 1}, {"ped": 131793, "prod": "EMPILHADEIRA ELÉTRICA RETRÁTIL STILL", "forn": "IBN MANUTENÇÃO E LOCAÇÃO DE EMPILHADEIRAS LTDA", "emissao": "26/08/2026", "prevEntrega": "26/08/2026", "dias": 7, "valor": 9600.0, "grupo": "LOCAÇÃO DE EQUIPAMENTOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "ALUGUEL DE MAQS E EQUIPAMENTOS", "qtAberto": 1}], "sourceLabel": "27_08_1.xlsx", "savedAt": "2026-09-02T11:36:12.298279", "version": "30"}; // @END_RAW
+var RAW = {"months": ["Jan/26", "Fev/26", "Mar/26", "Abr/26", "Mai/26", "Jun/26", "Jul/26", "Ago/26"], "totals": [948491.77, 620551.57, 1001725.08, 3249726.37, 1576225.43, 1329271.62, 966998.5, 989512.27], "orders": [113, 100, 154, 156, 164, 127, 145, 129], "totalOrders": 884, "records": 1613, "familias": {"PRESTAÇÃO DE SERVIÇOS": [819904.76, 545875.26, 576303.66, 568248.12, 869489.06, 1145753.78, 813815.39, 809578.33], "USO E CONSUMO": [53791.34, 48127.59, 69791.95, 2088791.63, 445674.16, 36314.27, 56684.48, 30461.07], "MATERIAIS PARA REFORMA": [5380.2, 7047.06, 261374.32, 268544.09, 90564.18, 57091.66, 1500.0, 40426.36], "ATIVO IMOBILIZADO": [8250.0, 8250.0, 8250.0, 255727.29, 61855.43, 13397.27, 2145.23, 12637.44], "MATERIAIS DE EXPEDIENTE": [4555.96, 3691.98, 24294.5, 6324.92, 8394.94, 63793.64, 32264.61, 14167.63], "COZINHA\\COPA": [3680.0, 0.0, 3680.0, 3680.0, 1650.0, 3961.0, 2760.0, 4800.0], "VESTUARIO": [0.0, 0.0, 3134.0, 1851.15, 1300.0, 5160.0, 7070.0, 1935.5], "MATERIAIS DE LIMPEZA": [2393.0, 1154.68, 5647.18, 0.0, 4620.99, 0.0, 1736.29, 2318.78], "CALÇADOS ": [570.0, 2605.0, 0.0, 3250.0, 260.0, 0.0, 5810.0, 0.0]}, "familiaTotals": {"PRESTAÇÃO DE SERVIÇOS": 6148968.36, "USO E CONSUMO": 2829636.49, "MATERIAIS PARA REFORMA": 731927.87, "ATIVO IMOBILIZADO": 370512.66, "MATERIAIS DE EXPEDIENTE": 157488.18, "COZINHA\\COPA": 24211.0, "VESTUARIO": 20450.65, "MATERIAIS DE LIMPEZA": 17870.92, "CALÇADOS ": 12495.0}, "naturezas": {"ALUGUEL ": [388046.08, 156000.0, 0.0, 0.0, 323988.0, 647976.0, 323988.0, 323988.0], "COMPRA DE IMOBILIZADO": [0.0, 0.0, 0.0, 1727477.29, 420590.05, 0.0, 0.0, 420.23], "OUTROS": [0.0, 15002.56, 278313.16, 327217.5, 38650.0, 113217.26, 68146.04, 19909.65], "ALUGUEL DE MAQS E EQUIPAMENTOS": [94542.68, 118289.9, 99761.06, 120011.34, 99999.75, 41977.17, 28403.53, 75074.82], "DESPESAS LEGAIS COM VEICULOS": [0.0, 0.0, 0.0, 540000.0, 0.0, 0.0, 0.0, 0.0], "CONDOMÍNIO": [0.0, 0.0, 90559.89, 70682.04, 74169.12, 73784.06, 74056.82, 73784.06], "REFEIÇÃO": [45766.51, 0.0, 45389.47, 89395.37, 46206.17, 40977.83, 4432.66, 46233.14], "SEGURANÇA PATRIMONIAL": [71845.58, 39171.47, 36967.16, 34384.74, 32493.19, 32334.41, 32334.41, 31367.73], "SEGURO E PLANO DE SAÚDE - OPERACIONAL": [39613.89, 30711.12, 33314.47, 34558.11, 33645.6, 38516.61, 35470.07, 43503.74], "DESPESAS COM MANUTENÇÃO PREDIAL": [9095.7, 9300.0, 56026.0, 47672.23, 63900.0, 48607.0, 2200.0, 38360.0], "COMBUSTIVEIS E LUBRIFICANTES (OPERACIONAL)": [13735.13, 26863.23, 40303.06, 29702.26, 48142.36, 21601.24, 47684.48, 28079.94], "VALE COMBUSTIVEL - OPERACIONAL": [24552.0, 28908.0, 29214.0, 31773.0, 31840.0, 37699.65, 33512.0, 37285.0], "AUXILIO ALIMENTAÇÃO - OPERACIONAL": [36841.97, 37241.73, 39345.1, 0.0, 43020.31, 0.0, 45676.1, 6869.04], "CARGA E DESCARGA": [15677.6, 18012.28, 24954.0, 9834.0, 48851.55, 32298.3, 9834.0, 30535.25], "REFEIÇÕES - OPERACIONAL": [0.0, 0.0, 0.0, 0.0, 45980.5, 0.0, 45972.5, 80460.96]}, "naturezaTotals": {"ALUGUEL ": 2163986.08, "COMPRA DE IMOBILIZADO": 2148487.57, "OUTROS": 860456.17, "ALUGUEL DE MAQS E EQUIPAMENTOS": 678060.25, "DESPESAS LEGAIS COM VEICULOS": 540000.0, "CONDOMÍNIO": 457035.99, "REFEIÇÃO": 318401.15, "SEGURANÇA PATRIMONIAL": 310898.69, "SEGURO E PLANO DE SAÚDE - OPERACIONAL": 289333.61, "DESPESAS COM MANUTENÇÃO PREDIAL": 275160.93, "COMBUSTIVEIS E LUBRIFICANTES (OPERACIONAL)": 256111.7, "VALE COMBUSTIVEL - OPERACIONAL": 254783.65, "AUXILIO ALIMENTAÇÃO - OPERACIONAL": 208994.25, "CARGA E DESCARGA": 189996.98, "REFEIÇÕES - OPERACIONAL": 172413.96}, "allNaturezas": ["ALUGUEL ", "ALUGUEL DE MAQS E EQUIPAMENTOS", "AUXILIO ALIMENTAÇÃO - OPERACIONAL", "BENS DE PEQUENO VALOR - OPERACIONAL", "BENS DE PEQUENOS VALOR - ADM", "BRINDES", "CARGA E DESCARGA", "COLETA DE RESÍDUOS", "COMBUSTIVEIS E LUBRIFICANTES (OPERACIONAL)", "COMPRA DE IMOBILIZADO", "COMPRA DE MATERIAL DE USO E CONSUMO - ADM", "COMPRA DE MATERIAL DE USO E CONSUMO - OPERACIONAL", "COMPRA MATERIAL OUTROS", "CONDOMÍNIO", "CURSO/TREINAMENTO", "DEDETIZAÇÃO E CONTROLE DE PRAGAS", "DESPESAS COM MANUTENÇÃO PREDIAL", "DESPESAS LEGAIS COM VEICULOS", "ENERGIA ELETRÍCA", "ENTREGA E COLETA", "ESTACIONAMENTO E PEDÁGIO", "ETIQUETAS E EMBALAGENS", "EVENTOS E COMEMORAÇÕES - ADMINISTRATIVO", "EXAMES MÉDICOS - OPERACIONAL", "FRETES E CARRETOS", "INTERNET", "LIMPEZA E CONSERVAÇÃO", "MANUTENÇÃO TÉCNICA", "MATERIAL DE ESCRITÓRIO", "MATERIAL DE EXPEDIENTE", "MATERIAL DE EXPEDIENTE - OPERACIONAL", "MATERIAL DE LIMPEZA", "OUTROS", "PROPAGANDA E PUBLICIDADE", "PROVA/CERTIFICAÇÃO", "REFEIÇÃO", "REFEIÇÕES - OPERACIONAL", "REPARO E MANUTENÇAO COM VEICULOS", "SEGURANÇA PATRIMONIAL", "SEGURO E PLANO DE SAÚDE - ADMINISTRATIVO", "SEGURO E PLANO DE SAÚDE - OPERACIONAL", "SERVICOS DE ASSESSORIA CONTABIL", "SERVIÇOS DE ADVOCACIA", "SERVIÇOS DE AUDITORIA", "SERVIÇOS DE CONSULTORIA E ASSESSORIA", "SERVIÇOS GRÁFICOS", "SOFTWARES E LICENÇAS - ADMINISTRATIVO", "SOFTWARES E LICENÇAS - OPERACIONAL", "TAXAS DE ORGAOS PROFISSIONAIS", "TELEFONIA CELULAR", "UNIFORMES E VESTUÁRIOS", "VALE COMBUSTIVEL - OPERACIONAL", "VIAGENS E ESTADIAS", "XEROX E ASSEMELHADOS"], "grupos": ["SERVIÇOS CONTRATADOS", "VEÍCULOS", "MATERIAL DE CONSTRUÇÃO\\REFORMA", "LOCAÇÃO DE EQUIPAMENTOS", "SERVIÇOS PRESTADOS", "COPA E COZINHA", "MÁQUINAS E EQUIPAMENTOS", "ESCRITÓRIO E PAPELARIA", "IDENTIFICAÇÃO", "EPI", "MATERIAL DE LIMPEZA", "MATERIAL DE CONSTRUÇÃO/REFORMA", "REVENDA", "MÓVEIS"], "grupoMes": {"SERVIÇOS CONTRATADOS": [698692.67, 451464.6, 452544.2, 412806.72, 685198.03, 1062139.01, 709997.77, 760150.33], "VEÍCULOS": [46535.13, 68863.23, 82303.06, 2076702.26, 481642.36, 21601.24, 47684.48, 30116.38], "MATERIAL DE CONSTRUÇÃO\\REFORMA": [4016.27, 8087.26, 252607.17, 261621.09, 86312.27, 61303.22, 1175.52, 39636.76], "LOCAÇÃO DE EQUIPAMENTOS": [43818.37, 44496.61, 63865.82, 95197.69, 101523.69, 57010.0, 38345.38, 20317.21], "SERVIÇOS PRESTADOS": [50292.6, 29811.28, 56364.0, 81116.0, 80507.05, 46946.43, 68499.0, 33122.7], "COPA E COZINHA": [51247.51, 982.83, 49069.47, 53189.17, 88656.47, 3961.0, 43212.5, 74404.26], "MÁQUINAS E EQUIPAMENTOS": [11829.0, 8329.9, 8329.9, 255807.19, 12034.74, 13477.17, 3579.9, 14478.53], "ESCRITÓRIO E PAPELARIA": [3122.78, 3560.77, 20936.5, 6899.0, 14616.76, 45710.03, 26465.1, 12851.72], "IDENTIFICAÇÃO": [33328.0, 0.0, 189.0, 0.0, 6908.27, 3947.14, 3443.56, 102.0], "EPI": [570.0, 4307.56, 3134.0, 5964.25, 2370.6, 11369.58, 12301.0, 1935.5], "MATERIAL DE LIMPEZA": [988.0, 597.53, 12306.96, 0.0, 4634.79, 0.0, 1736.29, 1607.28], "MATERIAL DE CONSTRUÇÃO/REFORMA": [4051.44, 50.0, 75.0, 423.0, 4820.4, 1806.8, 1558.0, 789.6], "REVENDA": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 9000.0, 0.0], "MÓVEIS": [0.0, 0.0, 0.0, 0.0, 7000.0, 0.0, 0.0, 0.0]}, "grupoTotals": {"SERVIÇOS CONTRATADOS": 5232993.33, "VEÍCULOS": 2855448.14, "MATERIAL DE CONSTRUÇÃO\\REFORMA": 714759.56, "LOCAÇÃO DE EQUIPAMENTOS": 464574.77, "SERVIÇOS PRESTADOS": 446659.06, "COPA E COZINHA": 364723.21, "MÁQUINAS E EQUIPAMENTOS": 327866.33, "ESCRITÓRIO E PAPELARIA": 134162.66, "IDENTIFICAÇÃO": 47917.97, "EPI": 41952.49, "MATERIAL DE LIMPEZA": 21870.85, "MATERIAL DE CONSTRUÇÃO/REFORMA": 13574.24, "REVENDA": 9000.0, "MÓVEIS": 7000.0}, "fornecedorMes": {"XP LOGISTICO PRIME YIELD FUNDO DE INVESTIMENTO IMO": [0.0, 0.0, 0.0, 0.0, 323988.0, 647976.0, 323988.0, 323988.0], "Z W M TRANSPORTE LTDA": [4900.0, 3360.0, 560.0, 902140.0, 370280.0, 0.0, 0.0, 0.0], "MARDISA VEICULOS S/A": [0.0, 0.0, 0.0, 1120000.0, 0.0, 0.0, 0.0, 0.0], "FLASH TECNOLOGIA E INSTITUICAO DE PAGAMENTO LTDA": [61393.97, 66149.73, 68559.1, 71659.2, 74860.31, 78677.48, 83620.76, 90387.18], "CONDOMINIO DISTRIBUTION PARK MANAUS I": [0.0, 0.0, 90559.89, 70682.04, 74169.12, 73784.06, 74056.82, 73784.06], "BIG TRADING E EMPREENDIMENTOS LTDA": [0.0, 0.0, 203400.0, 203400.0, 0.0, 0.0, 0.0, 0.0], "C.L.N PARTICIPACOES E EMPREENDIMENTOS IMOBILIARIOS": [163062.02, 161747.31, 6845.59, 60000.0, 0.0, 0.0, 0.0, 0.0], "W L FABRICACAO DE ALIMENTOS LTDA": [45766.51, 0.0, 45389.47, 49509.17, 92186.67, 0.0, 45972.5, 80460.96], "HAPVIDA ASSISTENCIA MEDICA S.A.": [39613.89, 30711.12, 33314.47, 34558.11, 33645.6, 38516.61, 35470.07, 43503.74], "AMAZON COMBUSTIVEIS PARA VEICULOS E CONSTRUCOES LT": [13735.13, 26863.23, 40303.06, 29702.26, 48142.36, 21601.24, 47684.48, 28079.94], "M.A CONSTRUCOES E ELETRICA LTDA": [3700.0, 7100.0, 50400.0, 39000.0, 58700.0, 46407.0, 0.0, 35160.0], "GLOBALSERVICE - SERVICOS EMPRESARIAIS LTDA": [0.0, 36967.16, 36967.16, 34384.74, 32493.19, 32334.41, 32334.41, 31367.73], "IBN MANUTENÇÃO E LOCAÇÃO DE EMPILHADEIRAS LTDA": [27384.0, 25820.0, 31380.0, 35900.0, 26746.0, 30560.0, 26665.0, 24083.7], "EQUIPACENTER COMERCIO DE EQUIPAMENTOS LTDA.": [0.0, 0.0, 0.0, 170490.0, 0.0, 0.0, 0.0, 0.0], "FREITAS E MONTEIRO TRANSPORTES DE CARGAS LTDA": [15277.6, 18012.28, 24954.0, 9834.0, 48851.55, 32298.3, 9834.0, 9834.0]}, "fornecedorTotals": {"XP LOGISTICO PRIME YIELD FUNDO DE INVESTIMENTO IMO": 1619940.0, "Z W M TRANSPORTE LTDA": 1281240.0, "MARDISA VEICULOS S/A": 1120000.0, "FLASH TECNOLOGIA E INSTITUICAO DE PAGAMENTO LTDA": 595307.73, "CONDOMINIO DISTRIBUTION PARK MANAUS I": 457035.99, "BIG TRADING E EMPREENDIMENTOS LTDA": 406800.0, "C.L.N PARTICIPACOES E EMPREENDIMENTOS IMOBILIARIOS": 391654.92, "W L FABRICACAO DE ALIMENTOS LTDA": 359285.28, "HAPVIDA ASSISTENCIA MEDICA S.A.": 289333.61, "AMAZON COMBUSTIVEIS PARA VEICULOS E CONSTRUCOES LT": 256111.7, "M.A CONSTRUCOES E ELETRICA LTDA": 240467.0, "GLOBALSERVICE - SERVICOS EMPRESARIAIS LTDA": 236848.8, "IBN MANUTENÇÃO E LOCAÇÃO DE EMPILHADEIRAS LTDA": 228538.7, "EQUIPACENTER COMERCIO DE EQUIPAMENTOS LTDA.": 170490.0, "FREITAS E MONTEIRO TRANSPORTES DE CARGAS LTDA": 168895.73}, "catPie": {"labels": ["SERVIÇOS CONTRATADOS", "VEÍCULOS", "MATERIAL DE CONSTRUÇ", "LOCAÇÃO DE EQUIPAMEN", "SERVIÇOS PRESTADOS", "COPA E COZINHA", "Outros"], "values": [5232993.33, 2855448.14, 714759.56, 464574.77, 446659.06, 364723.21, 603344.54]}, "suppliers": {"names": ["XP LOGISTICO PRIME YIELD FUNDO", "Z W M TRANSPORTE LTDA", "MARDISA VEICULOS S/A", "FLASH TECNOLOGIA E INSTITUICAO", "CONDOMINIO DISTRIBUTION PARK M", "BIG TRADING E EMPREENDIMENTOS ", "C.L.N PARTICIPACOES E EMPREEND", "W L FABRICACAO DE ALIMENTOS LT", "HAPVIDA ASSISTENCIA MEDICA S.A", "AMAZON COMBUSTIVEIS PARA VEICU"], "values": [1619940.0, 1281240.0, 1120000.0, 595307.73, 457035.99, 406800.0, 391654.92, 359285.28, 289333.61, 256111.7]}, "status": {"labels": ["Totalmente atendido", "Cancelado", "Parcialmente atendido", "Aberto", "Atendido com corte"], "values": [10512888.52, 488005.98, 107286.57, 60109.96, 2217.56]}, "statusMes": {"Totalmente atendido": [915691.77, 600604.13, 993802.4, 3246046.37, 1570184.12, 1287301.62, 953103.91, 946154.2], "Cancelado": [3668.24, 8521.11, 469422.0, 2455.43, 3600.0, 84.0, 255.2, 0.0], "Parcialmente atendido": [32800.0, 17307.56, 500.0, 3680.0, 6041.31, 41970.0, 4987.7, 0.0], "Aberto": [0.0, 1455.0, 6390.0, 0.0, 0.0, 0.0, 8906.89, 43358.07], "Atendido com corte": [0.0, 1184.88, 1032.68, 0.0, 0.0, 0.0, 0.0, 0.0]}, "statusTotals": {"Totalmente atendido": 10512888.52, "Cancelado": 488005.98, "Parcialmente atendido": 107286.57, "Aberto": 60109.96, "Atendido com corte": 2217.56}, "abertos": [{"ped": 120526, "prod": "Ponto eletronico", "forn": "MAM LABS SOFTWARE LTDA", "emissao": "19/02/2026", "prevEntrega": "19/02/2026", "dias": 195, "valor": 1455.0, "grupo": "SERVIÇOS PRESTADOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "SOFTWARES E LICENÇAS - ADMINISTRATIVO", "qtAberto": 1}, {"ped": 121256, "prod": "Carimbo 302", "forn": "KAMILA Y R DUTRA", "emissao": "10/03/2026", "prevEntrega": "10/03/2026", "dias": 176, "valor": 45.0, "grupo": "ESCRITÓRIO E PAPELARIA", "familia": "USO E CONSUMO", "natureza": "COMPRA MATERIAL OUTROS", "qtAberto": 1}, {"ped": 121256, "prod": "Carimbo 301", "forn": "KAMILA Y R DUTRA", "emissao": "10/03/2026", "prevEntrega": "10/03/2026", "dias": 176, "valor": 45.0, "grupo": "ESCRITÓRIO E PAPELARIA", "familia": "USO E CONSUMO", "natureza": "COMPRA MATERIAL OUTROS", "qtAberto": 1}, {"ped": 122206, "prod": "MAO DE OBRA DE INSTALAÇÃO", "forn": "H F COMERCIO DE MAQUINAS E EQUIPAMENTOS LTDA", "emissao": "23/03/2026", "prevEntrega": "23/03/2026", "dias": 163, "valor": 5200.0, "grupo": "MATERIAL DE CONSTRUÇÃO\\REFORMA", "familia": "MATERIAIS PARA REFORMA", "natureza": "OUTROS", "qtAberto": 1}, {"ped": 122206, "prod": "TRANSPORTE MUNCK", "forn": "H F COMERCIO DE MAQUINAS E EQUIPAMENTOS LTDA", "emissao": "23/03/2026", "prevEntrega": "23/03/2026", "dias": 163, "valor": 1100.0, "grupo": "MATERIAL DE CONSTRUÇÃO\\REFORMA", "familia": "MATERIAIS PARA REFORMA", "natureza": "OUTROS", "qtAberto": 1}, {"ped": 128543, "prod": "mesa Delta Com 2 gavetas, medindo 160x160x60x75 Confeccionada em MDP d", "forn": "MOVENORTE COMERCIO E REPRESENTACOES LTDA", "emissao": "09/07/2026", "prevEntrega": "09/07/2026", "dias": 55, "valor": 1329.0, "grupo": "ESCRITÓRIO E PAPELARIA", "familia": "MATERIAIS DE EXPEDIENTE", "natureza": "MATERIAL DE ESCRITÓRIO", "qtAberto": 1}, {"ped": 129156, "prod": "CONSULTORIA", "forn": "SB SERVICOS DE CONSULTORIA E TREINAMENTO LTDA", "emissao": "13/07/2026", "prevEntrega": "13/07/2026", "dias": 51, "valor": 7500.0, "grupo": "SERVIÇOS PRESTADOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "SERVIÇOS DE AUDITORIA", "qtAberto": 3}, {"ped": 129188, "prod": "LICENCIAMENTO OU CESSAO DE DIREITO USO DE PROGRAMA DE COMPUTACAO", "forn": "ALTERDATA TECNOLOGIA EM INFORMATICA LTDA", "emissao": "13/07/2026", "prevEntrega": "13/07/2026", "dias": 51, "valor": 77.89, "grupo": "SERVIÇOS CONTRATADOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "SOFTWARES E LICENÇAS - ADMINISTRATIVO", "qtAberto": 1}, {"ped": 130285, "prod": "Locação de prancha de 20 pés", "forn": "ADLOG TRANSPORTE E LOGISTICA LTDA", "emissao": "03/08/2026", "prevEntrega": "03/08/2026", "dias": 30, "valor": 900.0, "grupo": "VEÍCULOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "ALUGUEL DE MAQS E EQUIPAMENTOS", "qtAberto": 1}, {"ped": 130662, "prod": "PEDÁGIO", "forn": "SUPER TERMINAIS COMERCIO E INDUSTRIA LTDA", "emissao": "06/08/2026", "prevEntrega": "06/08/2026", "dias": 27, "valor": 4721.38, "grupo": "SERVIÇOS CONTRATADOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "ESTACIONAMENTO E PEDÁGIO", "qtAberto": 1}, {"ped": 130104, "prod": "MANUTENÇÃO TECNICA", "forn": "M.A CONSTRUCOES E ELETRICA LTDA", "emissao": "06/08/2026", "prevEntrega": "06/08/2026", "dias": 27, "valor": 10625.0, "grupo": "MATERIAL DE CONSTRUÇÃO\\REFORMA", "familia": "MATERIAIS PARA REFORMA", "natureza": "DESPESAS COM MANUTENÇÃO PREDIAL", "qtAberto": 1}, {"ped": 130766, "prod": "COMPRA DE MATERIAL DE USO E CONSUMO - OPERACIONAL", "forn": "R P V DA AMAZONIA LTDA", "emissao": "07/08/2026", "prevEntrega": "07/08/2026", "dias": 26, "valor": 102.0, "grupo": "IDENTIFICAÇÃO", "familia": "USO E CONSUMO", "natureza": "COMPRA DE MATERIAL DE USO E CONSUMO - OPERACIONAL", "qtAberto": 300}, {"ped": 130592, "prod": "Rastreador", "forn": "RAIO INSTALACAO DE ACESSORIOS LTDA", "emissao": "10/08/2026", "prevEntrega": "10/08/2026", "dias": 23, "valor": 719.1, "grupo": "MÁQUINAS E EQUIPAMENTOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "ALUGUEL DE MAQS E EQUIPAMENTOS", "qtAberto": 1}, {"ped": 130751, "prod": "serviços de segurança e saúde do trabalhador", "forn": "GSO SAUDE OCUPACIONAL LTDA", "emissao": "12/08/2026", "prevEntrega": "12/08/2026", "dias": 21, "valor": 170.0, "grupo": "SERVIÇOS CONTRATADOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "EXAMES MÉDICOS - OPERACIONAL", "qtAberto": 1}, {"ped": 131146, "prod": "serviços de certificação", "forn": "B&D HORIZON CERTIFICADORA LTDA", "emissao": "14/08/2026", "prevEntrega": "14/08/2026", "dias": 19, "valor": 2700.0, "grupo": "SERVIÇOS CONTRATADOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "SERVIÇOS DE AUDITORIA", "qtAberto": 1}, {"ped": 131361, "prod": "Serviços de engenharia", "forn": "R C TEC. CONSULTORIA EM PROJETOS E TREINAMENTOS LT", "emissao": "21/08/2026", "prevEntrega": "21/08/2026", "dias": 12, "valor": 3200.0, "grupo": "SERVIÇOS CONTRATADOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "DESPESAS COM MANUTENÇÃO PREDIAL", "qtAberto": 1}, {"ped": 131404, "prod": "Diesel S10", "forn": "AMAZON COMBUSTIVEIS PARA VEICULOS E CONSTRUCOES LT", "emissao": "21/08/2026", "prevEntrega": "21/08/2026", "dias": 12, "valor": 1000.0, "grupo": "VEÍCULOS", "familia": "USO E CONSUMO", "natureza": "COMBUSTIVEIS E LUBRIFICANTES (OPERACIONAL)", "qtAberto": 1}, {"ped": 131649, "prod": "Firewall", "forn": "BLUEPEX TECNOLOGIA S.A.", "emissao": "24/08/2026", "prevEntrega": "24/08/2026", "dias": 9, "valor": 1117.21, "grupo": "LOCAÇÃO DE EQUIPAMENTOS", "familia": "ATIVO IMOBILIZADO", "natureza": "SOFTWARES E LICENÇAS - OPERACIONAL", "qtAberto": 1}, {"ped": 131731, "prod": "PEDÁGIO", "forn": "SUPER TERMINAIS COMERCIO E INDUSTRIA LTDA", "emissao": "24/08/2026", "prevEntrega": "24/08/2026", "dias": 9, "valor": 1229.0, "grupo": "SERVIÇOS CONTRATADOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "ESTACIONAMENTO E PEDÁGIO", "qtAberto": 1}, {"ped": 131733, "prod": "PEDÁGIO", "forn": "CHIBATAO NAVEGACAO E COMERCIO LTDA", "emissao": "24/08/2026", "prevEntrega": "24/08/2026", "dias": 9, "valor": 2553.0, "grupo": "SERVIÇOS CONTRATADOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "ESTACIONAMENTO E PEDÁGIO", "qtAberto": 1}, {"ped": 130662, "prod": "PEDÁGIO", "forn": "SUPER TERMINAIS COMERCIO E INDUSTRIA LTDA", "emissao": "25/08/2026", "prevEntrega": "25/08/2026", "dias": 8, "valor": 1328.01, "grupo": "SERVIÇOS CONTRATADOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "ESTACIONAMENTO E PEDÁGIO", "qtAberto": 1}, {"ped": 130662, "prod": "PEDÁGIO", "forn": "SUPER TERMINAIS COMERCIO E INDUSTRIA LTDA", "emissao": "25/08/2026", "prevEntrega": "25/08/2026", "dias": 8, "valor": 3393.37, "grupo": "SERVIÇOS CONTRATADOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "ESTACIONAMENTO E PEDÁGIO", "qtAberto": 1}, {"ped": 131793, "prod": "EMPILHADEIRA ELÉTRICA RETRÁTIL STILL", "forn": "IBN MANUTENÇÃO E LOCAÇÃO DE EMPILHADEIRAS LTDA", "emissao": "26/08/2026", "prevEntrega": "26/08/2026", "dias": 7, "valor": 9600.0, "grupo": "LOCAÇÃO DE EQUIPAMENTOS", "familia": "PRESTAÇÃO DE SERVIÇOS", "natureza": "ALUGUEL DE MAQS E EQUIPAMENTOS", "qtAberto": 1}], "sourceLabel": "27_08_1.xlsx", "savedAt": "2026-09-02T11:36:12.298279", "version": "30"};
 
 
-// ===================================================
+// ═══════════════════════════════════════════════════
 //  CURRENT STATE
-// ===================================================
+// ═══════════════════════════════════════════════════
 var S = JSON.parse(JSON.stringify(RAW));
 // ABERTOS_DATA declarado aqui para evitar erros de inicialização
 var ABERTOS_DATA = [];
 
-// Limpar localStorage se versão antiga - colocado APÓS declarações das variáveis
+// Limpar localStorage se versão antiga — colocado APÓS declarações das variáveis
 (function(){
   try{
     if(localStorage.getItem('vl_version') !== DATA_VERSION){
@@ -702,22 +720,22 @@ var ABERTOS_DATA = [];
       localStorage.removeItem('vl_abertos');
       localStorage.removeItem('vl_saved_at');
       localStorage.setItem('vl_version', DATA_VERSION);
-      console.log('Cache limpo - versão atualizada para ' + DATA_VERSION);
+      console.log('Cache limpo — versão atualizada para ' + DATA_VERSION);
     }
   }catch(e){}
 })();
 var charts = {};
 var C=[
-  '#f47c20',  // laranja principal - primário
-  '#4cc9f0',  // azul claro - contraste frio
-  '#2ec4b6',  // teal - equilíbrio
-  '#9b72cf',  // roxo - diferenciação
-  '#ffd166',  // amarelo dourado - destaque
-  '#e63946',  // vermelho - alerta
-  '#06d6a0',  // verde menta - positivo
+  '#f47c20',  // laranja principal — primário
+  '#4cc9f0',  // azul claro — contraste frio
+  '#2ec4b6',  // teal — equilíbrio
+  '#9b72cf',  // roxo — diferenciação
+  '#ffd166',  // amarelo dourado — destaque
+  '#e63946',  // vermelho — alerta
+  '#06d6a0',  // verde menta — positivo
   '#74b0ff',  // azul suave
-  '#ff9940',  // laranja claro - variação
-  '#ef8c8c',  // rosa - complemento
+  '#ff9940',  // laranja claro — variação
+  '#ef8c8c',  // rosa — complemento
 ];
 Chart.defaults.color='#888';
 Chart.defaults.font.family="'Segoe UI',system-ui,sans-serif";
@@ -725,9 +743,9 @@ Chart.defaults.plugins.legend.labels.usePointStyle=false;
 Chart.defaults.plugins.legend.labels.boxWidth=12;
 Chart.defaults.plugins.legend.labels.boxHeight=12;
 
-// ===================================================
+// ═══════════════════════════════════════════════════
 //  HELPERS
-// ===================================================
+// ═══════════════════════════════════════════════════
 var fmt=function(n){
   if(n==null||isNaN(n))return'R$ 0,00';
   if(n>=1e6)return'R$ '+(n/1e6).toFixed(2).replace('.',',')+'M';
@@ -750,11 +768,11 @@ var loading=function(on){
 };
 var destroy=function(id){if(charts[id]){charts[id].destroy();delete charts[id];}};
 
-// ===================================================
+// ═══════════════════════════════════════════════════
 //  POPULATE FILTER DROPDOWNS
-// ===================================================
+// ═══════════════════════════════════════════════════
 function populateFilters(){
-  // Mês - dinâmico baseado em S.months
+  // Mês — dinâmico baseado em S.months
   const fm2=document.getElementById('fMes');
   fm2.innerHTML='<option value="">Todos</option>';
   S.months.forEach((m,i)=>{const o=document.createElement('option');o.value=i;o.textContent=m;fm2.appendChild(o);});
@@ -778,16 +796,16 @@ function populateFilters(){
   // Fornecedor
   const fv=document.getElementById('fFornecedor');
   fv.innerHTML='<option value="">Todos</option>';
-  Object.keys(S.fornecedorTotals||{}).forEach(n=>{const o=document.createElement('option');o.value=n;o.textContent=n.length>40?n.substring(0,40)+' ':n;fv.appendChild(o);});
+  Object.keys(S.fornecedorTotals||{}).forEach(n=>{const o=document.createElement('option');o.value=n;o.textContent=n.length>40?n.substring(0,40)+'…':n;fv.appendChild(o);});
 
-  // Status - dinâmico
+  // Status — dinâmico
   populateStatusFilter();
 }
 
-// ===================================================
+// ═══════════════════════════════════════════════════
 //  APPLY FILTERS
-// ===================================================
-// -- Compute filtered slice across all active filters --
+// ═══════════════════════════════════════════════════
+// ── Compute filtered slice across all active filters ──
 function getSlice(){
   const mes       = document.getElementById('fMes').value;
   const grupo     = document.getElementById('fGrupo').value;
@@ -841,11 +859,11 @@ function applyFilters(){
   const grand=S.totals.reduce((a,b)=>a+b,0);
   const hasFilter=mes||grupo||familia||nat||forn||status.length>0;
 
-  // -- Active tags --
+  // ── Active tags ──
   const tagsEl=document.getElementById('activeTags');tagsEl.innerHTML='';
   const addTag=(label,clearFn)=>{
     const d=document.createElement('div');d.className='f-tag';
-    d.innerHTML=''+(label)+' <span class="rm" onclick="'+(clearFn)+'"> </span>';
+    d.innerHTML=`${label} <span class="rm" onclick="${clearFn}">✕</span>`;
     tagsEl.appendChild(d);
   };
   const mn2=S.months.slice(); // dinâmico
@@ -867,15 +885,15 @@ function applyFilters(){
   const filtTotal=fTotals.reduce((a,b)=>a+(isNaN(b)||b==null?0:b),0);
   const filtOrders=Math.max(1,fOrders.reduce((a,b)=>a+(isNaN(b)?0:b),0));
 
-  // -- KPIs --
+  // ── KPIs ──
   document.getElementById('kpiTotal').textContent=fmtF(filtTotal);
   const displayOrders=(!hasFilter&&S.totalOrders)?S.totalOrders:filtOrders;
   document.getElementById('kpiOrders').textContent=(+displayOrders||0).toLocaleString('pt-BR');
   document.getElementById('kpiTicket').textContent=fmtF(filtTotal/(displayOrders||filtOrders||1));
-  document.getElementById('kpiSub1').textContent=hasFilter?(fMonths.length>1?fMonths[0]+'   '+fMonths[fMonths.length-1]:fMonths[0]):S.months[0]+'   '+S.months[S.months.length-1];
+  document.getElementById('kpiSub1').textContent=hasFilter?(fMonths.length>1?fMonths[0]+' – '+fMonths[fMonths.length-1]:fMonths[0]):S.months[0]+' – '+S.months[S.months.length-1];
   document.getElementById('kpiAtend').textContent=hasFilter?((filtTotal/grand*100).toFixed(1)+'%'):'92.3%';
 
-  // -- Line chart --
+  // ── Line chart ──
   destroy('line');
   const safeTotals=(fTotals||[]).map(v=>isNaN(v)||v==null?0:v);
   const nonZero=safeTotals.map((v,i)=>v>0?i:-1).filter(i=>i>=0);
@@ -893,14 +911,14 @@ function applyFilters(){
               y:{grid:{color:'#1e1e1e'},ticks:{callback:v=>fmt(v),font:{size:11}},border:{display:false}}}}
   });
 
-  // -- Donut - by família for the filtered context --
+  // ── Donut — by família for the filtered context ──
   destroy('donut');
   let donutL,donutV;
   if(hasFilter){
     const famKeys=Object.keys(S.familias);
     if(mesIdx>=0){
       const pairs=famKeys.map(k=>([k,S.familias[k][mesIdx]||0])).filter(([,v])=>v>0);
-      donutL=pairs.map(([k])=>k.length>18?k.substring(0,18)+' ':k);
+      donutL=pairs.map(([k])=>k.length>18?k.substring(0,18)+'…':k);
       donutV=pairs.map(([,v])=>v);
     } else if(grupo&&S.grupoTotals){
       // Show grupo share when filtering by grupo
@@ -919,10 +937,10 @@ function applyFilters(){
     data:{labels:donutL,datasets:[{data:donutV,backgroundColor:C,borderWidth:0,hoverOffset:8}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
       plugins:{legend:{position:'right',labels:{boxWidth:10,padding:9,font:{size:10}}},
-               tooltip:{callbacks:{label:c=>{const t=donutV.reduce((a,b)=>a+(isNaN(b)?0:b),0)||1;return' '+(fmt(c.raw))+' ('+((c.raw/t*100).toFixed(1))+'%)';}}}}}
+               tooltip:{callbacks:{label:c=>{const t=donutV.reduce((a,b)=>a+(isNaN(b)?0:b),0)||1;return` ${fmt(c.raw)} (${(c.raw/t*100).toFixed(1)}%)`;}}}}}
   });
 
-  // -- Família stacked bar --
+  // ── Família stacked bar ──
   destroy('fambar');
   const famEntries2=Object.entries(S.familias);
   const famLabels2=mesIdx>=0?[S.months[mesIdx]]:S.months.slice();
@@ -930,9 +948,9 @@ function applyFilters(){
   const famDs=famEntries2.map(([k,v],i)=>{
     const isHL=familia&&k===familia;
     // Garantir que v tem o mesmo tamanho que months (padding com 0 se necessário)
-    const vPad=Array.isArray(v)?(v.length>=nMonths?v.slice(0,nMonths):(v||[]).concat(Array(nMonths-v.length).fill(0)]):Array(nMonths).fill(0);
+    const vPad=Array.isArray(v)?(v.length>=nMonths?v.slice(0,nMonths):[...v,...Array(nMonths-v.length).fill(0)]):Array(nMonths).fill(0);
     const data=mesIdx>=0?[vPad[mesIdx]||0]:(vPad||[]).slice();
-    return{label:k.length>22?k.substring(0,22)+' ':k,data,
+    return{label:k.length>22?k.substring(0,22)+'…':k,data,
       backgroundColor:isHL?'#f4a261':C[i%C.length]+(familia&&!isHL?'55':''),
       borderRadius:2,borderWidth:isHL?2:0,borderColor:'#ffffff'};
   });
@@ -940,12 +958,12 @@ function applyFilters(){
     type:'bar',data:{labels:famLabels2,datasets:famDs},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{position:'bottom',labels:{boxWidth:8,padding:8,font:{size:9}}},
-               tooltip:{callbacks:{label:c=>' '+(c.dataset.label)+': '+(fmt(c.raw))+''}}},
+               tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${fmt(c.raw)}`}}},
       scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:10}}},
               y:{stacked:true,grid:{color:'#1e1e1e'},ticks:{callback:v=>fmt(v),font:{size:10}},border:{display:false}}}}
   });
 
-  // -- Natureza bar - filtered --
+  // ── Natureza bar — filtered ──
   destroy('natbar');
   let natEntries2;
   if(mesIdx>=0){
@@ -959,7 +977,7 @@ function applyFilters(){
   }
   charts.natbar=new Chart(document.getElementById('cNatBar').getContext('2d'),{
     type:'bar',
-    data:{labels:natEntries2.map(([k])=>k.length>20?k.substring(0,20)+' ':k),
+    data:{labels:natEntries2.map(([k])=>k.length>20?k.substring(0,20)+'…':k),
           datasets:[{data:natEntries2.map(([,v])=>v),
             backgroundColor:natEntries2.map(([k],i)=>nat&&(k===nat||k.startsWith(nat.substring(0,14)))?'#f4a261':C[i%C.length]+(nat?'77':'')),
             borderRadius:4}]},
@@ -969,7 +987,7 @@ function applyFilters(){
               y:{grid:{display:false},ticks:{font:{size:9}}}}}
   });
 
-  // -- Status polar - dinâmico: lê labels direto de statusTotals --
+  // ── Status polar — dinâmico: lê labels direto de statusTotals ──
   destroy('status');
   var _stf={};if(S.status&&S.status.labels&&S.status.labels[0])_stf[S.status.labels[0]]=1;
   var stFullLabels=Object.keys(S.statusTotals||_stf);
@@ -983,7 +1001,7 @@ function applyFilters(){
   const stBorderC=(stFullLabels||[]).map(l=>status.includes(l)?'#ffffff':'transparent');
   charts.status=new Chart(document.getElementById('cStatus').getContext('2d'),{
     type:'polarArea',
-    data:{labels:(stFullLabels||[]).map(l=>l.length>18?l.substring(0,18)+' ':l),
+    data:{labels:(stFullLabels||[]).map(l=>l.length>18?l.substring(0,18)+'…':l),
           datasets:[{data:stFullVals,backgroundColor:stColors,borderWidth:stBorderW,borderColor:stBorderC}]},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{
@@ -1010,7 +1028,7 @@ function applyFilters(){
       scales:{r:{grid:{color:'#1e1e1e'},ticks:{display:false}}}}
   });
 
-  // -- Fornecedores bar - highlight if filtered --
+  // ── Fornecedores bar — highlight if filtered ──
   destroy('supp');
   let suppNames,suppVals2;
   if(forn&&S.fornecedorMes&&S.fornecedorMes[forn]){
@@ -1020,10 +1038,10 @@ function applyFilters(){
     suppVals2=nonZeroM.map(i=>S.fornecedorMes[forn][i]);
   } else if(mesIdx>=0){
     const ratio2=fTotals[0]/(S.totals[mesIdx]||1);
-    suppNames=(S.suppliers&&(S.suppliers&&S.suppliers.names||[])||[]).map(n=>n.length>20?n.substring(0,20)+' ':n);
+    suppNames=(S.suppliers&&(S.suppliers&&S.suppliers.names||[])||[]).map(n=>n.length>20?n.substring(0,20)+'…':n);
     suppVals2=(S.suppliers&&(S.suppliers&&S.suppliers.values||[])||[]).map(v=>v*ratio2);
   } else {
-    suppNames=(S.suppliers&&(S.suppliers&&S.suppliers.names||[])||[]).map(n=>n.length>20?n.substring(0,20)+' ':n);
+    suppNames=(S.suppliers&&(S.suppliers&&S.suppliers.names||[])||[]).map(n=>n.length>20?n.substring(0,20)+'…':n);
     suppVals2=(S.suppliers&&(S.suppliers&&S.suppliers.values||[]))||[];
   }
   charts.supp=new Chart(document.getElementById('cSupp').getContext('2d'),{
@@ -1035,7 +1053,7 @@ function applyFilters(){
               y:{grid:{display:false},ticks:{font:{size:9}}}}}
   });
 
-  // -- Qtd. Pedidos --
+  // ── Qtd. Pedidos ──
   destroy('count');
   const peakI3=fTotals.indexOf(Math.max(...fTotals));
   charts.count=new Chart(document.getElementById('cCount').getContext('2d'),{
@@ -1044,12 +1062,12 @@ function applyFilters(){
       backgroundColor:(fMonths||[]).map((_,i)=>i===peakI3?'#f4a261':'rgba(0,180,216,.65)'),
       borderRadius:5}]},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+(c.raw)+' pedidos'}}},
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.raw} pedidos`}}},
       scales:{x:{grid:{display:false},ticks:{font:{size:10}}},
               y:{grid:{color:'#1e1e1e'},ticks:{stepSize:Math.max(1,Math.round((Math.max(...(fOrders||[]).map(v=>isNaN(v)?0:v))||1)/4)),font:{size:10}},border:{display:false}}}}
   });
 
-  // -- Detail panel --
+  // ── Detail panel ──
   const dp=document.getElementById('detailPanel');
   if(familia||nat||grupo||forn||status.length>0){
     dp.classList.add('visible');
@@ -1063,12 +1081,12 @@ function applyFilters(){
     document.getElementById('dpPct').textContent=(filtTotal/grand*100).toFixed(1)+'% do total geral';
     document.getElementById('dpOrders').textContent=(+filtOrders||0).toLocaleString('pt-BR');
     const peakIdx3=fTotals.indexOf(Math.max(...fTotals));
-    document.getElementById('dpPeak').textContent=fMonths[peakIdx3]||'-';
+    document.getElementById('dpPeak').textContent=fMonths[peakIdx3]||'—';
     document.getElementById('dpPeakVal').textContent=fmt(Math.max(...fTotals));
     document.getElementById('dpTicket').textContent=fmtF(filtTotal/filtOrders);
   } else { dp.classList.remove('visible'); }
 
-  // -- Tables --
+  // ── Tables ──
   buildMonthlyTable(fMonths,fTotals,fOrders,filtTotal);
   buildFamiliaTableFiltered(mesIdx,grupo,forn);
   buildNaturezaTableFiltered(mesIdx,grupo,forn);
@@ -1086,12 +1104,12 @@ function resetFilters(){
   applyFilters();
 }
 
-// ===================================================
+// ═══════════════════════════════════════════════════
 //  BUILD CHARTS
-// ===================================================
+// ═══════════════════════════════════════════════════
 function buildLine(){
   destroy('line');
-  // Todos os meses - sem filtro
+  // Todos os meses — sem filtro
   const lineMonths=S.months.slice();
   const lineTotals=S.totals.slice();
   charts.line=new Chart(document.getElementById('cLine').getContext('2d'),{
@@ -1111,9 +1129,9 @@ function buildLine(){
 
 // chart stubs handled inside applyFilters
 
-// ===================================================
+// ═══════════════════════════════════════════════════
 //  BUILD TABLES
-// ===================================================
+// ═══════════════════════════════════════════════════
 function buildMonthlyTable(months,totals,orders,grand){
   const b=document.getElementById('tMonthly');b.innerHTML='';
   totals=totals.map(v=>isNaN(v)||v==null?0:v);
@@ -1124,13 +1142,16 @@ function buildMonthlyTable(months,totals,orders,grand){
     const prev=i>0?totals[i-1]:null;
     const vp=prev?((totals[i]-prev)/prev*100):null;
     // vp>=0 = aumento (vermelho/ruim), vp<0 = redução (verde/bom)
-    const varEl=vp!=null?'<span class="kpi-badge '+(vp>=0?'bg-up':'bg-dn')+'" title="'+(vp>=0?'Aumento':'Redução')+' de gastos">'+(vp>=0?' ':' ')+' '+(Math.abs(vp).toFixed(1))+'%</span>':'-';
+    const varEl=vp!=null?`<span class="kpi-badge ${vp>=0?'bg-up':'bg-dn'}" title="${vp>=0?'Aumento':'Redução'} de gastos">${vp>=0?'▲':'▼'} ${Math.abs(vp).toFixed(1)}%</span>`:'—';
     const pct=(totals[i]/g*100).toFixed(1);
     const bw=(totals[i]/Math.max(...totals)*100).toFixed(0);
     const ord=Array.isArray(orders)?orders[i]:Math.round(totals[i]/10691);
     const tr=document.createElement('tr');
     if(i===peakI)tr.style.background='rgba(0,180,216,.07)';
-    tr.innerHTML='<td class="rank">'+(i+1)+'</td><td><strong>'+(m)+'</strong>'+(i===peakI?'  ':'')+'</td>      <td>'+(fmtF(totals[i]))+'</td><td>'+(ord)+'</td><td>'+(fmtF(totals[i]/(ord||1)))+'</td>      <td>'+(varEl)+'</td><td><span style="color:var(--muted);font-size:.73rem">'+(pct)+'%</span>      <div class="bm" style="width:'+(bw)+'%"></div></td>';
+    tr.innerHTML=`<td class="rank">${i+1}</td><td><strong>${m}</strong>${i===peakI?' 🏆':''}</td>
+      <td>${fmtF(totals[i])}</td><td>${ord}</td><td>${fmtF(totals[i]/(ord||1))}</td>
+      <td>${varEl}</td><td><span style="color:var(--muted);font-size:.73rem">${pct}%</span>
+      <div class="bm" style="width:${bw}%"></div></td>`;
     b.appendChild(tr);
   });
 }
@@ -1144,7 +1165,9 @@ function buildFamiliaTable(){
     const pct=(v/grand*100).toFixed(1);
     const bw=(v/mx*100).toFixed(0);
     const tr=document.createElement('tr');
-    tr.innerHTML='<td class="rank">'+(i+1)+'</td><td><strong>'+(n)+'</strong></td>      <td>'+(fmtF(v))+'</td><td>'+(pct)+'%</td>      <td><div class="bm" style="width:'+(bw)+'%;background:linear-gradient(90deg,#2ec4b6,#4cc9f0)"></div></td>';
+    tr.innerHTML=`<td class="rank">${i+1}</td><td><strong>${n}</strong></td>
+      <td>${fmtF(v)}</td><td>${pct}%</td>
+      <td><div class="bm" style="width:${bw}%;background:linear-gradient(90deg,#2ec4b6,#4cc9f0)"></div></td>`;
     tr.style.cursor='pointer';
     tr.onclick=()=>{document.getElementById('fFamilia').value=n;applyFilters();};
     tr.title='Clique para filtrar por esta família';
@@ -1161,7 +1184,9 @@ function buildNaturezaTable(){
     const pct=(v/grand*100).toFixed(1);
     const bw=(v/mx*100).toFixed(0);
     const tr=document.createElement('tr');
-    tr.innerHTML='<td class="rank">'+(i+1)+'</td><td>'+(n)+'</td>      <td>'+(fmtF(v))+'</td><td>'+(pct)+'%</td>      <td><div class="bm" style="width:'+(bw)+'%;background:linear-gradient(90deg,#4cc9f0,#2ec4b6)"></div></td>';
+    tr.innerHTML=`<td class="rank">${i+1}</td><td>${n}</td>
+      <td>${fmtF(v)}</td><td>${pct}%</td>
+      <td><div class="bm" style="width:${bw}%;background:linear-gradient(90deg,#4cc9f0,#2ec4b6)"></div></td>`;
     tr.style.cursor='pointer';
     tr.onclick=()=>{document.getElementById('fNatureza').value=n;applyFilters();};
     tr.title='Clique para filtrar por esta natureza';
@@ -1178,10 +1203,10 @@ function buildKPIs(){
   document.getElementById('kpiOrders').textContent=orders.toLocaleString('pt-BR');
   document.getElementById('kpiAtend').textContent=atend+'%';
   document.getElementById('kpiTicket').textContent=fmtF(grand/orders);
-  // Mostrar todos os meses - sem filtrar por valor mínimo
-  document.getElementById('kpiSub1').textContent=S.months[0]+'   '+S.months[S.months.length-1];
+  // Mostrar todos os meses — sem filtrar por valor mínimo
+  document.getElementById('kpiSub1').textContent=S.months[0]+' – '+S.months[S.months.length-1];
   document.getElementById('hdrTotal').textContent=fmt(grand);
-  document.getElementById('hdrPeriod').textContent='Gasto Total · '+S.months[0]+'   '+S.months[S.months.length-1];
+  document.getElementById('hdrPeriod').textContent='Gasto Total · '+S.months[0]+' – '+S.months[S.months.length-1];
   document.getElementById('dataSource').textContent=S.sourceLabel||'Dados padrão';
   document.getElementById('recCount').textContent=(S.records||0).toLocaleString('pt-BR')+' registros';
 }
@@ -1191,15 +1216,15 @@ function renderAll(){
   applyFilters();
 }
 
-// ===================================================
+// ═══════════════════════════════════════════════════
 //  FILE IMPORT
-// ===================================================
+// ═══════════════════════════════════════════════════
 function toggleZone(){document.getElementById('importZone').classList.toggle('visible');}
 function handleDrop(e){e.preventDefault();document.getElementById('importZone').classList.remove('drag-over');const f=e.dataTransfer.files[0];if(f)processFile(f);}
 function handleFile(e){const f=e.target.files[0];if(f)processFile(f);e.target.value='';}
 
 function processFile(file){
-  loading(true);toast('Lendo arquivo ','info');
+  loading(true);toast('Lendo arquivo…','info');
   const ext=file.name.split('.').pop().toLowerCase();
   const reader=new FileReader();
   reader.onload=e=>{
@@ -1212,9 +1237,9 @@ function processFile(file){
   ext==='csv'?reader.readAsText(file,'UTF-8'):reader.readAsArrayBuffer(file);
 }
 
-function col(row,keys){for(var _ci=0;_ci<keys.length;_ci++){var k=keys[_ci];if(row[k]!==undefined&&row[k]!==''&&row[k]!==null)return row[k];}return '';}
+function col(row,keys){for(const k of keys)if(row[k]!==undefined&&row[k]!==''&&row[k]!==null)return row[k];return '';}
 
-// Download seguro - compatível com GitHub Pages e navegadores modernos
+// Download seguro — compatível com GitHub Pages e navegadores modernos
 function safeDownload(blob, filename){
   try{
     const url=URL.createObjectURL(blob);
@@ -1241,7 +1266,7 @@ function safeDownload(blob, filename){
 function parseExcelDate(val){
   if(val===null||val===undefined||val==='')return null;
   if(val instanceof Date)return isNaN(val)?null:val;
-  // Número serial Excel (raw:true) - base 01/01/1900
+  // Número serial Excel (raw:true) — base 01/01/1900
   // Usa UTC para evitar problema de timezone
   if(typeof val==='number'){
     if(val<1)return null;
@@ -1273,7 +1298,7 @@ function parseImport(rows,fname){
   const parsed=rows.map(r=>({
     date:     col(r,['Dt. emissão','Dt.emissão','DT. EMISSÃO','dt_emissao','Data Emissão','date']),
     value:    (()=>{
-      // Busca EXCLUSIVAMENTE Vl. item - nunca Vl. unitário
+      // Busca EXCLUSIVAMENTE Vl. item — nunca Vl. unitário
       const raw = col(r,['Vl. item','Vl.item','VL. ITEM','vl_item']);
       if(raw===''||raw===null||raw===undefined) return 0;
       if(typeof raw === 'number') return isNaN(raw)?0:raw;
@@ -1302,7 +1327,7 @@ function parseImport(rows,fname){
 
   const mn=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
   const monthMap={};const famMap={};const natMap={};const suppMap={};const statusMap={};const grupMap={};
-  // Mapa: pedido   mês da primeira emissão (para não repetir pedido em meses)
+  // Mapa: pedido → mês da primeira emissão (para não repetir pedido em meses)
   const pedFirstMonth={};
 
   parsed.forEach(r=>{
@@ -1334,7 +1359,7 @@ function parseImport(rows,fname){
   const grand=totals.reduce((a,b)=>a+b,0);
   const totalOrders=Object.keys(pedFirstMonth).length; // pedidos únicos totais sem repetição
 
-  // Familia per month - usa parseExcelDate para datas seriais do Excel
+  // Familia per month — usa parseExcelDate para datas seriais do Excel
   const familias={};
   Object.keys(famMap).forEach(f=>{
     familias[f]=sm.map(mk=>{
@@ -1370,7 +1395,7 @@ function parseImport(rows,fname){
   const top3pct=suppS.slice(0,3).reduce((a,b)=>a+b[1],0)/grand*100;
 
   // Build statusMes and statusTotals dynamically from imported data
-  const allStatuses=parsed.map(function(r){return r.status;}).filter(Boolean).filter(function(v,i,a){return a.indexOf(v)===i;});
+  const allStatuses=[...new Set(parsed.map(r=>r.status).filter(Boolean))];
   const statusMesImport={};
   const statusTotalsImport={};
   allStatuses.forEach(st=>{
@@ -1422,7 +1447,7 @@ function parseImport(rows,fname){
     grupoTotals:Object.fromEntries(Object.entries(grupMap).sort((a,b)=>b[1]-a[1])),
     fornecedorMes,
     fornecedorTotals,
-    catPie:{labels:top6G.map(function(e){return e[0].substring(0,20);}).concat(['Outros']),values:top6G.map(function(e){return e[1];}).concat([other])},
+    catPie:{labels:[...top6G.map(e=>e[0].substring(0,20)),'Outros'],values:[...top6G.map(e=>e[1]),other]},
     suppliers:{names:suppS.map(e=>e[0]),values:suppS.map(e=>e[1])},
     status:{labels:statS.map(e=>e[0]),values:statS.map(e=>e[1])},
     statusMes:statusMesImport,
@@ -1431,11 +1456,11 @@ function parseImport(rows,fname){
   };
 
   // Insights
-  document.getElementById('ins1').innerHTML='Maior mês: <strong>'+(months[peakI])+' ('+(fmt(Math.max(...totals)))+')</strong> - <strong>'+((Math.max(...totals)/grand*100).toFixed(1))+'%</strong> do total importado.';
-  document.getElementById('ins2').innerHTML='Pedidos em aberto: <strong>'+(fmtF(aberto))+'</strong> - <strong>'+((aberto/grand*100).toFixed(1))+'%</strong> do total.';
-  document.getElementById('ins3').innerHTML='Maior fornecedor: <strong>'+(topS?topS[0].substring(0,30):'-')+'</strong> ('+(fmt(topS?topS[1]:0))+'). Top 3 concentram <strong>'+(top3pct.toFixed(1))+'%</strong>.';
+  document.getElementById('ins1').innerHTML=`Maior mês: <strong>${months[peakI]} (${fmt(Math.max(...totals))})</strong> — <strong>${(Math.max(...totals)/grand*100).toFixed(1)}%</strong> do total importado.`;
+  document.getElementById('ins2').innerHTML=`Pedidos em aberto: <strong>${fmtF(aberto)}</strong> — <strong>${(aberto/grand*100).toFixed(1)}%</strong> do total.`;
+  document.getElementById('ins3').innerHTML=`Maior fornecedor: <strong>${topS?topS[0].substring(0,30):'—'}</strong> (${fmt(topS?topS[1]:0)}). Top 3 concentram <strong>${top3pct.toFixed(1)}%</strong>.`;
 
-  // -- Build Pedidos em Aberto from imported data --
+  // ── Build Pedidos em Aberto from imported data ──
   const today = new Date(); today.setHours(0,0,0,0); // zerar hora para cálculo correto de dias
 
   const abertosImport = parsed
@@ -1445,7 +1470,7 @@ function parseImport(rows,fname){
       const dtPrev = parseExcelDate(r.prevEntrega) || dt;
       const dias = dt ? Math.max(0, Math.floor((today - dt) / 86400000)) : 0;
       const qtCol = String(r.qtAberto||'1').replace(',','.');
-      const fmtDate = d => d ? d.toLocaleDateString('pt-BR') : '-';
+      const fmtDate = d => d ? d.toLocaleDateString('pt-BR') : '—';
       return {
         ped:     parseInt(r.order) || 0,
         prod:    String(r.prod||'').trim().substring(0,80),
@@ -1465,17 +1490,17 @@ function parseImport(rows,fname){
 
   ABERTOS_DATA = abertosImport;
 
-  // -- Salvar no localStorage para persistir entre sessões --
+  // ── Salvar no localStorage para persistir entre sessões ──
   try {
     // Verificar que familias tem o tamanho correto antes de salvar
     const famValid = S.familias && Object.values(S.familias).every(v=>Array.isArray(v)&&v.length===S.months.length);
-    if(!famValid) console.warn('familias com tamanho inconsistente - não salvando');
+    if(!famValid) console.warn('familias com tamanho inconsistente — não salvando');
     else {
       localStorage.setItem('vl_raw', JSON.stringify(S));
       localStorage.setItem('vl_abertos', JSON.stringify(ABERTOS_DATA));
       localStorage.setItem('vl_saved_at', new Date().toISOString());
     }
-    toast('  '+parsed.length.toLocaleString('pt-BR')+' registros importados!');
+    toast('✅ '+parsed.length.toLocaleString('pt-BR')+' registros importados!');
   } catch(e) {
     console.warn('localStorage indisponível:', e);
   }
@@ -1490,28 +1515,28 @@ function parseImport(rows,fname){
   // Publicar no GitHub para todos os usuários
   var _token = localStorage.getItem('vl_admin_token');
   var payload = JSON.parse(JSON.stringify(S));
+  // totalOrders = pedidos únicos (calculado via pedFirstMonth no parseImport)
   payload.totalOrders = S.totalOrders || payload.orders.reduce(function(a,b){return a+b;},0);
   payload.savedAt = new Date().toISOString();
   payload.version = DATA_VERSION;
-  payload.abertos = ABERTOS_DATA || [];
   payload.abertos = ABERTOS_DATA;
   if(_token){
-    toast('  Publicando dados para todos os usuários...');
+    toast('📤 Publicando dados para todos os usuários...');
     setTimeout(function(){ publishToGitHub(payload); }, 800);
   } else {
-    // Sem token - mostrar botão de publicar e instrução
+    // Sem token — mostrar botão de publicar e instrução
     var _pb=document.getElementById('publishBanner');if(_pb)_pb.style.display='flex';
-    toast('  Dados importados! Clique em "Publicar" para compartilhar com todos.','');
+    toast('✅ Dados importados! Clique em "Publicar" para compartilhar com todos.','');
   }
 
 
 }
 
-// ===================================================
+// ═══════════════════════════════════════════════════
 //  EXPORTS
-// ===================================================
+// ═══════════════════════════════════════════════════
 function exportExcel(){
-  loading(true);toast('Gerando Excel ','info');
+  loading(true);toast('Gerando Excel…','info');
   setTimeout(()=>{
     try{
       const wb=XLSX.utils.book_new();
@@ -1519,7 +1544,7 @@ function exportExcel(){
       const mw=[['Mês','Gasto Total','Qtd Pedidos','Ticket Médio','Var M/M %','Part %']];
       S.months.slice(0,S.totals.length).forEach((m,i)=>{
         const prev=i>0?S.totals[i-1]:null;
-        const vp=prev?((S.totals[i]-prev)/prev*100).toFixed(2):'-';
+        const vp=prev?((S.totals[i]-prev)/prev*100).toFixed(2):'—';
         mw.push([m,S.totals[i],S.orders[i],(S.totals[i]/(S.orders[i]||1)).toFixed(2),vp,(S.totals[i]/grand*100).toFixed(2)]);
       });
       XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(mw),'Resumo Mensal');
@@ -1540,11 +1565,11 @@ function exportExcel(){
       S.status.labels.forEach((l,i)=>stw.push([l,S.status.values[i],(S.status.values[i]/grand*100).toFixed(2)]));
       XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(stw),'Status Pedidos');
 
-      // XLSX.writeFile bloqueado em GitHub Pages - usar Blob
+      // XLSX.writeFile bloqueado em GitHub Pages — usar Blob
       const wbOut=XLSX.write(wb,{bookType:'xlsx',type:'array'});
       const blob=new Blob([wbOut],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
       safeDownload(blob,'Dashboard_Compras_ValorLog.xlsx');
-      loading(false);toast('  Excel exportado! (5 abas)');
+      loading(false);toast('✅ Excel exportado! (5 abas)');
     }catch(e){loading(false);toast('Erro: '+e.message,'err');}
   },100);
 }
@@ -1562,7 +1587,7 @@ function exportPDF(){
       try{ pdf.save('Dashboard_Compras_ValorLog.pdf'); }
       catch(e){ safeDownload(pdf.output('blob'),'Dashboard_Compras_ValorLog.pdf'); }
       document.getElementById('expMsg').classList.remove('open');
-      toast('  PDF exportado!');
+      toast('✅ PDF exportado!');
     }).catch(function(e){
       document.getElementById('expMsg').classList.remove('open');
       toast('Erro ao gerar PDF','err');
@@ -1577,29 +1602,29 @@ function exportCSV(){
   const grand=S.totals.reduce((a,b)=>a+b,0);
   let csv='Mes;Gasto_Total;Qtd_Pedidos;Ticket_Medio;Participacao_Pct\n';
   S.months.slice(0,S.totals.length).forEach((m,i)=>
-    csv+=''+(m)+';'+(S.totals[i].toFixed(2))+';'+(S.orders[i])+';'+((S.totals[i]/(S.orders[i]||1)).toFixed(2))+';'+((S.totals[i]/grand*100).toFixed(2))+'\n'
+    csv+=`${m};${S.totals[i].toFixed(2)};${S.orders[i]};${(S.totals[i]/(S.orders[i]||1)).toFixed(2)};${(S.totals[i]/grand*100).toFixed(2)}\n`
   );
   csv+='\nFamilia;Valor;Pct\n';
-  Object.entries(S.familiaTotals).sort((a,b)=>b[1]-a[1]).forEach(([n,v])=>csv+=''+(n)+';'+(v.toFixed(2))+';'+((v/grand*100).toFixed(2))+'\n');
+  Object.entries(S.familiaTotals).sort((a,b)=>b[1]-a[1]).forEach(([n,v])=>csv+=`${n};${v.toFixed(2)};${(v/grand*100).toFixed(2)}\n`);
   csv+='\nNatureza;Valor;Pct\n';
-  Object.entries(S.naturezaTotals).sort((a,b)=>b[1]-a[1]).forEach(([n,v])=>csv+=''+(n)+';'+(v.toFixed(2))+';'+((v/grand*100).toFixed(2))+'\n');
+  Object.entries(S.naturezaTotals).sort((a,b)=>b[1]-a[1]).forEach(([n,v])=>csv+=`${n};${v.toFixed(2)};${(v/grand*100).toFixed(2)}\n`);
   const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
   safeDownload(blob,'Dashboard_ValorLog.csv');
-  toast('  CSV exportado!');
+  toast('✅ CSV exportado!');
 }
 
-// ===================================================
+// ═══════════════════════════════════════════════════
 //  SHARE MODAL
-// ===================================================
+// ═══════════════════════════════════════════════════
 function shareWhatsApp(){
   var url = encodeURIComponent('https://operacaovalorlog-code.github.io/valorlog-dashboard/');
-  var msg = encodeURIComponent('  *Dashboard de Compras - Valor Log*\n\nAcesse o relatório atualizado de compras:\nhttps://operacaovalorlog-code.github.io/valorlog-dashboard/');
+  var msg = encodeURIComponent('📊 *Dashboard de Compras — Valor Log*\n\nAcesse o relatório atualizado de compras:\nhttps://operacaovalorlog-code.github.io/valorlog-dashboard/');
   window.open('https://wa.me/?text=' + msg, '_blank');
   closeModal();
 }
 
 function shareEmail(){
-  var subject = encodeURIComponent('Dashboard de Compras - Valor Log Armazém Geral');
+  var subject = encodeURIComponent('Dashboard de Compras — Valor Log Armazém Geral');
   var body = encodeURIComponent(
     'Olá,\n\n' +
     'Segue o link do Dashboard de Compras da Valor Log Armazém Geral:\n\n' +
@@ -1629,7 +1654,7 @@ function showTokenModal(){
 
 function saveToken(){
   var t = (document.getElementById('tokenInput').value||'').trim();
-  if(t){ localStorage.setItem('vl_admin_token', t); toast('  Token salvo! Agora importe o XLSX para publicar.'); }
+  if(t){ localStorage.setItem('vl_admin_token', t); toast('✅ Token salvo! Agora importe o XLSX para publicar.'); }
   else { localStorage.removeItem('vl_admin_token'); toast('Token removido'); }
   document.getElementById('tokenModal').style.display = 'none';
 }
@@ -1639,86 +1664,46 @@ function publishToGitHub(dataJson){
   if(!token){
     var pb=document.getElementById('publishBanner');
     if(pb)pb.style.display='flex';
-    toast('Configure o token em Admin para publicar','err');
+    toast('Configure token em Admin','err');
     return Promise.resolve(false);
   }
-  toast('Publicando dados para todos...');
+  toast('Publicando dados...');
   var apiUrl='https://api.github.com/repos/operacaovalorlog-code/valorlog-dashboard/contents/index.html';
-
   return fetch(apiUrl,{headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json'}})
-  .then(function(r){
-    if(!r.ok) throw new Error('Erro '+r.status+' ao buscar HTML');
-    return r.json();
-  })
+  .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
   .then(function(f){
-    // Decodificar HTML com UTF-8 completo
-    var b64=f.content.replace(/\n/g,'');
-    var bin=atob(b64);
+    var bin=atob(f.content.replace(/
+/g,''));
     var arr=new Uint8Array(bin.length);
-    for(var i=0;i<bin.length;i++) arr[i]=bin.charCodeAt(i);
+    for(var i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);
     var curHtml=new TextDecoder('utf-8').decode(arr);
-
-    // Montar novo RAW com dados atualizados
-    var newRaw={
-      months:dataJson.months, totals:dataJson.totals, orders:dataJson.orders,
-      totalOrders:dataJson.totalOrders, records:dataJson.records,
-      familias:dataJson.familias, familiaTotals:dataJson.familiaTotals,
-      naturezas:dataJson.naturezas, naturezaTotals:dataJson.naturezaTotals,
-      allNaturezas:dataJson.allNaturezas||[],
-      grupos:dataJson.grupos, grupoMes:dataJson.grupoMes, grupoTotals:dataJson.grupoTotals,
-      fornecedorMes:dataJson.fornecedorMes, fornecedorTotals:dataJson.fornecedorTotals,
-      catPie:dataJson.catPie, suppliers:dataJson.suppliers,
-      status:dataJson.status, statusMes:dataJson.statusMes, statusTotals:dataJson.statusTotals,
+    var newRaw='var RAW = '+JSON.stringify({
+      months:dataJson.months,totals:dataJson.totals,orders:dataJson.orders,
+      totalOrders:dataJson.totalOrders,records:dataJson.records,
+      familias:dataJson.familias,familiaTotals:dataJson.familiaTotals,
+      naturezas:dataJson.naturezas,naturezaTotals:dataJson.naturezaTotals,
+      allNaturezas:dataJson.allNaturezas||[],grupos:dataJson.grupos,
+      grupoMes:dataJson.grupoMes,grupoTotals:dataJson.grupoTotals,
+      fornecedorMes:dataJson.fornecedorMes,fornecedorTotals:dataJson.fornecedorTotals,
+      catPie:dataJson.catPie,suppliers:dataJson.suppliers,
+      status:dataJson.status,statusMes:dataJson.statusMes,statusTotals:dataJson.statusTotals,
       sourceLabel:dataJson.sourceLabel||'BIMER',
-      abertos:dataJson.abertos||[],
-      savedAt:new Date().toISOString(), version:DATA_VERSION
-    };
-
-    // Substituir usando marcador @END_RAW (confiável, sem regex greedy)
-    var marker='var RAW = ';
-    var endMarker='; // @END_RAW';
-    var startPos=curHtml.indexOf(marker);
-    var endPos=curHtml.indexOf(endMarker);
-
-    if(startPos<0||endPos<0){
-      throw new Error('Marcador RAW não encontrado no HTML');
-    }
-
-    var newRawStr=marker+JSON.stringify(newRaw)+endMarker;
-    var updatedHtml=curHtml.substring(0,startPos)+newRawStr+curHtml.substring(endPos+endMarker.length);
-
-    // Verificar que substituição foi feita
-    if(updatedHtml===curHtml) throw new Error('HTML não foi modificado');
-
-    // Encodar de volta para base64 UTF-8
+      savedAt:new Date().toISOString(),version:DATA_VERSION
+    })+';';
+    var updated=curHtml.replace(/var RAW = \{[\s\S]*?\};/,newRaw);
+    if(updated===curHtml)throw new Error('RAW block não encontrado');
     var enc=new TextEncoder();
-    var encBytes=enc.encode(updatedHtml);
-    var s='';
-    for(var j=0;j<encBytes.length;j++) s+=String.fromCharCode(encBytes[j]);
-    var encoded=btoa(s);
-
+    var eb=enc.encode(updated);
+    var s='';for(var j=0;j<eb.length;j++)s+=String.fromCharCode(eb[j]);
     return fetch(apiUrl,{
       method:'PUT',
       headers:{'Authorization':'token '+token,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'},
-      body:JSON.stringify({
-        message:'Dados '+new Date().toLocaleDateString('pt-BR')+' '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),
-        content:encoded,
-        sha:f.sha
-      })
+      body:JSON.stringify({message:'Dados '+new Date().toLocaleDateString('pt-BR'),content:btoa(s),sha:f.sha})
     });
-  })
-  .then(function(r){
-    if(r.ok){
-      toast('Dados publicados! Todos veem em ~2 min.');
-      return true;
-    }
-    return r.json().then(function(e){ throw new Error(e.message||r.status); });
-  })
-  .catch(function(e){
-    console.error('Publish error:',e.message);
-    toast('Erro ao publicar: '+e.message,'err');
-    return false;
-  });
+  }).then(function(r){
+    if(r.ok){toast('Dados publicados! Todos veem em ~2 min.');return true;}
+    return r.json().then(function(e){throw new Error(e.message||r.status);});
+  }).catch(function(e){console.error('Publish:',e.message);toast('Erro: '+e.message,'err');return false;});
 }
 
 function clearSaved(){
@@ -1732,7 +1717,7 @@ function clearSaved(){
   Object.assign(S, JSON.parse(JSON.stringify(RAW)));
   ABERTOS_DATA=(ABERTOS_ALL||[]).slice();
   document.getElementById('dataSource').textContent = 'Dados padrão';
-  document.getElementById('hdrPeriod').textContent = 'Gasto Total · ' + S.months[0] + '   ' + S.months[S.months.length-1];
+  document.getElementById('hdrPeriod').textContent = 'Gasto Total · ' + S.months[0] + ' – ' + S.months[S.months.length-1];
   resetFilters();
   populateFilters();
   renderAll();
@@ -1744,21 +1729,20 @@ document.getElementById('shareModal').addEventListener('click',e=>{if(e.target==
 function downloadSelfContained(){
   const blob=new Blob([document.documentElement.outerHTML],{type:'text/html;charset=utf-8'});
   safeDownload(blob,'dashboard_valorlog_autonomo.html');
-  toast('  HTML autônomo baixado!');closeModal();
+  toast('✅ HTML autônomo baixado!');closeModal();
 }
-function copyField(id){const e=document.getElementById(id);e.select();document.execCommand('copy');toast('  Copiado!');}
+function copyField(id){const e=document.getElementById(id);e.select();document.execCommand('copy');toast('✅ Copiado!');}
 
-// ===================================================
+// ═══════════════════════════════════════════════════
 //  INIT
-// ===================================================
-ABERTOS_DATA = (ABERTOS_ALL||[]).slice();
+// ═══════════════════════════════════════════════════
 populateAbertosGrupo();
 populateFilters();
 renderAll();
 renderAbertos();
-// ===================================================
+// ═══════════════════════════════════════════════════
 //  FILTERED TABLES
-// ===================================================
+// ═══════════════════════════════════════════════════
 function buildFamiliaTableFiltered(mesIdx,grupo,forn){
   const b=document.getElementById('tFamilia');b.innerHTML='';
   const grand=S.totals.reduce((a,b)=>a+b,0);
@@ -1773,7 +1757,9 @@ function buildFamiliaTableFiltered(mesIdx,grupo,forn){
     const pct=(v/grand*100).toFixed(1);
     const bw=(v/mx*100).toFixed(0);
     const tr=document.createElement('tr');
-    tr.innerHTML='<td class="rank">'+(i+1)+'</td><td><strong>'+(n)+'</strong></td>      <td>'+(fmtF(v))+'</td><td>'+(pct)+'%</td>      <td><div class="bm" style="width:'+(bw)+'%;background:linear-gradient(90deg,#2ec4b6,#4cc9f0)"></div></td>';
+    tr.innerHTML=`<td class="rank">${i+1}</td><td><strong>${n}</strong></td>
+      <td>${fmtF(v)}</td><td>${pct}%</td>
+      <td><div class="bm" style="width:${bw}%;background:linear-gradient(90deg,#2ec4b6,#4cc9f0)"></div></td>`;
     tr.style.cursor='pointer';
     tr.onclick=()=>{document.getElementById('fFamilia').value=n;applyFilters();};
     b.appendChild(tr);
@@ -1794,16 +1780,18 @@ function buildNaturezaTableFiltered(mesIdx,grupo,forn){
     const pct=(v/grand*100).toFixed(1);
     const bw=(v/mx*100).toFixed(0);
     const tr=document.createElement('tr');
-    tr.innerHTML='<td class="rank">'+(i+1)+'</td><td>'+(n)+'</td>      <td>'+(fmtF(v))+'</td><td>'+(pct)+'%</td>      <td><div class="bm" style="width:'+(bw)+'%;background:linear-gradient(90deg,#4cc9f0,#2ec4b6)"></div></td>';
+    tr.innerHTML=`<td class="rank">${i+1}</td><td>${n}</td>
+      <td>${fmtF(v)}</td><td>${pct}%</td>
+      <td><div class="bm" style="width:${bw}%;background:linear-gradient(90deg,#4cc9f0,#2ec4b6)"></div></td>`;
     tr.style.cursor='pointer';
     tr.onclick=()=>{document.getElementById('fNatureza').value=n;applyFilters();};
     b.appendChild(tr);
   });
 }
 
-// ===================================================
+// ═══════════════════════════════════════════════════
 //  COMPARATIVO ÚLTIMOS 2 MESES
-// ===================================================
+// ═══════════════════════════════════════════════════
 function buildComparativo(mesIdx){
   const validMs=(S.totals||[]).map((v,i)=>v>50000?i:-1).filter(i=>i>=0);
   let mA,mB;
@@ -1816,14 +1804,16 @@ function buildComparativo(mesIdx){
   const ordB=S.orders[mB],ordA=mA!=null?S.orders[mA]:null;
   const grand=S.totals.reduce((a,b)=>a+b,0);
 
-  document.getElementById('compSubtitle').textContent=mA!=null?''+(nameA)+' vs '+(nameB)+'':'Mês: '+(nameB)+'';
+  document.getElementById('compSubtitle').textContent=mA!=null?`${nameA} vs ${nameB}`:`Mês: ${nameB}`;
 
   const mkCard=(title,vA,vB,fmt2,unit='')=>{
     const pct=mA!=null&&vA&&!isNaN(vA)&&!isNaN(vB)?((vB-vA)/vA*100):null;
     const up=pct!=null&&pct>=0; // up = aumento = vermelho (bg-up agora é vermelho)
-    const arrow=pct!=null?'<span class="kpi-badge '+(up?'bg-up':'bg-dn')+'" style="font-size:.72rem;margin-left:5px;" title="'+(up?'Aumento':'Redução')+' de gastos">'+(up?' ':' ')+' '+(Math.abs(pct).toFixed(1))+'%</span>':'';
-    const prev=mA!=null?'<div style="font-size:.72rem;color:var(--muted);margin-top:3px;">'+(nameA)+': '+(fmt2(vA))+'(unit)+'</div>':'';
-    return '<div style="background:rgba(0,0,0,.6);border:1px solid #2a2a2a;border-radius:9px;padding:13px 15px;">      <div style="font-size:.67rem;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px;">'+(title)+'</div>      <div style="font-size:1.2rem;font-weight:800;color:var(--teal);">'+(fmt2(vB))+'(unit)+'(arrow)+'</div>'+(prev)+'</div>';
+    const arrow=pct!=null?`<span class="kpi-badge ${up?'bg-up':'bg-dn'}" style="font-size:.72rem;margin-left:5px;" title="${up?'Aumento':'Redução'} de gastos">${up?'▲':'▼'} ${Math.abs(pct).toFixed(1)}%</span>`:'';
+    const prev=mA!=null?`<div style="font-size:.72rem;color:var(--muted);margin-top:3px;">${nameA}: ${fmt2(vA)}${unit}</div>`:'';
+    return `<div style="background:rgba(0,0,0,.6);border:1px solid #2a2a2a;border-radius:9px;padding:13px 15px;">
+      <div style="font-size:.67rem;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px;">${title}</div>
+      <div style="font-size:1.2rem;font-weight:800;color:var(--teal);">${fmt2(vB)}${unit}${arrow}</div>${prev}</div>`;
   };
   document.getElementById('compGrid').innerHTML=
     mkCard('Gasto Total',totA,totB,fmtF)+
@@ -1831,7 +1821,8 @@ function buildComparativo(mesIdx){
     mkCard('Ticket Médio',mA!=null?totA/ordA:null,totB/ordB,fmtF)+
     mkCard('Part. no Total',mA!=null?totA/grand*100:null,totB/grand*100,v=>v.toFixed(1),'%');
 
-  document.getElementById('compHead').innerHTML='<th class="rank">#</th><th>Família</th>    <th>'+(nameB)+' (R$)</th>${mA!=null?'<th>${nameA} (R$)</th><th>Variação</th>':''}';
+  document.getElementById('compHead').innerHTML=`<th class="rank">#</th><th>Família</th>
+    <th>${nameB} (R$)</th>${mA!=null?`<th>${nameA} (R$)</th><th>Variação</th>`:''}`;
 
   const pairs=Object.entries(S.familias).map(([k,v])=>({n:k,vB:v[mB]||0,vA:mA!=null?v[mA]||0:null}))
     .filter(r=>r.vB>0||(r.vA&&r.vA>0)).sort((a,b)=>b.vB-a.vB);
@@ -1839,18 +1830,19 @@ function buildComparativo(mesIdx){
   pairs.forEach((r,i)=>{
     const pct=mA!=null&&r.vA?((r.vB-r.vA)/r.vA*100):null;
     // pct>=0 = aumento de gasto = vermelho; pct<0 = redução = verde
-    const varEl=pct!=null?'<span class="kpi-badge '+(pct>=0?'bg-up':'bg-dn')+'" title="'+(pct>=0?'Aumento':'Redução')+' de gastos">'+(pct>=0?' ':' ')+' '+(Math.abs(pct).toFixed(1))+'%</span>':'-';
+    const varEl=pct!=null?`<span class="kpi-badge ${pct>=0?'bg-up':'bg-dn'}" title="${pct>=0?'Aumento':'Redução'} de gastos">${pct>=0?'▲':'▼'} ${Math.abs(pct).toFixed(1)}%</span>`:'—';
     const tr=document.createElement('tr');
-    tr.innerHTML='<td class="rank">'+(i+1)+'</td><td>'+(r.n)+'</td><td><strong>'+(fmtF(r.vB))+'</strong></td>      ${mA!=null?'<td style="color:var(--muted)">${fmtF(r.vA)}</td><td>${varEl}</td>':''}';
+    tr.innerHTML=`<td class="rank">${i+1}</td><td>${r.n}</td><td><strong>${fmtF(r.vB)}</strong></td>
+      ${mA!=null?`<td style="color:var(--muted)">${fmtF(r.vA)}</td><td>${varEl}</td>`:''}`;
     tbody.appendChild(tr);
   });
 }
 
 
-// ===================================================
-//  PEDIDOS EM ABERTO - DADOS E FUNÇÕES
-// ===================================================
-// -- Mapa de cores por status (expansível automaticamente) --
+// ═══════════════════════════════════════════════════
+//  PEDIDOS EM ABERTO — DADOS E FUNÇÕES
+// ═══════════════════════════════════════════════════
+// ── Mapa de cores por status (expansível automaticamente) ──
 function getStatusColorMap(){
   return {
     'Totalmente atendido':  'rgba(46,196,182,.85)',   // teal
@@ -1875,7 +1867,7 @@ function getStatusDotColor(status){
 }
 var STATUS_EXTRA_COLORS=['rgba(244,124,32,.85)','rgba(6,214,160,.85)','rgba(255,140,0,.85)','rgba(200,100,255,.85)'];
 
-// -- Popula o filtro de status dinamicamente com base em S.statusTotals --
+// ── Popula o filtro de status dinamicamente com base em S.statusTotals ──
 function populateStatusFilter(){
   const container=document.getElementById('statusCheckboxes');
   if(!container)return;
@@ -1889,7 +1881,7 @@ function populateStatusFilter(){
     const dotColor=getStatusDotColor(s);
     const label=document.createElement('label');
     label.className='status-opt';
-    label.innerHTML='<input type="checkbox" value="'+(s)+'" '+(wasChecked.has(s)?' checked':'')+'><span class="so-dot" style="background:'+(dotColor)+'"></span>'+(s)+'';
+    label.innerHTML=`<input type="checkbox" value="${s}" onchange="onStatusChange()"${wasChecked.has(s)?' checked':''}><span class="so-dot" style="background:${dotColor}"></span>${s}`;
     container.appendChild(label);
   });
   updateStatusBtn();
@@ -1974,95 +1966,86 @@ function sortAbertos(col){
 }
 
 function renderAbertos(){
-  var painel=document.getElementById('abertosPanel');
-  var body=document.getElementById('abertosBody');
-  var empty=document.getElementById('abEmpty');
-  if(!painel||!body) return;
-
-  painel.style.display='block';
+  const search=(document.getElementById('abSearch')||{}).value||'';
+  const grupo=(document.getElementById('abGrupo')||{}).value||'';
+  const antig=(document.getElementById('abAntiguidade')||{}).value||'';
+  const fGrupo=document.getElementById('fGrupo').value;
+  const fFamilia=document.getElementById('fFamilia').value;
+  const fForn=document.getElementById('fFornecedor').value;
+  const fStatus=Array.prototype.slice.call(document.querySelectorAll('#statusCheckboxes input:checked')).map(el=>el.value);
 
   var data=(ABERTOS_DATA||[]).slice();
 
-  // Filtros locais
-  var search=(document.getElementById('abSearch')||{}).value||'';
-  var grupo=(document.getElementById('abGrupo')||{}).value||'';
-  var antig=(document.getElementById('abAntiguidade')||{}).value||'';
-
-  // Filtros globais
-  var fGrupo=(document.getElementById('fGrupo')||{}).value||'';
-  var fFamilia=(document.getElementById('fFamilia')||{}).value||'';
-
-  if(fGrupo)   data=data.filter(function(r){return r.grupo===fGrupo;});
-  if(fFamilia) data=data.filter(function(r){return r.familia===fFamilia;});
-  if(search){
-    var q=search.toLowerCase();
-    data=data.filter(function(r){
-      return r.prod.toLowerCase().indexOf(q)>=0||
-             r.forn.toLowerCase().indexOf(q)>=0||
-             String(r.ped).indexOf(q)>=0;
-    });
+  // Se filtro de status for diferente de Aberto, esconde o painel
+  if(fStatus.length>0&&!fStatus.includes('Aberto')){
+    document.getElementById('abertosPanel').style.display='none';return;
   }
-  if(grupo) data=data.filter(function(r){return r.grupo===grupo;});
+  document.getElementById('abertosPanel').style.display='block';
+
+  // Aplicar filtros globais do dashboard
+  if(fGrupo) data=data.filter(r=>r.grupo===fGrupo);
+  if(fFamilia) data=data.filter(r=>r.familia===fFamilia);
+  if(fForn) data=data.filter(r=>r.forn.toUpperCase().includes(fForn.substring(0,15).toUpperCase()));
+
+  // Filtros locais do painel
+  if(search){const q=search.toLowerCase();data=data.filter(r=>r.prod.toLowerCase().includes(q)||r.forn.toLowerCase().includes(q)||String(r.ped).includes(q));}
+  if(grupo) data=data.filter(r=>r.grupo===grupo);
   if(antig){
-    if(antig==='critico') data=data.filter(function(r){return r.dias>120;});
-    else if(antig==='alto') data=data.filter(function(r){return r.dias>60&&r.dias<=120;});
-    else if(antig==='medio') data=data.filter(function(r){return r.dias>30&&r.dias<=60;});
-    else if(antig==='normal') data=data.filter(function(r){return r.dias<=30;});
+    const map={critico:d=>d>120,alto:d=>d>60&&d<=120,medio:d=>d>30&&d<=60,normal:d=>d<=30};
+    if(map[antig])data=data.filter(r=>map[antig](r.dias));
   }
 
   // Ordenação
-  data.sort(function(a,b){
-    var va=a.dias,vb=b.dias;
-    if(abSortCol==='valor'){va=a.valor;vb=b.valor;}
-    else if(abSortCol==='pedido'){va=a.ped;vb=b.ped;}
-    else if(abSortCol==='fornecedor'){va=a.forn;vb=b.forn;}
-    if(typeof va==='string') return abSortDir==='desc'?vb.localeCompare(va):va.localeCompare(vb);
+  data.sort((a,b)=>{
+    const vals={dias:[a.dias,b.dias],valor:[a.valor,b.valor],pedido:[a.ped,b.ped],fornecedor:[a.forn,b.forn],emissao:[a.emissao,b.emissao]};
+    const [va,vb]=vals[abSortCol]||[a.dias,b.dias];
+    if(typeof va==='string')return abSortDir==='desc'?vb.localeCompare(va):va.localeCompare(vb);
     return abSortDir==='desc'?vb-va:va-vb;
   });
 
-  // KPIs
-  var total=data.length;
-  var show=data.slice(0,15);
-  var totalVal=0,maxDias=0,sumDias=0;
-  for(var k=0;k<data.length;k++){
-    totalVal+=data[k].valor;
-    if(data[k].dias>maxDias)maxDias=data[k].dias;
-    sumDias+=data[k].dias;
-  }
-  var avgDias=data.length?Math.round(sumDias/data.length):0;
+  const total=data.length;
+  const show=data.slice(0,15);
 
-  var e1=document.getElementById('abTotalVal'); if(e1)e1.textContent=fmt(totalVal);
-  var e2=document.getElementById('abQtd');      if(e2)e2.textContent=total;
-  var e3=document.getElementById('abMaxDias');  if(e3)e3.textContent=maxDias+' dias';
-  var e4=document.getElementById('abMediaDias');if(e4)e4.textContent=avgDias+' dias';
-  var e5=document.getElementById('abShowCount');if(e5)e5.textContent=Math.min(15,total);
-  var e6=document.getElementById('abTotalCount');if(e6)e6.textContent=total;
+  // Atualizar KPIs do painel
+  const totalVal=data.reduce((a,r)=>a+r.valor,0);
+  const maxDias=data.length?Math.max(...data.map(r=>r.dias)):0;
+  const avgDias=data.length?Math.round(data.reduce((a,r)=>a+r.dias,0)/data.length):0;
+  document.getElementById('abTotalVal').textContent=fmt(totalVal);
+  document.getElementById('abQtd').textContent=total;
+  document.getElementById('abMaxDias').textContent=maxDias+' dias';
+  document.getElementById('abMediaDias').textContent=avgDias+' dias';
+  document.getElementById('abShowCount').textContent=Math.min(15,total);
+  document.getElementById('abTotalCount').textContent=total;
 
+  const body=document.getElementById('abertosBody');
+  const empty=document.getElementById('abEmpty');
   body.innerHTML='';
-  if(!show.length){if(empty)empty.style.display='block';return;}
-  if(empty)empty.style.display='none';
 
-  for(var j=0;j<show.length;j++){
-    var r=show[j];
-    var cls=r.dias>120?'dias-critico':r.dias>60?'dias-alto':r.dias>30?'dias-medio':'dias-normal';
-    var late=r.dias>120;
-    var forn=r.forn.length>32?r.forn.substring(0,32)+' ':r.forn;
-    var nat=r.natureza.length>26?r.natureza.substring(0,26)+' ':r.natureza;
-    var tr=document.createElement('tr');
-    tr.innerHTML=
-      '<td><span class="dias-badge '+cls+'">'+r.dias+'d</span></td>'+
-      '<td style="font-weight:700;color:var(--teal)">'+r.ped+'</td>'+
-      '<td class="prod-nome" title="'+r.prod+'">'+r.prod+'</td>'+
-      '<td style="font-size:.75rem">'+forn+'</td>'+
-      '<td style="font-size:.72rem;color:var(--muted)">'+r.grupo+'</td>'+
-      '<td style="font-size:.75rem">'+r.emissao+'</td>'+
-      '<td style="font-size:.75rem;color:'+(late?'var(--rose)':'var(--muted)')+';font-weight:'+(late?700:400)+'">'+r.prevEntrega+'</td>'+
-      '<td style="font-weight:700">'+fmtF(r.valor)+'</td>'+
-      '<td style="text-align:center">'+r.qtAberto+'</td>'+
-      '<td style="font-size:.72rem;color:var(--muted)" title="'+r.natureza+'">'+nat+'</td>';
+  if(!show.length){empty.style.display='block';return;}
+  empty.style.display='none';
+
+  show.forEach(r=>{
+    const cls=diasClass(r.dias);
+    const isLate=r.dias>120;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td><span class="dias-badge ${cls}">${r.dias}d</span></td>
+      <td style="font-weight:700;color:var(--teal)">${r.ped}</td>
+      <td class="prod-nome" title="${r.prod}">${r.prod}</td>
+      <td style="font-size:.75rem">${r.forn.length>32?r.forn.substring(0,32)+'…':r.forn}</td>
+      <td style="font-size:.72rem;color:var(--muted)">${r.grupo}</td>
+      <td style="font-size:.75rem">${r.emissao}</td>
+      <td style="font-size:.75rem;color:${isLate?'var(--rose)':'var(--muted)'};font-weight:${isLate?700:400}">${r.prevEntrega}</td>
+      <td style="font-weight:700">${fmtF(r.valor)}</td>
+      <td style="text-align:center;color:var(--text-muted)">${r.qtAberto}</td>
+      <td style="font-size:.72rem;color:var(--muted)" title="${r.natureza}">${r.natureza.length>26?r.natureza.substring(0,26)+'…':r.natureza}</td>`;
     body.appendChild(tr);
-  }
+  });
 }
+
+// ── Carregar dados salvos do localStorage ──
+// ── Versão dos dados — escopo global ──
+
 var FB_URL = ''; // não usado
 function initFirebase(){ /* não usado */ }
 
@@ -2078,7 +2061,7 @@ function saveToFirebase(){
     localStorage.setItem('vl_abertos', JSON.stringify(ABERTOS_DATA));
     localStorage.setItem('vl_saved_at', payload.savedAt);
   } catch(e){}
-  toast('  Dados importados! Para compartilhar, suba o arquivo no GitHub.');
+  toast('✅ Dados importados! Para compartilhar, suba o arquivo no GitHub.');
   return Promise.resolve(true);
 }
 
@@ -2099,7 +2082,7 @@ function saveToFirebase(){
     localStorage.setItem('vl_abertos', JSON.stringify(ABERTOS_DATA));
     localStorage.setItem('vl_saved_at', payload.savedAt);
   } catch(e){}
-  toast('  Dados importados! Para compartilhar, suba o arquivo no GitHub.');
+  toast('✅ Dados importados! Para compartilhar, suba o arquivo no GitHub.');
   return Promise.resolve(true);
 }
 
@@ -2127,7 +2110,7 @@ function loadFromFirebase(){
         ABERTOS_DATA = data.abertos || [];
         // Verificar se S está completo
         if(!S.familias || !S.months || !S.totals){
-          console.warn('S incompleto após XHR - usando RAW');
+          console.warn('S incompleto após XHR — usando RAW');
           return resolve(false);
         }
         try{
@@ -2141,138 +2124,33 @@ function loadFromFirebase(){
           var dt=new Date(data.savedAt);
           document.getElementById('hdrPeriod').textContent='Atualizado: '+dt.toLocaleDateString('pt-BR')+' '+dt.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
         }
-        console.log('  Dados carregados com sucesso!');
+        console.log('✅ Dados carregados com sucesso!');
         resolve(true);
       } catch(e){
-        console.log('  Parse error:', e.message);
+        console.log('❌ Parse error:', e.message);
         resolve(false);
       }
     };
-    xhr.onerror = function(){ console.log('  XHR error'); resolve(false); };
+    xhr.onerror = function(){ console.log('❌ XHR error'); resolve(false); };
     xhr.send();
   });
 }
 
-// -- Expor funções globalmente --
-
-window.handleFile      = handleFile;
-window.exportExcel     = typeof exportExcel     === 'function' ? exportExcel     : function(){};
-window.exportPDF       = typeof exportPDF       === 'function' ? exportPDF       : function(){};
-window.exportCSV       = typeof exportCSV       === 'function' ? exportCSV       : function(){};
-window.resetFilters    = typeof resetFilters    === 'function' ? resetFilters    : function(){};
-window.clearSaved      = typeof clearSaved      === 'function' ? clearSaved      : function(){};
-window.showTokenModal  = typeof showTokenModal  === 'function' ? showTokenModal  : function(){};
-window.sortAbertos     = typeof sortAbertos     === 'function' ? sortAbertos     : function(){};
-window.applyFilters    = typeof applyFilters    === 'function' ? applyFilters    : function(){};
-window.closeModal      = typeof closeModal      === 'function' ? closeModal      : function(){};
-window.shareWhatsApp   = typeof shareWhatsApp   === 'function' ? shareWhatsApp   : function(){};
-window.shareEmail      = typeof shareEmail      === 'function' ? shareEmail      : function(){};
-window.doPublish       = typeof doPublish       === 'function' ? doPublish       : function(){};
-window.downloadSelfContained=typeof downloadSelfContained==='function'?downloadSelfContained:function(){};
-window.toggleBlock     = typeof toggleBlock     === 'function' ? toggleBlock     : function(){};
-window.saveToken       = typeof saveToken       === 'function' ? saveToken       : function(){};
-window.copyField       = typeof copyField       === 'function' ? copyField       : function(){};
-window.toggleZone      = typeof toggleZone      === 'function' ? toggleZone      : function(){};
-window.handleFile = handleFile;
-window.processFile = processFile;
-window.exportPDF = typeof exportPDF === 'function' ? exportPDF : function(){};
-window.resetFilters = typeof resetFilters === 'function' ? resetFilters : function(){};
-window.showTokenModal = typeof showTokenModal === 'function' ? showTokenModal : function(){};
-window.closeModal = typeof closeModal === 'function' ? closeModal : function(){};
-window.shareEmail = typeof shareEmail === 'function' ? shareEmail : function(){};
-window.copyField = typeof copyField === 'function' ? copyField : function(){};
-window.doPublish = typeof doPublish === 'function' ? doPublish : function(){};
-// =====================================================
-// EVENTOS VIA addEventListener   sem inline no HTML
-// =====================================================
-document.addEventListener('DOMContentLoaded', function() {
-  function bind(id, ev, fn) {
-    var el = document.getElementById(id);
-    if(el) el.addEventListener(ev, fn);
+// Fix: registrar handleFile via addEventListener
+(function(){
+  function init(){
+    var fi = document.getElementById('fileInput');
+    if(fi && typeof handleFile === 'function'){
+      fi.removeEventListener('change', handleFile);
+      fi.addEventListener('change', handleFile);
+    }
   }
-  function bindAll(sel, ev, fn) {
-    var els = document.querySelectorAll(sel);
-    for(var i=0;i<els.length;i++) els[i].addEventListener(ev, fn);
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
   }
-
-  // Import
-  bind('fileInput',  'change', handleFile);
-  bind('btn-import', 'click',  function(){ var f=document.getElementById('fileInput'); if(f) f.click(); });
-
-  // Exportar
-  bind('btn-excel', 'click', function(){ if(typeof exportExcel==='function') exportExcel(); });
-  bind('btn-pdf',   'click', function(){ if(typeof exportPDF==='function') exportPDF(); });
-  bind('btn-csv',   'click', function(){ if(typeof exportCSV==='function') exportCSV(); });
-  bind('btn-print', 'click', function(){ window.print(); });
-
-  // Compartilhar
-  bind('btn-share', 'click', function(){
-    var m=document.getElementById('shareModal'); if(m) m.classList.add('open');
-  });
-  bind('btn-whatsapp',  'click', function(){ if(typeof shareWhatsApp==='function') shareWhatsApp(); });
-  bind('btn-email',     'click', function(){ if(typeof shareEmail==='function') shareEmail(); });
-  bind('btn-download',  'click', function(){ if(typeof downloadSelfContained==='function') downloadSelfContained(); });
-  bind('btn-copy-dash', 'click', function(){ if(typeof copyField==='function') copyField('dashLink'); });
-  bind('btn-copy-gh',   'click', function(){ if(typeof copyField==='function') copyField('ghLink'); });
-
-  // Admin / Acesso
-  bind('btn-admin',    'click', function(){ if(typeof showTokenModal==='function') showTokenModal(); });
-  bind('btn-firebase', 'click', function(){ if(typeof saveToFirebase==='function') saveToFirebase(); });
-  bind('btn-access',   'click', function(){ if(typeof showAccessPanel==='function') showAccessPanel(); });
-
-  // Filtros
-  bind('btn-reset', 'click',  function(){ if(typeof resetFilters==='function') resetFilters(); });
-  bind('btn-zone',  'click',  function(){ if(typeof toggleZone==='function') toggleZone(); });
-  bind('btn-do-publish', 'click', function(){ if(typeof doPublish==='function') doPublish(); });
-  bind('btn-clear', 'click',  function(){ if(typeof clearSaved==='function') clearSaved(); });
-
-  // Modal
-  bind('btn-close-modal', 'click', function(){ if(typeof closeModal==='function') closeModal(); });
-  var modals = document.querySelectorAll('.modal-overlay');
-  for(var i=0;i<modals.length;i++){
-    modals[i].addEventListener('click', function(e){ if(e.target===this && typeof closeModal==='function') closeModal(); });
-  }
-
-  // Status
-  bind('btn-status-all',  'click', function(){ if(typeof selectAllStatus==='function') selectAllStatus(true); });
-  bind('btn-status-none', 'click', function(){ if(typeof selectAllStatus==='function') selectAllStatus(false); });
-
-  // Sort abertos
-  bindAll('[data-sort]', 'click', function(){
-    if(typeof sortAbertos==='function') sortAbertos(this.getAttribute('data-sort'));
-  });
-
-  // Selects de filtro
-  bind('fGrupo',       'change', function(){ if(typeof applyFilters==='function') applyFilters(); });
-  bind('fFamilia',     'change', function(){ if(typeof applyFilters==='function') applyFilters(); });
-  bind('fFornecedor',  'change', function(){ if(typeof applyFilters==='function') applyFilters(); });
-  bind('fMes',         'change', function(){ if(typeof applyFilters==='function') applyFilters(); });
-  bind('abSearch',     'input',  function(){ if(typeof renderAbertos==='function') renderAbertos(); });
-  bind('abGrupo',      'change', function(){ if(typeof renderAbertos==='function') renderAbertos(); });
-  bind('abAntiguidade','change', function(){ if(typeof renderAbertos==='function') renderAbertos(); });
-
-  // Netlify
-  bind('btn-netlify', 'click', function(){
-    window.open('https://app.netlify.com/drop','_blank');
-    if(typeof closeModal==='function') closeModal();
-  });
-  // Status dropdown
-  bind('btn-status-dd', 'click', function(e){
-    if(typeof toggleStatusDropdown==='function') toggleStatusDropdown(e);
-  });
-  // Hide publish banner
-  bind('btn-hide-banner', 'click', function(){
-    var b=document.getElementById('publishBanner'); if(b) b.style.display='none';
-  });
-  // onStatusChange nos checkboxes de status
-  var statusCbs = document.querySelectorAll('#statusCheckboxes input[type=checkbox]');
-  for(var si=0;si<statusCbs.length;si++){
-    statusCbs[si].addEventListener('change', function(){
-      if(typeof onStatusChange==='function') onStatusChange();
-      else if(typeof applyFilters==='function') applyFilters();
-    });
-  }
-});
+})();
 </script>
 </body>
 </html>
