@@ -401,7 +401,7 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
 <div class="toolbar">
   <span class="tb-label">📂 Importar:</span>
   <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">⬆ XLSX / CSV</button>
-  <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" >
+  <input type="file" id="fileInput" accept=".xlsx,.xls,.csv">
   <button class="btn btn-ghost" onclick="toggleZone()">Arraste aqui</button>
   <div class="tb-div"></div>
   <span class="tb-label">⬇ Exportar:</span>
@@ -679,7 +679,7 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
 
 <script>
 // ── Variáveis globais — definidas primeiro via var (hoisting) ──
-var DATA_VERSION = '32';
+var DATA_VERSION = '30';
 // Configuração do admin
 (function(){
   try{
@@ -863,7 +863,7 @@ function applyFilters(){
   const tagsEl=document.getElementById('activeTags');tagsEl.innerHTML='';
   const addTag=(label,clearFn)=>{
     const d=document.createElement('div');d.className='f-tag';
-    d.innerHTML=''+(label)+' <span class="rm" onclick="'+(clearFn)+'">✕</span>';
+    d.innerHTML=`${label} <span class="rm" onclick="${clearFn}">✕</span>`;
     tagsEl.appendChild(d);
   };
   const mn2=S.months.slice(); // dinâmico
@@ -937,12 +937,12 @@ function applyFilters(){
     data:{labels:donutL,datasets:[{data:donutV,backgroundColor:C,borderWidth:0,hoverOffset:8}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
       plugins:{legend:{position:'right',labels:{boxWidth:10,padding:9,font:{size:10}}},
-               tooltip:{callbacks:{label:c=>{const t=donutV.reduce((a,b)=>a+(isNaN(b)?0:b),0)||1;return' '+(fmt(c.raw))+' ('+((c.raw/t*100).toFixed(1))+'%)';}}}}}
+               tooltip:{callbacks:{label:c=>{const t=donutV.reduce((a,b)=>a+(isNaN(b)?0:b),0)||1;return` ${fmt(c.raw)} (${(c.raw/t*100).toFixed(1)}%)`;}}}}}
   });
 
   // ── Família stacked bar ──
   destroy('fambar');
-  const famEntries2=Object.keys(S.familias).map(function(__k){return [__k,(S.familias)[__k]];});
+  const famEntries2=Object.entries(S.familias);
   const famLabels2=mesIdx>=0?[S.months[mesIdx]]:S.months.slice();
   const nMonths=S.months.length;
   const famDs=famEntries2.map(([k,v],i)=>{
@@ -958,7 +958,7 @@ function applyFilters(){
     type:'bar',data:{labels:famLabels2,datasets:famDs},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{position:'bottom',labels:{boxWidth:8,padding:8,font:{size:9}}},
-               tooltip:{callbacks:{label:c=>' '+(c.dataset.label)+': '+(fmt(c.raw))+''}}},
+               tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${fmt(c.raw)}`}}},
       scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:10}}},
               y:{stacked:true,grid:{color:'#1e1e1e'},ticks:{callback:v=>fmt(v),font:{size:10}},border:{display:false}}}}
   });
@@ -967,13 +967,13 @@ function applyFilters(){
   destroy('natbar');
   let natEntries2;
   if(mesIdx>=0){
-    natEntries2=Object.keys(S.naturezas).map(function(__k){return [__k,(S.naturezas)[__k]];}).map(([k,v])=>([k,v[mesIdx]||0])).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]).slice(0,10);
+    natEntries2=Object.entries(S.naturezas).map(([k,v])=>([k,v[mesIdx]||0])).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]).slice(0,10);
   } else if(forn&&S.fornecedorMes&&S.fornecedorMes[forn]){
     // proportional by month ratio
     const ratio=filtTotal/grand;
-    natEntries2=Object.keys(S.naturezaTotals).map(function(__k){return [__k,(S.naturezaTotals)[__k]];}).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([k,v])=>([k,v*ratio]));
+    natEntries2=Object.entries(S.naturezaTotals).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([k,v])=>([k,v*ratio]));
   } else {
-    natEntries2=Object.keys(S.naturezaTotals).map(function(__k){return [__k,(S.naturezaTotals)[__k]];}).sort((a,b)=>b[1]-a[1]).slice(0,10);
+    natEntries2=Object.entries(S.naturezaTotals).sort((a,b)=>b[1]-a[1]).slice(0,10);
   }
   charts.natbar=new Chart(document.getElementById('cNatBar').getContext('2d'),{
     type:'bar',
@@ -1062,7 +1062,7 @@ function applyFilters(){
       backgroundColor:(fMonths||[]).map((_,i)=>i===peakI3?'#f4a261':'rgba(0,180,216,.65)'),
       borderRadius:5}]},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+(c.raw)+' pedidos'}}},
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.raw} pedidos`}}},
       scales:{x:{grid:{display:false},ticks:{font:{size:10}}},
               y:{grid:{color:'#1e1e1e'},ticks:{stepSize:Math.max(1,Math.round((Math.max(...(fOrders||[]).map(v=>isNaN(v)?0:v))||1)/4)),font:{size:10}},border:{display:false}}}}
   });
@@ -1142,16 +1142,16 @@ function buildMonthlyTable(months,totals,orders,grand){
     const prev=i>0?totals[i-1]:null;
     const vp=prev?((totals[i]-prev)/prev*100):null;
     // vp>=0 = aumento (vermelho/ruim), vp<0 = redução (verde/bom)
-    const varEl=vp!=null?'<span class="kpi-badge '+(vp>=0?'bg-up':'bg-dn')+'" title="'+(vp>=0?'Aumento':'Redução')+' de gastos">'+(vp>=0?'▲':'▼')+' '+(Math.abs(vp).toFixed(1))+'%</span>':'—';
+    const varEl=vp!=null?`<span class="kpi-badge ${vp>=0?'bg-up':'bg-dn'}" title="${vp>=0?'Aumento':'Redução'} de gastos">${vp>=0?'▲':'▼'} ${Math.abs(vp).toFixed(1)}%</span>`:'—';
     const pct=(totals[i]/g*100).toFixed(1);
     const bw=(totals[i]/Math.max(...totals)*100).toFixed(0);
     const ord=Array.isArray(orders)?orders[i]:Math.round(totals[i]/10691);
     const tr=document.createElement('tr');
     if(i===peakI)tr.style.background='rgba(0,180,216,.07)';
-    tr.innerHTML='<td class="rank">'+(i+1)+'</td><td><strong>'+(m)+'</strong>'+(i===peakI?' 🏆':'')+'</td>
-      <td>'+(fmtF(totals[i]))+'</td><td>'+(ord)+'</td><td>'+(fmtF(totals[i]/(ord||1)))+'</td>
-      <td>'+(varEl)+'</td><td><span style="color:var(--muted);font-size:.73rem">'+(pct)+'%</span>
-      <div class="bm" style="width:'+(bw)+'%"></div></td>';
+    tr.innerHTML=`<td class="rank">${i+1}</td><td><strong>${m}</strong>${i===peakI?' 🏆':''}</td>
+      <td>${fmtF(totals[i])}</td><td>${ord}</td><td>${fmtF(totals[i]/(ord||1))}</td>
+      <td>${varEl}</td><td><span style="color:var(--muted);font-size:.73rem">${pct}%</span>
+      <div class="bm" style="width:${bw}%"></div></td>`;
     b.appendChild(tr);
   });
 }
@@ -1159,15 +1159,15 @@ function buildMonthlyTable(months,totals,orders,grand){
 function buildFamiliaTable(){
   const b=document.getElementById('tFamilia');b.innerHTML='';
   const grand=S.totals.reduce((a,v)=>a+v,0);
-  const entries=Object.keys(S.familiaTotals).map(function(__k){return [__k,(S.familiaTotals)[__k]];}).sort((a,b)=>b[1]-a[1]);
+  const entries=Object.entries(S.familiaTotals).sort((a,b)=>b[1]-a[1]);
   const mx=entries[0][1];
   entries.forEach(([n,v],i)=>{
     const pct=(v/grand*100).toFixed(1);
     const bw=(v/mx*100).toFixed(0);
     const tr=document.createElement('tr');
-    tr.innerHTML='<td class="rank">'+(i+1)+'</td><td><strong>'+(n)+'</strong></td>
-      <td>'+(fmtF(v))+'</td><td>'+(pct)+'%</td>
-      <td><div class="bm" style="width:'+(bw)+'%;background:linear-gradient(90deg,#2ec4b6,#4cc9f0)"></div></td>';
+    tr.innerHTML=`<td class="rank">${i+1}</td><td><strong>${n}</strong></td>
+      <td>${fmtF(v)}</td><td>${pct}%</td>
+      <td><div class="bm" style="width:${bw}%;background:linear-gradient(90deg,#2ec4b6,#4cc9f0)"></div></td>`;
     tr.style.cursor='pointer';
     tr.onclick=()=>{document.getElementById('fFamilia').value=n;applyFilters();};
     tr.title='Clique para filtrar por esta família';
@@ -1178,15 +1178,15 @@ function buildFamiliaTable(){
 function buildNaturezaTable(){
   const b=document.getElementById('tNatureza');b.innerHTML='';
   const grand=S.totals.reduce((a,v)=>a+v,0);
-  const entries=Object.keys(S.naturezaTotals).map(function(__k){return [__k,(S.naturezaTotals)[__k]];}).sort((a,b)=>b[1]-a[1]);
+  const entries=Object.entries(S.naturezaTotals).sort((a,b)=>b[1]-a[1]);
   const mx=entries[0][1];
   entries.forEach(([n,v],i)=>{
     const pct=(v/grand*100).toFixed(1);
     const bw=(v/mx*100).toFixed(0);
     const tr=document.createElement('tr');
-    tr.innerHTML='<td class="rank">'+(i+1)+'</td><td>'+(n)+'</td>
-      <td>'+(fmtF(v))+'</td><td>'+(pct)+'%</td>
-      <td><div class="bm" style="width:'+(bw)+'%;background:linear-gradient(90deg,#4cc9f0,#2ec4b6)"></div></td>';
+    tr.innerHTML=`<td class="rank">${i+1}</td><td>${n}</td>
+      <td>${fmtF(v)}</td><td>${pct}%</td>
+      <td><div class="bm" style="width:${bw}%;background:linear-gradient(90deg,#4cc9f0,#2ec4b6)"></div></td>`;
     tr.style.cursor='pointer';
     tr.onclick=()=>{document.getElementById('fNatureza').value=n;applyFilters();};
     tr.title='Clique para filtrar por esta natureza';
@@ -1237,7 +1237,7 @@ function processFile(file){
   ext==='csv'?reader.readAsText(file,'UTF-8'):reader.readAsArrayBuffer(file);
 }
 
-function col(row,keys){for(var _i=0;_i<keys.length;_i++){var k=keys[_i];if(row[k]!==undefined&&row[k]!==''&&row[k]!==null)return row[k];}return '';}
+function col(row,keys){for(const k of keys)if(row[k]!==undefined&&row[k]!==''&&row[k]!==null)return row[k];return '';}
 
 // Download seguro — compatível com GitHub Pages e navegadores modernos
 function safeDownload(blob, filename){
@@ -1371,12 +1371,12 @@ function parseImport(rows,fname){
     });
   });
 
-  const suppS=Object.keys(suppMap).map(function(__k){return [__k,(suppMap)[__k]];}).sort((a,b)=>b[1]-a[1]).slice(0,10);
-  const statS=Object.keys(statusMap).map(function(__k){return [__k,(statusMap)[__k]];}).sort((a,b)=>b[1]-a[1]);
+  const suppS=Object.entries(suppMap).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const statS=Object.entries(statusMap).sort((a,b)=>b[1]-a[1]);
   const aberto=statusMap['Aberto']||0;
-  const natSorted=Object.keys(natMap).map(function(__k){return [__k,(natMap)[__k]];}).sort((a,b)=>b[1]-a[1]);
-  const top6G=Object.keys(grupMap).map(function(__k){return [__k,(grupMap)[__k]];}).sort((a,b)=>b[1]-a[1]).slice(0,6);
-  const other=Object.keys(grupMap).map(function(__k){return [__k,(grupMap)[__k]];}).sort((a,b)=>b[1]-a[1]).slice(6).reduce((a,b)=>a+b[1],0);
+  const natSorted=Object.entries(natMap).sort((a,b)=>b[1]-a[1]);
+  const top6G=Object.entries(grupMap).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const other=Object.entries(grupMap).sort((a,b)=>b[1]-a[1]).slice(6).reduce((a,b)=>a+b[1],0);
 
   // Natureza per month
   const naturezas={};
@@ -1422,7 +1422,7 @@ function parseImport(rows,fname){
   });
 
   // Fornecedor por mês (top 15)
-  const forn15=Object.keys(suppMap).map(function(__k){return [__k,(suppMap)[__k]];}).sort((a,b)=>b[1]-a[1]).slice(0,15);
+  const forn15=Object.entries(suppMap).sort((a,b)=>b[1]-a[1]).slice(0,15);
   const fornecedorMes={};
   const fornecedorTotals={};
   forn15.forEach(([f,total])=>{
@@ -1438,13 +1438,13 @@ function parseImport(rows,fname){
 
   S={
     months,totals,orders,familias,
-    familiaTotals:(function(__a){var __o={};__a.forEach(function(__p){__o[__p[0]]=__p[1];});return __o;})(Object.keys(famMap).map(function(__k){return [__k,(famMap)[__k]];}).sort((a,b)=>b[1]-a[1])),
+    familiaTotals:Object.fromEntries(Object.entries(famMap).sort((a,b)=>b[1]-a[1])),
     naturezas,
-    naturezaTotals:(function(__a){var __o={};__a.forEach(function(__p){__o[__p[0]]=__p[1];});return __o;})(natSorted.slice(0,15)),
+    naturezaTotals:Object.fromEntries(natSorted.slice(0,15)),
     allNaturezas:natSorted.map(e=>e[0]).sort(),
     grupos:Object.keys(grupMap).sort((a,b)=>grupMap[b]-grupMap[a]),
     grupoMes,
-    grupoTotals:(function(__a){var __o={};__a.forEach(function(__p){__o[__p[0]]=__p[1];});return __o;})(Object.keys(grupMap).map(function(__k){return [__k,(grupMap)[__k]];}).sort((a,b)=>b[1]-a[1])),
+    grupoTotals:Object.fromEntries(Object.entries(grupMap).sort((a,b)=>b[1]-a[1])),
     fornecedorMes,
     fornecedorTotals,
     catPie:{labels:[...top6G.map(e=>e[0].substring(0,20)),'Outros'],values:[...top6G.map(e=>e[1]),other]},
@@ -1456,9 +1456,9 @@ function parseImport(rows,fname){
   };
 
   // Insights
-  document.getElementById('ins1').innerHTML='Maior mês: <strong>'+(months[peakI])+' ('+(fmt(Math.max(...totals)))+')</strong> — <strong>'+((Math.max(...totals)/grand*100).toFixed(1))+'%</strong> do total importado.';
-  document.getElementById('ins2').innerHTML='Pedidos em aberto: <strong>'+(fmtF(aberto))+'</strong> — <strong>'+((aberto/grand*100).toFixed(1))+'%</strong> do total.';
-  document.getElementById('ins3').innerHTML='Maior fornecedor: <strong>'+(topS?topS[0].substring(0,30):'—')+'</strong> ('+(fmt(topS?topS[1]:0))+'). Top 3 concentram <strong>'+(top3pct.toFixed(1))+'%</strong>.';
+  document.getElementById('ins1').innerHTML=`Maior mês: <strong>${months[peakI]} (${fmt(Math.max(...totals))})</strong> — <strong>${(Math.max(...totals)/grand*100).toFixed(1)}%</strong> do total importado.`;
+  document.getElementById('ins2').innerHTML=`Pedidos em aberto: <strong>${fmtF(aberto)}</strong> — <strong>${(aberto/grand*100).toFixed(1)}%</strong> do total.`;
+  document.getElementById('ins3').innerHTML=`Maior fornecedor: <strong>${topS?topS[0].substring(0,30):'—'}</strong> (${fmt(topS?topS[1]:0)}). Top 3 concentram <strong>${top3pct.toFixed(1)}%</strong>.`;
 
   // ── Build Pedidos em Aberto from imported data ──
   const today = new Date(); today.setHours(0,0,0,0); // zerar hora para cálculo correto de dias
@@ -1550,11 +1550,11 @@ function exportExcel(){
       XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(mw),'Resumo Mensal');
 
       const fw=[['Família','Valor Total','% Total']];
-      Object.keys(S.familiaTotals).map(function(__k){return [__k,(S.familiaTotals)[__k]];}).sort((a,b)=>b[1]-a[1]).forEach(([n,v])=>fw.push([n,v,(v/grand*100).toFixed(2)]));
+      Object.entries(S.familiaTotals).sort((a,b)=>b[1]-a[1]).forEach(([n,v])=>fw.push([n,v,(v/grand*100).toFixed(2)]));
       XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(fw),'Família Produto');
 
       const nw=[['Natureza de Lançamento','Valor Total','% Total']];
-      Object.keys(S.naturezaTotals).map(function(__k){return [__k,(S.naturezaTotals)[__k]];}).sort((a,b)=>b[1]-a[1]).forEach(([n,v])=>nw.push([n,v,(v/grand*100).toFixed(2)]));
+      Object.entries(S.naturezaTotals).sort((a,b)=>b[1]-a[1]).forEach(([n,v])=>nw.push([n,v,(v/grand*100).toFixed(2)]));
       XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(nw),'Natureza Lançamento');
 
       const sw=[['Fornecedor','Valor Total','% Total']];
@@ -1602,12 +1602,12 @@ function exportCSV(){
   const grand=S.totals.reduce((a,b)=>a+b,0);
   let csv='Mes;Gasto_Total;Qtd_Pedidos;Ticket_Medio;Participacao_Pct\n';
   S.months.slice(0,S.totals.length).forEach((m,i)=>
-    csv+=''+(m)+';'+(S.totals[i].toFixed(2))+';'+(S.orders[i])+';'+((S.totals[i]/(S.orders[i]||1)).toFixed(2))+';'+((S.totals[i]/grand*100).toFixed(2))+'\n'
+    csv+=`${m};${S.totals[i].toFixed(2)};${S.orders[i]};${(S.totals[i]/(S.orders[i]||1)).toFixed(2)};${(S.totals[i]/grand*100).toFixed(2)}\n`
   );
   csv+='\nFamilia;Valor;Pct\n';
-  Object.keys(S.familiaTotals).map(function(__k){return [__k,(S.familiaTotals)[__k]];}).sort((a,b)=>b[1]-a[1]).forEach(([n,v])=>csv+=''+(n)+';'+(v.toFixed(2))+';'+((v/grand*100).toFixed(2))+'\n');
+  Object.entries(S.familiaTotals).sort((a,b)=>b[1]-a[1]).forEach(([n,v])=>csv+=`${n};${v.toFixed(2)};${(v/grand*100).toFixed(2)}\n`);
   csv+='\nNatureza;Valor;Pct\n';
-  Object.keys(S.naturezaTotals).map(function(__k){return [__k,(S.naturezaTotals)[__k]];}).sort((a,b)=>b[1]-a[1]).forEach(([n,v])=>csv+=''+(n)+';'+(v.toFixed(2))+';'+((v/grand*100).toFixed(2))+'\n');
+  Object.entries(S.naturezaTotals).sort((a,b)=>b[1]-a[1]).forEach(([n,v])=>csv+=`${n};${v.toFixed(2)};${(v/grand*100).toFixed(2)}\n`);
   const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
   safeDownload(blob,'Dashboard_ValorLog.csv');
   toast('✅ CSV exportado!');
@@ -1748,18 +1748,18 @@ function buildFamiliaTableFiltered(mesIdx,grupo,forn){
   const grand=S.totals.reduce((a,b)=>a+b,0);
   let entries;
   if(mesIdx>=0){
-    entries=Object.keys(S.familias).map(function(__k){return [__k,(S.familias)[__k]];}).map(([k,v])=>([k,v[mesIdx]||0])).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]);
+    entries=Object.entries(S.familias).map(([k,v])=>([k,v[mesIdx]||0])).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]);
   } else {
-    entries=Object.keys(S.familiaTotals).map(function(__k){return [__k,(S.familiaTotals)[__k]];}).sort((a,b)=>b[1]-a[1]);
+    entries=Object.entries(S.familiaTotals).sort((a,b)=>b[1]-a[1]);
   }
   const mx=entries.length?entries[0][1]:1;
   entries.forEach(([n,v],i)=>{
     const pct=(v/grand*100).toFixed(1);
     const bw=(v/mx*100).toFixed(0);
     const tr=document.createElement('tr');
-    tr.innerHTML='<td class="rank">'+(i+1)+'</td><td><strong>'+(n)+'</strong></td>
-      <td>'+(fmtF(v))+'</td><td>'+(pct)+'%</td>
-      <td><div class="bm" style="width:'+(bw)+'%;background:linear-gradient(90deg,#2ec4b6,#4cc9f0)"></div></td>';
+    tr.innerHTML=`<td class="rank">${i+1}</td><td><strong>${n}</strong></td>
+      <td>${fmtF(v)}</td><td>${pct}%</td>
+      <td><div class="bm" style="width:${bw}%;background:linear-gradient(90deg,#2ec4b6,#4cc9f0)"></div></td>`;
     tr.style.cursor='pointer';
     tr.onclick=()=>{document.getElementById('fFamilia').value=n;applyFilters();};
     b.appendChild(tr);
@@ -1771,18 +1771,18 @@ function buildNaturezaTableFiltered(mesIdx,grupo,forn){
   const grand=S.totals.reduce((a,b)=>a+b,0);
   let entries;
   if(mesIdx>=0){
-    entries=Object.keys(S.naturezas).map(function(__k){return [__k,(S.naturezas)[__k]];}).map(([k,v])=>([k,v[mesIdx]||0])).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]);
+    entries=Object.entries(S.naturezas).map(([k,v])=>([k,v[mesIdx]||0])).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]);
   } else {
-    entries=Object.keys(S.naturezaTotals).map(function(__k){return [__k,(S.naturezaTotals)[__k]];}).sort((a,b)=>b[1]-a[1]);
+    entries=Object.entries(S.naturezaTotals).sort((a,b)=>b[1]-a[1]);
   }
   const mx=entries.length?entries[0][1]:1;
   entries.forEach(([n,v],i)=>{
     const pct=(v/grand*100).toFixed(1);
     const bw=(v/mx*100).toFixed(0);
     const tr=document.createElement('tr');
-    tr.innerHTML='<td class="rank">'+(i+1)+'</td><td>'+(n)+'</td>
-      <td>'+(fmtF(v))+'</td><td>'+(pct)+'%</td>
-      <td><div class="bm" style="width:'+(bw)+'%;background:linear-gradient(90deg,#4cc9f0,#2ec4b6)"></div></td>';
+    tr.innerHTML=`<td class="rank">${i+1}</td><td>${n}</td>
+      <td>${fmtF(v)}</td><td>${pct}%</td>
+      <td><div class="bm" style="width:${bw}%;background:linear-gradient(90deg,#4cc9f0,#2ec4b6)"></div></td>`;
     tr.style.cursor='pointer';
     tr.onclick=()=>{document.getElementById('fNatureza').value=n;applyFilters();};
     b.appendChild(tr);
@@ -1804,16 +1804,16 @@ function buildComparativo(mesIdx){
   const ordB=S.orders[mB],ordA=mA!=null?S.orders[mA]:null;
   const grand=S.totals.reduce((a,b)=>a+b,0);
 
-  document.getElementById('compSubtitle').textContent=mA!=null?''+(nameA)+' vs '+(nameB)+'':'Mês: '+(nameB)+'';
+  document.getElementById('compSubtitle').textContent=mA!=null?`${nameA} vs ${nameB}`:`Mês: ${nameB}`;
 
   const mkCard=(title,vA,vB,fmt2,unit='')=>{
     const pct=mA!=null&&vA&&!isNaN(vA)&&!isNaN(vB)?((vB-vA)/vA*100):null;
     const up=pct!=null&&pct>=0; // up = aumento = vermelho (bg-up agora é vermelho)
-    const arrow=pct!=null?'<span class="kpi-badge '+(up?'bg-up':'bg-dn')+'" style="font-size:.72rem;margin-left:5px;" title="'+(up?'Aumento':'Redução')+' de gastos">'+(up?'▲':'▼')+' '+(Math.abs(pct).toFixed(1))+'%</span>':'';
-    const prev=mA!=null?'<div style="font-size:.72rem;color:var(--muted);margin-top:3px;">'+(nameA)+': '+(fmt2(vA))+''+(unit)+'</div>':'';
-    return '<div style="background:rgba(0,0,0,.6);border:1px solid #2a2a2a;border-radius:9px;padding:13px 15px;">
-      <div style="font-size:.67rem;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px;">'+(title)+'</div>
-      <div style="font-size:1.2rem;font-weight:800;color:var(--teal);">'+(fmt2(vB))+''+(unit)+''+(arrow)+'</div>'+(prev)+'</div>';
+    const arrow=pct!=null?`<span class="kpi-badge ${up?'bg-up':'bg-dn'}" style="font-size:.72rem;margin-left:5px;" title="${up?'Aumento':'Redução'} de gastos">${up?'▲':'▼'} ${Math.abs(pct).toFixed(1)}%</span>`:'';
+    const prev=mA!=null?`<div style="font-size:.72rem;color:var(--muted);margin-top:3px;">${nameA}: ${fmt2(vA)}${unit}</div>`:'';
+    return `<div style="background:rgba(0,0,0,.6);border:1px solid #2a2a2a;border-radius:9px;padding:13px 15px;">
+      <div style="font-size:.67rem;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px;">${title}</div>
+      <div style="font-size:1.2rem;font-weight:800;color:var(--teal);">${fmt2(vB)}${unit}${arrow}</div>${prev}</div>`;
   };
   document.getElementById('compGrid').innerHTML=
     mkCard('Gasto Total',totA,totB,fmtF)+
@@ -1821,19 +1821,19 @@ function buildComparativo(mesIdx){
     mkCard('Ticket Médio',mA!=null?totA/ordA:null,totB/ordB,fmtF)+
     mkCard('Part. no Total',mA!=null?totA/grand*100:null,totB/grand*100,v=>v.toFixed(1),'%');
 
-  document.getElementById('compHead').innerHTML='<th class="rank">#</th><th>Família</th>
-    <th>'+(nameB)+' (R$)</th>${mA!=null?'<th>${nameA} (R$)</th><th>Variação</th>':''}';
+  document.getElementById('compHead').innerHTML=`<th class="rank">#</th><th>Família</th>
+    <th>${nameB} (R$)</th>${mA!=null?`<th>${nameA} (R$)</th><th>Variação</th>`:''}`;
 
-  const pairs=Object.keys(S.familias).map(function(__k){return [__k,(S.familias)[__k]];}).map(([k,v])=>({n:k,vB:v[mB]||0,vA:mA!=null?v[mA]||0:null}))
+  const pairs=Object.entries(S.familias).map(([k,v])=>({n:k,vB:v[mB]||0,vA:mA!=null?v[mA]||0:null}))
     .filter(r=>r.vB>0||(r.vA&&r.vA>0)).sort((a,b)=>b.vB-a.vB);
   const tbody=document.getElementById('compBody');tbody.innerHTML='';
   pairs.forEach((r,i)=>{
     const pct=mA!=null&&r.vA?((r.vB-r.vA)/r.vA*100):null;
     // pct>=0 = aumento de gasto = vermelho; pct<0 = redução = verde
-    const varEl=pct!=null?'<span class="kpi-badge '+(pct>=0?'bg-up':'bg-dn')+'" title="'+(pct>=0?'Aumento':'Redução')+' de gastos">'+(pct>=0?'▲':'▼')+' '+(Math.abs(pct).toFixed(1))+'%</span>':'—';
+    const varEl=pct!=null?`<span class="kpi-badge ${pct>=0?'bg-up':'bg-dn'}" title="${pct>=0?'Aumento':'Redução'} de gastos">${pct>=0?'▲':'▼'} ${Math.abs(pct).toFixed(1)}%</span>`:'—';
     const tr=document.createElement('tr');
-    tr.innerHTML='<td class="rank">'+(i+1)+'</td><td>'+(r.n)+'</td><td><strong>'+(fmtF(r.vB))+'</strong></td>
-      ${mA!=null?'<td style="color:var(--muted)">${fmtF(r.vA)}</td><td>${varEl}</td>':''}';
+    tr.innerHTML=`<td class="rank">${i+1}</td><td>${r.n}</td><td><strong>${fmtF(r.vB)}</strong></td>
+      ${mA!=null?`<td style="color:var(--muted)">${fmtF(r.vA)}</td><td>${varEl}</td>`:''}`;
     tbody.appendChild(tr);
   });
 }
@@ -1881,7 +1881,7 @@ function populateStatusFilter(){
     const dotColor=getStatusDotColor(s);
     const label=document.createElement('label');
     label.className='status-opt';
-    label.innerHTML='<input type="checkbox" value="'+(s)+'" onchange="onStatusChange()"'+(wasChecked.has(s)?' checked':'')+'><span class="so-dot" style="background:'+(dotColor)+'"></span>'+(s)+'';
+    label.innerHTML=`<input type="checkbox" value="${s}" onchange="onStatusChange()"${wasChecked.has(s)?' checked':''}><span class="so-dot" style="background:${dotColor}"></span>${s}`;
     container.appendChild(label);
   });
   updateStatusBtn();
@@ -2028,17 +2028,17 @@ function renderAbertos(){
     const cls=diasClass(r.dias);
     const isLate=r.dias>120;
     const tr=document.createElement('tr');
-    tr.innerHTML='
-      <td><span class="dias-badge '+(cls)+'">'+(r.dias)+'d</span></td>
-      <td style="font-weight:700;color:var(--teal)">'+(r.ped)+'</td>
-      <td class="prod-nome" title="'+(r.prod)+'">'+(r.prod)+'</td>
-      <td style="font-size:.75rem">'+(r.forn.length>32?r.forn.substring(0,32)+'…':r.forn)+'</td>
-      <td style="font-size:.72rem;color:var(--muted)">'+(r.grupo)+'</td>
-      <td style="font-size:.75rem">'+(r.emissao)+'</td>
-      <td style="font-size:.75rem;color:'+(isLate?'var(--rose)':'var(--muted)')+';font-weight:'+(isLate?700:400)+'">'+(r.prevEntrega)+'</td>
-      <td style="font-weight:700">'+(fmtF(r.valor))+'</td>
-      <td style="text-align:center;color:var(--text-muted)">'+(r.qtAberto)+'</td>
-      <td style="font-size:.72rem;color:var(--muted)" title="'+(r.natureza)+'">'+(r.natureza.length>26?r.natureza.substring(0,26)+'…':r.natureza)+'</td>';
+    tr.innerHTML=`
+      <td><span class="dias-badge ${cls}">${r.dias}d</span></td>
+      <td style="font-weight:700;color:var(--teal)">${r.ped}</td>
+      <td class="prod-nome" title="${r.prod}">${r.prod}</td>
+      <td style="font-size:.75rem">${r.forn.length>32?r.forn.substring(0,32)+'…':r.forn}</td>
+      <td style="font-size:.72rem;color:var(--muted)">${r.grupo}</td>
+      <td style="font-size:.75rem">${r.emissao}</td>
+      <td style="font-size:.75rem;color:${isLate?'var(--rose)':'var(--muted)'};font-weight:${isLate?700:400}">${r.prevEntrega}</td>
+      <td style="font-weight:700">${fmtF(r.valor)}</td>
+      <td style="text-align:center;color:var(--text-muted)">${r.qtAberto}</td>
+      <td style="font-size:.72rem;color:var(--muted)" title="${r.natureza}">${r.natureza.length>26?r.natureza.substring(0,26)+'…':r.natureza}</td>`;
     body.appendChild(tr);
   });
 }
@@ -2136,19 +2136,12 @@ function loadFromFirebase(){
   });
 }
 
-// Fix: registrar handleFile via addEventListener
-(function(){
-  function init(){
-    var fi = document.getElementById('fileInput');
-    if(fi && typeof handleFile === 'function'){
-      fi.removeEventListener('change', handleFile);
-      fi.addEventListener('change', handleFile);
-    }
-  }
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
+;(function(){
+  var _fi = document.getElementById('fileInput');
+  if(_fi) {
+    _fi.addEventListener('change', function(e){
+      if(typeof handleFile === 'function') handleFile(e);
+    });
   }
 })();
 </script>
