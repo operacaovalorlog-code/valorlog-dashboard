@@ -401,7 +401,7 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
 <div class="toolbar">
   <span class="tb-label">📂 Importar:</span>
   <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">⬆ XLSX / CSV</button>
-  <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" onchange="handleFile(event)">
+  <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" onchange="window._hf(event)">
   <button class="btn btn-ghost" onclick="toggleZone()">Arraste aqui</button>
   <div class="tb-div"></div>
   <span class="tb-label">⬇ Exportar:</span>
