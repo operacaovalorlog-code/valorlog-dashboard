@@ -1775,6 +1775,7 @@ function copyField(id){const e=document.getElementById(id);e.select();document.e
 // ═══════════════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════════════
+ABERTOS_DATA = (ABERTOS_ALL||[]).slice();
 populateAbertosGrupo();
 populateFilters();
 renderAll();
@@ -2047,7 +2048,7 @@ function renderAbertos(){
 
   // Atualizar KPIs do painel
   const totalVal=data.reduce((a,r)=>a+r.valor,0);
-  const maxDias=data.length?Math.max(...data.map(r=>r.dias)):0;
+  var maxDias=0; if(data.length){data.forEach(function(r){if(r.dias>maxDias)maxDias=r.dias;});}
   const avgDias=data.length?Math.round(data.reduce((a,r)=>a+r.dias,0)/data.length):0;
   document.getElementById('abTotalVal').textContent=fmt(totalVal);
   document.getElementById('abQtd').textContent=total;
@@ -2067,17 +2068,17 @@ function renderAbertos(){
     const cls=diasClass(r.dias);
     const isLate=r.dias>120;
     const tr=document.createElement('tr');
-    tr.innerHTML=`
-      <td><span class="dias-badge ${cls}">${r.dias}d</span></td>
-      <td style="font-weight:700;color:var(--teal)">${r.ped}</td>
-      <td class="prod-nome" title="${r.prod}">${r.prod}</td>
-      <td style="font-size:.75rem">${r.forn.length>32?r.forn.substring(0,32)+'…':r.forn}</td>
-      <td style="font-size:.72rem;color:var(--muted)">${r.grupo}</td>
-      <td style="font-size:.75rem">${r.emissao}</td>
-      <td style="font-size:.75rem;color:${isLate?'var(--rose)':'var(--muted)'};font-weight:${isLate?700:400}">${r.prevEntrega}</td>
-      <td style="font-weight:700">${fmtF(r.valor)}</td>
-      <td style="text-align:center;color:var(--text-muted)">${r.qtAberto}</td>
-      <td style="font-size:.72rem;color:var(--muted)" title="${r.natureza}">${r.natureza.length>26?r.natureza.substring(0,26)+'…':r.natureza}</td>`;
+    tr.innerHTML=
+      '<td><span class="dias-badge '+cls+'">'+r.dias+'d</span></td>'+
+      '<td style="font-weight:700;color:var(--teal)">'+r.ped+'</td>'+
+      '<td class="prod-nome" title="'+r.prod+'">'+r.prod+'</td>'+
+      '<td style="font-size:.75rem">'+(r.forn.length>32?r.forn.substring(0,32)+'…':r.forn)+'</td>'+
+      '<td style="font-size:.72rem;color:var(--muted)">'+r.grupo+'</td>'+
+      '<td style="font-size:.75rem">'+r.emissao+'</td>'+
+      '<td style="font-size:.75rem;color:'+(isLate?'var(--rose)':'var(--muted)')+';font-weight:'+(isLate?700:400)+'">'+r.prevEntrega+'</td>'+
+      '<td style="font-weight:700">'+fmtF(r.valor)+'</td>'+
+      '<td style="text-align:center;color:var(--text-muted)">'+r.qtAberto+'</td>'+
+      '<td style="font-size:.72rem;color:var(--muted)" title="'+r.natureza+'">'+(r.natureza.length>26?r.natureza.substring(0,26)+'…':r.natureza)+'</td>';
     body.appendChild(tr);
   });
 }
