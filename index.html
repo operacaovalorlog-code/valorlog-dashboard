@@ -604,8 +604,8 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
     </div>
   </div>
   <div class="abertos-filters">
-    <label>Buscar produto / fornecedor:</label>
-    <input type="text" id="abSearch" name="vl-ab-search" placeholder="Buscar produto ou fornecedor" autocomplete="new-password" value="">
+    <label>Buscar produto / fornecedor:</label><input type="text" name="vl-fake-search" style="display:none;position:absolute;left:-9999px" autocomplete="on" tabindex="-1">
+    <input type="search" id="abSearch" name="vl-ab-search" placeholder="Buscar produto ou fornecedor" autocomplete="new-password" value="">
     <label style="margin-left:8px">Grupo:</label>
     <select id="abGrupo">
       <option value="">Todos</option>
@@ -2120,20 +2120,34 @@ document.addEventListener('DOMContentLoaded', function() {
     var pb = document.getElementById('publishBanner');
     if(pb) pb.style.display='flex';
   }
-    // Garantir que campos de busca iniciam vazios (anti-autocomplete browser)
-  var _abSrch = document.getElementById('abSearch');
-  if(_abSrch){ _abSrch.value = ''; _abSrch.setAttribute('autocomplete','new-password'); }
-  var _fForn = document.getElementById('fFornecedor');
-  if(_fForn && _fForn.value && _fForn.value.indexOf('http') >= 0) _fForn.value = '';
-  // Renderizar abertos com dados limpos
-  if(typeof renderAbertos === 'function') renderAbertos();
-  
-  var fi = document.getElementById('fileInput');
+    var fi = document.getElementById('fileInput');
   if(fi) fi.addEventListener('change', function(e){ handleFile(e); });
   var btnImp = document.getElementById('btn-import');
   if(btnImp) btnImp.addEventListener('click', function(){
     var f=document.getElementById('fileInput'); if(f) f.click();
   });
+});
+// Anti-autocomplete: limpar campos apos o browser preencher automaticamente
+// O browser aplica autocomplete apos DOMContentLoaded e load
+// setTimeout garante que sobrescrevemos depois do preenchimento automatico
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var fields = ['abSearch', 'fFornecedor'];
+    for(var i=0; i<fields.length; i++) {
+      var el = document.getElementById(fields[i]);
+      if(el && el.value && (
+        el.value.indexOf('http') >= 0 ||
+        el.value.indexOf('github') >= 0 ||
+        el.value.indexOf('valorlog') >= 0
+      )) {
+        el.value = '';
+      }
+    }
+    // Garantir que abSearch sempre inicia vazio
+    var ab = document.getElementById('abSearch');
+    if(ab) ab.value = '';
+    if(typeof renderAbertos === 'function') renderAbertos();
+  }, 500);
 });
 </script>
 </body>
