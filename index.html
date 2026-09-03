@@ -367,7 +367,7 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
       <div class="s-ico">🔗</div>
       <div class="s-info"><h4>GitHub Pages (Gratuito)</h4><p>Crie um repositório, suba o HTML e ative o Pages — link público permanente.</p>
         <div class="copy-row" onclick="event.stopPropagation()">
-          <input id="ghLink" value="https://seuusuario.github.io/valorlog-dashboard/" readonly>
+          <input id="ghLink" value="https://operacaovalorlog-code.github.io/valorlog-dashboard/" readonly>
           <button class="btn btn-ghost" onclick="copyField('ghLink')">Copiar</button>
         </div>
       </div>
@@ -605,13 +605,13 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
   </div>
   <div class="abertos-filters">
     <label>Buscar produto / fornecedor:</label>
-    <input type="text" id="abSearch" placeholder="Digite para filtrar…" oninput="renderAbertos()">
+    <input type="text" id="abSearch" placeholder="Digite para filtrar…">
     <label style="margin-left:8px">Grupo:</label>
-    <select id="abGrupo" onchange="renderAbertos()">
+    <select id="abGrupo">
       <option value="">Todos</option>
     </select>
     <label style="margin-left:8px">Antiguidade:</label>
-    <select id="abAntiguidade" onchange="renderAbertos()">
+    <select id="abAntiguidade">
       <option value="">Todos</option>
       <option value="critico">Crítico (+120 dias)</option>
       <option value="alto">Alto (60-120 dias)</option>
