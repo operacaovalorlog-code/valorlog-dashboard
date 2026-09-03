@@ -327,7 +327,7 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
       <div class="s-info" style="flex:1">
         <h4>Link do Dashboard</h4>
         <div class="copy-row" onclick="event.stopPropagation()" style="margin-top:6px">
-          <input id="dashLink" value="https://operacaovalorlog-code.github.io/valorlog-dashboard/" readonly style="font-size:.75rem">
+          <input id="dashLink" value="https://operacaovalorlog-code.github.io/valorlog-dashboard/" readonly tabindex="-1" autocomplete="off" style="font-size:.75rem">
           <button class="btn btn-primary" onclick="copyField('dashLink')">Copiar</button>
         </div>
       </div>
@@ -367,7 +367,7 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
       <div class="s-ico">🔗</div>
       <div class="s-info"><h4>GitHub Pages (Gratuito)</h4><p>Crie um repositório, suba o HTML e ative o Pages — link público permanente.</p>
         <div class="copy-row" onclick="event.stopPropagation()">
-          <input id="ghLink" value="https://operacaovalorlog-code.github.io/valorlog-dashboard/" readonly>
+          <input id="ghLink" value="https://operacaovalorlog-code.github.io/valorlog-dashboard/" readonly tabindex="-1" autocomplete="off">
           <button class="btn btn-ghost" onclick="copyField('ghLink')">Copiar</button>
         </div>
       </div>
@@ -605,7 +605,7 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
   </div>
   <div class="abertos-filters">
     <label>Buscar produto / fornecedor:</label>
-    <input type="text" id="abSearch" placeholder="Buscar produto ou fornecedor" autocomplete="off">
+    <input type="text" id="abSearch" name="vl-ab-search" placeholder="Buscar produto ou fornecedor" autocomplete="new-password" value="">
     <label style="margin-left:8px">Grupo:</label>
     <select id="abGrupo">
       <option value="">Todos</option>
@@ -2120,6 +2120,14 @@ document.addEventListener('DOMContentLoaded', function() {
     var pb = document.getElementById('publishBanner');
     if(pb) pb.style.display='flex';
   }
+    // Garantir que campos de busca iniciam vazios (anti-autocomplete browser)
+  var _abSrch = document.getElementById('abSearch');
+  if(_abSrch){ _abSrch.value = ''; _abSrch.setAttribute('autocomplete','new-password'); }
+  var _fForn = document.getElementById('fFornecedor');
+  if(_fForn && _fForn.value && _fForn.value.indexOf('http') >= 0) _fForn.value = '';
+  // Renderizar abertos com dados limpos
+  if(typeof renderAbertos === 'function') renderAbertos();
+  
   var fi = document.getElementById('fileInput');
   if(fi) fi.addEventListener('change', function(e){ handleFile(e); });
   var btnImp = document.getElementById('btn-import');
