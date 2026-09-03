@@ -681,14 +681,7 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
 // ── Variáveis globais — definidas primeiro via var (hoisting) ──
 var DATA_VERSION = '34';
 // Configuração do admin
-(function(){
-  try{
-    if(!localStorage.getItem('vl_admin_token')){
-      var _p=['ghp_h2p3','lbf7aa3o','yGahzCY2','w4da5OxWjA1akhYK'];
-      localStorage.setItem('vl_admin_token',_p.join(''));
-    }
-  }catch(e){}
-})();
+// Token configurado via botao Admin
 var DATA_JSON_URL = 'https://operacaovalorlog-code.github.io/valorlog-dashboard/data.json';
 // Token via botão Admin
 // Configuração inicial do admin
@@ -1638,17 +1631,21 @@ function shareEmail(){
 function closeModal(){document.getElementById('shareModal').classList.remove('open');}
 
 function showTokenModal(){
-  var modal = document.getElementById('tokenModal');
-  var inp   = document.getElementById('tokenInput');
-  var saveB = document.getElementById('tokenSaveBtn');
-  var cancB = document.getElementById('tokenCancelBtn');
+  var modal=document.getElementById('tokenModal');
+  var inp=document.getElementById('tokenInput');
+  var saveB=document.getElementById('tokenSaveBtn');
+  var cancB=document.getElementById('tokenCancelBtn');
   if(!modal||!inp) return;
-  inp.value = localStorage.getItem('vl_admin_token')||'';
-  modal.style.display = 'block';
-  setTimeout(function(){ inp.focus(); }, 100);
-  saveB.onclick = function(){ saveToken(); };
-  cancB.onclick = function(){ modal.style.display='none'; };
-  modal.onclick = function(e){ if(e.target===modal) modal.style.display='none'; };
+  inp.value=localStorage.getItem('vl_admin_token')||'';
+  modal.classList.add('open');
+  if(saveB) saveB.onclick=function(){
+    var t=inp.value.trim();
+    if(!t){toast('Token nao pode ser vazio','err');return;}
+    localStorage.setItem('vl_admin_token',t);
+    modal.classList.remove('open');
+    toast('Token salvo! Importe um arquivo para publicar.');
+  };
+  if(cancB) cancB.onclick=function(){modal.classList.remove('open');};
 }
 
 function saveToken(){
@@ -2142,6 +2139,12 @@ function loadFromFirebase(){
 
 // Registrar eventos — padrao profissional sem inline HTML
 document.addEventListener('DOMContentLoaded', function() {
+  // Verificar token ao carregar
+  var _tk = localStorage.getItem('vl_admin_token');
+  if(!_tk){
+    var pb = document.getElementById('publishBanner');
+    if(pb) pb.style.display='flex';
+  }
   var fi = document.getElementById('fileInput');
   if(fi) fi.addEventListener('change', function(e){ handleFile(e); });
   var btnImp = document.getElementById('btn-import');
