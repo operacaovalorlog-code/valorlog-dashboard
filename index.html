@@ -400,7 +400,7 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
 <!-- TOOLBAR -->
 <div class="toolbar">
   <span class="tb-label">📂 Importar:</span>
-  <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">⬆ XLSX / CSV</button>
+  <button class="btn btn-primary" id="btn-import">⬆ XLSX / CSV</button>
   <input type="file" id="fileInput" accept=".xlsx,.xls,.csv">
   <button class="btn btn-ghost" onclick="toggleZone()">Arraste aqui</button>
   <div class="tb-div"></div>
@@ -474,7 +474,7 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
 
 <!-- IMPORT ZONE -->
 <div class="import-zone" id="importZone"
-  onclick="document.getElementById('fileInput').click()"
+  id="btn-import"
   ondragover="event.preventDefault();this.classList.add('drag-over')"
   ondragleave="this.classList.remove('drag-over')"
   ondrop="handleDrop(event)">
@@ -2170,7 +2170,17 @@ function loadFromFirebase(){
     xhr.send();
   });
 }
-;(function(){var fi=document.getElementById('fileInput');if(fi)fi.addEventListener('change',function(e){handleFile(e);});})();
+
+// Registrar eventos via addEventListener — padrao profissional
+document.addEventListener('DOMContentLoaded', function() {
+  var fi = document.getElementById('fileInput');
+  if(fi) fi.addEventListener('change', function(e){ handleFile(e); });
+  var btnImp = document.getElementById('btn-import');
+  if(btnImp) btnImp.addEventListener('click', function(){
+    var f = document.getElementById('fileInput'); if(f) f.click();
+  });
+});
+
 </script>
 </body>
 </html>
