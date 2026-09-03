@@ -597,15 +597,15 @@ canvas + * .status-opt, .chartjs-legend .status-opt{display:none;}
       Pedidos em Aberto — Mais Tempo Sem Atendimento
     </div>
     <div class="abertos-kpis">
-      <div class="ab-kpi"><div class="ak-val" id="abTotalVal">R$ 276.737</div><div class="ak-lab">Valor Total Aberto</div></div>
-      <div class="ab-kpi"><div class="ak-val" id="abQtd">77</div><div class="ak-lab">Itens em Aberto</div></div>
-      <div class="ab-kpi"><div class="ak-val" id="abMaxDias">211 dias</div><div class="ak-lab">Mais Antigo</div></div>
-      <div class="ab-kpi"><div class="ak-val" id="abMediaDias">65 dias</div><div class="ak-lab">Média Dias</div></div>
+      <div class="ab-kpi"><div class="ak-val" id="abTotalVal">R$ 39.949.99</div><div class="ak-lab">Valor Total Aberto</div></div>
+      <div class="ab-kpi"><div class="ak-val" id="abQtd">18</div><div class="ak-lab">Itens em Aberto</div></div>
+      <div class="ab-kpi"><div class="ak-val" id="abMaxDias">196 dias</div><div class="ak-lab">Mais Antigo</div></div>
+      <div class="ab-kpi"><div class="ak-val" id="abMediaDias">69 dias</div><div class="ak-lab">Média Dias</div></div>
     </div>
   </div>
   <div class="abertos-filters">
     <label>Buscar produto / fornecedor:</label>
-    <input type="text" id="abSearch" placeholder="Digite para filtrar…">
+    <input type="text" id="abSearch" placeholder="Buscar produto ou fornecedor" autocomplete="off">
     <label style="margin-left:8px">Grupo:</label>
     <select id="abGrupo">
       <option value="">Todos</option>
@@ -1915,31 +1915,7 @@ function selectAllStatus(all){
   updateStatusBtn();applyFilters();
 }
 
-var ABERTOS_ALL=[
-  {ped:120526,prod:"Ponto eletronico",forn:"MAM LABS SOFTWARE LTDA",emissao:"19/02/2026",prevEntrega:"19/02/2026",dias:193,valor:1455.0,grupo:"SERVIÇOS PRESTADOS",familia:"PRESTAÇÃO DE SERVIÇOS",natureza:"SOFTWARES E LICENÇAS - ADMINISTRATIVO",qtAberto:1},
-  {ped:121256,prod:"Carimbo 302",forn:"KAMILA Y R DUTRA",emissao:"10/03/2026",prevEntrega:"10/03/2026",dias:174,valor:45.0,grupo:"ESCRITÓRIO E PAPELARIA",familia:"USO E CONSUMO",natureza:"COMPRA MATERIAL OUTROS",qtAberto:1},
-  {ped:121256,prod:"Carimbo 301",forn:"KAMILA Y R DUTRA",emissao:"10/03/2026",prevEntrega:"10/03/2026",dias:174,valor:45.0,grupo:"ESCRITÓRIO E PAPELARIA",familia:"USO E CONSUMO",natureza:"COMPRA MATERIAL OUTROS",qtAberto:1},
-  {ped:122206,prod:"MAO DE OBRA DE INSTALAÇÃO",forn:"H F COMERCIO DE MAQUINAS E EQUIPAMENTOS LTDA",emissao:"23/03/2026",prevEntrega:"23/03/2026",dias:161,valor:5200.0,grupo:"MATERIAL DE CONSTRUÇÃO\\REFORMA",familia:"MATERIAIS PARA REFORMA",natureza:"OUTROS",qtAberto:1},
-  {ped:122206,prod:"TRANSPORTE MUNCK",forn:"H F COMERCIO DE MAQUINAS E EQUIPAMENTOS LTDA",emissao:"23/03/2026",prevEntrega:"23/03/2026",dias:161,valor:1100.0,grupo:"MATERIAL DE CONSTRUÇÃO\\REFORMA",familia:"MATERIAIS PARA REFORMA",natureza:"OUTROS",qtAberto:1},
-  {ped:128543,prod:"mesa Delta Com 2 gavetas, medindo 160x160x60x75 Confeccionada em MDP d",forn:"MOVENORTE COMERCIO E REPRESENTACOES LTDA",emissao:"09/07/2026",prevEntrega:"09/07/2026",dias:53,valor:1329.0,grupo:"ESCRITÓRIO E PAPELARIA",familia:"MATERIAIS DE EXPEDIENTE",natureza:"MATERIAL DE ESCRITÓRIO",qtAberto:1},
-  {ped:129156,prod:"CONSULTORIA",forn:"SB SERVICOS DE CONSULTORIA E TREINAMENTO LTDA",emissao:"13/07/2026",prevEntrega:"13/07/2026",dias:49,valor:7500.0,grupo:"SERVIÇOS PRESTADOS",familia:"PRESTAÇÃO DE SERVIÇOS",natureza:"SERVIÇOS DE AUDITORIA",qtAberto:3},
-  {ped:129188,prod:"LICENCIAMENTO OU CESSAO DE DIREITO USO DE PROGRAMA DE COMPUTACAO",forn:"ALTERDATA TECNOLOGIA EM INFORMATICA LTDA",emissao:"13/07/2026",prevEntrega:"13/07/2026",dias:49,valor:77.89,grupo:"SERVIÇOS CONTRATADOS",familia:"PRESTAÇÃO DE SERVIÇOS",natureza:"SOFTWARES E LICENÇAS - ADMINISTRATIVO",qtAberto:1},
-  {ped:130285,prod:"Locação de prancha de 20 pés",forn:"ADLOG TRANSPORTE E LOGISTICA LTDA",emissao:"03/08/2026",prevEntrega:"03/08/2026",dias:28,valor:900.0,grupo:"VEÍCULOS",familia:"PRESTAÇÃO DE SERVIÇOS",natureza:"ALUGUEL DE MAQS E EQUIPAMENTOS",qtAberto:1},
-  {ped:130662,prod:"PEDÁGIO",forn:"SUPER TERMINAIS COMERCIO E INDUSTRIA LTDA",emissao:"06/08/2026",prevEntrega:"06/08/2026",dias:25,valor:4721.38,grupo:"SERVIÇOS CONTRATADOS",familia:"PRESTAÇÃO DE SERVIÇOS",natureza:"ESTACIONAMENTO E PEDÁGIO",qtAberto:1},
-  {ped:130104,prod:"MANUTENÇÃO TECNICA",forn:"M.A CONSTRUCOES E ELETRICA LTDA",emissao:"06/08/2026",prevEntrega:"06/08/2026",dias:25,valor:10625.0,grupo:"MATERIAL DE CONSTRUÇÃO\\REFORMA",familia:"MATERIAIS PARA REFORMA",natureza:"DESPESAS COM MANUTENÇÃO PREDIAL",qtAberto:1},
-  {ped:130766,prod:"COMPRA DE MATERIAL DE USO E CONSUMO - OPERACIONAL",forn:"R P V DA AMAZONIA LTDA",emissao:"07/08/2026",prevEntrega:"07/08/2026",dias:24,valor:102.0,grupo:"IDENTIFICAÇÃO",familia:"USO E CONSUMO",natureza:"COMPRA DE MATERIAL DE USO E CONSUMO - OPERACIONAL",qtAberto:300},
-  {ped:130592,prod:"Rastreador",forn:"RAIO INSTALACAO DE ACESSORIOS LTDA",emissao:"10/08/2026",prevEntrega:"10/08/2026",dias:21,valor:719.1,grupo:"MÁQUINAS E EQUIPAMENTOS",familia:"PRESTAÇÃO DE SERVIÇOS",natureza:"ALUGUEL DE MAQS E EQUIPAMENTOS",qtAberto:1},
-  {ped:130751,prod:"serviços de segurança e saúde do trabalhador",forn:"GSO SAUDE OCUPACIONAL LTDA",emissao:"12/08/2026",prevEntrega:"12/08/2026",dias:19,valor:170.0,grupo:"SERVIÇOS CONTRATADOS",familia:"PRESTAÇÃO DE SERVIÇOS",natureza:"EXAMES MÉDICOS - OPERACIONAL",qtAberto:1},
-  {ped:131146,prod:"serviços de certificação",forn:"B&D HORIZON CERTIFICADORA LTDA",emissao:"14/08/2026",prevEntrega:"14/08/2026",dias:17,valor:2700.0,grupo:"SERVIÇOS CONTRATADOS",familia:"PRESTAÇÃO DE SERVIÇOS",natureza:"SERVIÇOS DE AUDITORIA",qtAberto:1},
-  {ped:131361,prod:"Serviços de engenharia",forn:"R C TEC. CONSULTORIA EM PROJETOS E TREINAMENTOS LT",emissao:"21/08/2026",prevEntrega:"21/08/2026",dias:10,valor:3200.0,grupo:"SERVIÇOS CONTRATADOS",familia:"PRESTAÇÃO DE SERVIÇOS",natureza:"DESPESAS COM MANUTENÇÃO PREDIAL",qtAberto:1},
-  {ped:131404,prod:"Diesel S10",forn:"AMAZON COMBUSTIVEIS PARA VEICULOS E CONSTRUCOES LT",emissao:"21/08/2026",prevEntrega:"21/08/2026",dias:10,valor:1000.0,grupo:"VEÍCULOS",familia:"USO E CONSUMO",natureza:"COMBUSTIVEIS E LUBRIFICANTES (OPERACIONAL)",qtAberto:1},
-  {ped:131649,prod:"Firewall",forn:"BLUEPEX TECNOLOGIA S.A.",emissao:"24/08/2026",prevEntrega:"24/08/2026",dias:7,valor:1117.21,grupo:"LOCAÇÃO DE EQUIPAMENTOS",familia:"ATIVO IMOBILIZADO",natureza:"SOFTWARES E LICENÇAS - OPERACIONAL",qtAberto:1},
-  {ped:131731,prod:"PEDÁGIO",forn:"SUPER TERMINAIS COMERCIO E INDUSTRIA LTDA",emissao:"24/08/2026",prevEntrega:"24/08/2026",dias:7,valor:1229.0,grupo:"SERVIÇOS CONTRATADOS",familia:"PRESTAÇÃO DE SERVIÇOS",natureza:"ESTACIONAMENTO E PEDÁGIO",qtAberto:1},
-  {ped:131733,prod:"PEDÁGIO",forn:"CHIBATAO NAVEGACAO E COMERCIO LTDA",emissao:"24/08/2026",prevEntrega:"24/08/2026",dias:7,valor:2553.0,grupo:"SERVIÇOS CONTRATADOS",familia:"PRESTAÇÃO DE SERVIÇOS",natureza:"ESTACIONAMENTO E PEDÁGIO",qtAberto:1},
-  {ped:130662,prod:"PEDÁGIO",forn:"SUPER TERMINAIS COMERCIO E INDUSTRIA LTDA",emissao:"25/08/2026",prevEntrega:"25/08/2026",dias:6,valor:1328.01,grupo:"SERVIÇOS CONTRATADOS",familia:"PRESTAÇÃO DE SERVIÇOS",natureza:"ESTACIONAMENTO E PEDÁGIO",qtAberto:1},
-  {ped:130662,prod:"PEDÁGIO",forn:"SUPER TERMINAIS COMERCIO E INDUSTRIA LTDA",emissao:"25/08/2026",prevEntrega:"25/08/2026",dias:6,valor:3393.37,grupo:"SERVIÇOS CONTRATADOS",familia:"PRESTAÇÃO DE SERVIÇOS",natureza:"ESTACIONAMENTO E PEDÁGIO",qtAberto:1},
-  {ped:131793,prod:"EMPILHADEIRA ELÉTRICA RETRÁTIL STILL",forn:"IBN MANUTENÇÃO E LOCAÇÃO DE EMPILHADEIRAS LTDA",emissao:"26/08/2026",prevEntrega:"26/08/2026",dias:5,valor:9600.0,grupo:"LOCAÇÃO DE EQUIPAMENTOS",familia:"PRESTAÇÃO DE SERVIÇOS",natureza:"ALUGUEL DE MAQS E EQUIPAMENTOS",qtAberto:1}
-];
+var ABERTOS_ALL=[{"ped":120526,"prod":"Ponto eletronico","forn":"MAM LABS SOFTWARE LTDA","emissao":"19/02/2026","prevEntrega":"19/02/2026","dias":196,"valor":1455,"grupo":"SERVIÇOS PRESTADOS","familia":"PRESTAÇÃO DE SERVIÇOS","natureza":"SOFTWARES E LICENÇAS - ADMINISTRATIVO","qtAberto":1},{"ped":121256,"prod":"Carimbo 301","forn":"KAMILA Y R DUTRA","emissao":"10/03/2026","prevEntrega":"10/03/2026","dias":177,"valor":45,"grupo":"ESCRITÓRIO E PAPELARIA","familia":"USO E CONSUMO","natureza":"COMPRA MATERIAL OUTROS","qtAberto":1},{"ped":121256,"prod":"Carimbo 302","forn":"KAMILA Y R DUTRA","emissao":"10/03/2026","prevEntrega":"10/03/2026","dias":177,"valor":45,"grupo":"ESCRITÓRIO E PAPELARIA","familia":"USO E CONSUMO","natureza":"COMPRA MATERIAL OUTROS","qtAberto":1},{"ped":122206,"prod":"TRANSPORTE MUNCK","forn":"H F COMERCIO DE MAQUINAS E EQUIPAMENTOS LTDA","emissao":"23/03/2026","prevEntrega":"23/03/2026","dias":164,"valor":1100,"grupo":"MATERIAL DE CONSTRUÇÃO\\REFORMA","familia":"MATERIAIS PARA REFORMA","natureza":"OUTROS","qtAberto":1},{"ped":122206,"prod":"MAO DE OBRA DE INSTALAÇÃO","forn":"H F COMERCIO DE MAQUINAS E EQUIPAMENTOS LTDA","emissao":"23/03/2026","prevEntrega":"23/03/2026","dias":164,"valor":5200,"grupo":"MATERIAL DE CONSTRUÇÃO\\REFORMA","familia":"MATERIAIS PARA REFORMA","natureza":"OUTROS","qtAberto":1},{"ped":128543,"prod":"mesa Delta Com 2 gavetas, medindo 160x160x60x75 Confeccionada em MDP de 18mm de ","forn":"MOVENORTE COMERCIO E REPRESENTACOES LTDA","emissao":"09/07/2026","prevEntrega":"09/07/2026","dias":56,"valor":1329,"grupo":"ESCRITÓRIO E PAPELARIA","familia":"MATERIAIS DE EXPEDIENTE","natureza":"MATERIAL DE ESCRITÓRIO","qtAberto":1},{"ped":129156,"prod":"CONSULTORIA","forn":"SB SERVICOS DE CONSULTORIA E TREINAMENTO LTDA","emissao":"13/07/2026","prevEntrega":"13/07/2026","dias":52,"valor":7500,"grupo":"SERVIÇOS PRESTADOS","familia":"PRESTAÇÃO DE SERVIÇOS","natureza":"SERVIÇOS DE AUDITORIA","qtAberto":3},{"ped":129188,"prod":"LICENCIAMENTO OU CESSAO DE DIREITO USO DE PROGRAMA DE COMPUTACAO","forn":"ALTERDATA TECNOLOGIA EM INFORMATICA LTDA","emissao":"13/07/2026","prevEntrega":"13/07/2026","dias":52,"valor":77.89,"grupo":"SERVIÇOS CONTRATADOS","familia":"PRESTAÇÃO DE SERVIÇOS","natureza":"SOFTWARES E LICENÇAS - ADMINISTRATIVO","qtAberto":1},{"ped":130285,"prod":"Locação de prancha de 20 pés","forn":"ADLOG TRANSPORTE E LOGISTICA LTDA","emissao":"03/08/2026","prevEntrega":"03/08/2026","dias":31,"valor":900,"grupo":"VEÍCULOS","familia":"PRESTAÇÃO DE SERVIÇOS","natureza":"ALUGUEL DE MAQS E EQUIPAMENTOS","qtAberto":1},{"ped":130104,"prod":"MANUTENÇÃO TECNICA","forn":"M.A CONSTRUCOES E ELETRICA LTDA","emissao":"06/08/2026","prevEntrega":"06/08/2026","dias":28,"valor":10625,"grupo":"MATERIAL DE CONSTRUÇÃO\\REFORMA","familia":"MATERIAIS PARA REFORMA","natureza":"DESPESAS COM MANUTENÇÃO PREDIAL","qtAberto":1},{"ped":130766,"prod":"COMPRA DE MATERIAL DE USO E CONSUMO - OPERACIONAL","forn":"R P V DA AMAZONIA LTDA","emissao":"07/08/2026","prevEntrega":"07/08/2026","dias":27,"valor":102,"grupo":"IDENTIFICAÇÃO","familia":"USO E CONSUMO","natureza":"COMPRA DE MATERIAL DE USO E CONSUMO - OPERACIONAL","qtAberto":300},{"ped":130592,"prod":"Rastreador","forn":"RAIO INSTALACAO DE ACESSORIOS LTDA","emissao":"10/08/2026","prevEntrega":"10/08/2026","dias":24,"valor":719.1,"grupo":"MÁQUINAS E EQUIPAMENTOS","familia":"PRESTAÇÃO DE SERVIÇOS","natureza":"ALUGUEL DE MAQS E EQUIPAMENTOS","qtAberto":1},{"ped":130751,"prod":"serviços de segurança e saúde do trabalhador","forn":"GSO SAUDE OCUPACIONAL LTDA","emissao":"12/08/2026","prevEntrega":"12/08/2026","dias":22,"valor":170,"grupo":"SERVIÇOS CONTRATADOS","familia":"PRESTAÇÃO DE SERVIÇOS","natureza":"EXAMES MÉDICOS - OPERACIONAL","qtAberto":1},{"ped":131146,"prod":"serviços de certificação","forn":"B&D HORIZON CERTIFICADORA LTDA","emissao":"14/08/2026","prevEntrega":"14/08/2026","dias":20,"valor":2700,"grupo":"SERVIÇOS CONTRATADOS","familia":"PRESTAÇÃO DE SERVIÇOS","natureza":"SERVIÇOS DE AUDITORIA","qtAberto":1},{"ped":131404,"prod":"Diesel S10","forn":"AMAZON COMBUSTIVEIS PARA VEICULOS E CONSTRUCOES LT","emissao":"21/08/2026","prevEntrega":"21/08/2026","dias":13,"valor":1000,"grupo":"VEÍCULOS","familia":"USO E CONSUMO","natureza":"COMBUSTIVEIS E LUBRIFICANTES (OPERACIONAL)","qtAberto":1},{"ped":131361,"prod":"Serviços de engenharia","forn":"R C TEC. CONSULTORIA EM PROJETOS E TREINAMENTOS LT","emissao":"21/08/2026","prevEntrega":"21/08/2026","dias":13,"valor":3200,"grupo":"SERVIÇOS CONTRATADOS","familia":"PRESTAÇÃO DE SERVIÇOS","natureza":"DESPESAS COM MANUTENÇÃO PREDIAL","qtAberto":1},{"ped":131731,"prod":"PEDÁGIO","forn":"SUPER TERMINAIS COMERCIO E INDUSTRIA LTDA","emissao":"24/08/2026","prevEntrega":"24/08/2026","dias":10,"valor":1229,"grupo":"SERVIÇOS CONTRATADOS","familia":"PRESTAÇÃO DE SERVIÇOS","natureza":"ESTACIONAMENTO E PEDÁGIO","qtAberto":1},{"ped":131733,"prod":"PEDÁGIO","forn":"CHIBATAO NAVEGACAO E COMERCIO LTDA","emissao":"24/08/2026","prevEntrega":"24/08/2026","dias":10,"valor":2553,"grupo":"SERVIÇOS CONTRATADOS","familia":"PRESTAÇÃO DE SERVIÇOS","natureza":"ESTACIONAMENTO E PEDÁGIO","qtAberto":1}];
 
 // Abertos: começa com dados padrão, substituído ao importar
 ABERTOS_DATA=(ABERTOS_ALL||[]).slice(); // inicializar com dados padrão
@@ -1967,81 +1943,80 @@ function sortAbertos(col){
 }
 
 function renderAbertos(){
-  const search=(document.getElementById('abSearch')||{}).value||'';
-  const grupo=(document.getElementById('abGrupo')||{}).value||'';
-  const antig=(document.getElementById('abAntiguidade')||{}).value||'';
-  const fGrupo=document.getElementById('fGrupo').value;
-  const fFamilia=document.getElementById('fFamilia').value;
-  const fForn=document.getElementById('fFornecedor').value;
-  const fStatus=Array.prototype.slice.call(document.querySelectorAll('#statusCheckboxes input:checked')).map(el=>el.value);
+  var painel=document.getElementById('abertosPanel');
+  var body=document.getElementById('abertosBody');
+  var empty=document.getElementById('abEmpty');
+  if(!painel||!body) return;
+  painel.style.display='block';
+
+  var search=(document.getElementById('abSearch')||{}).value||'';
+  var grupo=(document.getElementById('abGrupo')||{}).value||'';
+  var antig=(document.getElementById('abAntiguidade')||{}).value||'';
+  var fGrupo=(document.getElementById('fGrupo')||{}).value||'';
+  var fFamilia=(document.getElementById('fFamilia')||{}).value||'';
 
   var data=(ABERTOS_DATA||[]).slice();
-
-  // Se filtro de status for diferente de Aberto, esconde o painel
-  if(fStatus.length>0&&!fStatus.includes('Aberto')){
-    document.getElementById('abertosPanel').style.display='none';return;
+  if(fGrupo)   data=data.filter(function(r){return r.grupo===fGrupo;});
+  if(fFamilia) data=data.filter(function(r){return r.familia===fFamilia;});
+  if(search){
+    var q=search.toLowerCase();
+    data=data.filter(function(r){
+      return (r.prod||'').toLowerCase().indexOf(q)>=0||
+             (r.forn||'').toLowerCase().indexOf(q)>=0||
+             String(r.ped||'').indexOf(q)>=0;
+    });
   }
-  document.getElementById('abertosPanel').style.display='block';
-
-  // Aplicar filtros globais do dashboard
-  if(fGrupo) data=data.filter(r=>r.grupo===fGrupo);
-  if(fFamilia) data=data.filter(r=>r.familia===fFamilia);
-  if(fForn) data=data.filter(r=>r.forn.toUpperCase().includes(fForn.substring(0,15).toUpperCase()));
-
-  // Filtros locais do painel
-  if(search){const q=search.toLowerCase();data=data.filter(r=>r.prod.toLowerCase().includes(q)||r.forn.toLowerCase().includes(q)||String(r.ped).includes(q));}
-  if(grupo) data=data.filter(r=>r.grupo===grupo);
+  if(grupo) data=data.filter(function(r){return r.grupo===grupo;});
   if(antig){
-    const map={critico:d=>d>120,alto:d=>d>60&&d<=120,medio:d=>d>30&&d<=60,normal:d=>d<=30};
-    if(map[antig])data=data.filter(r=>map[antig](r.dias));
+    if(antig==='critico') data=data.filter(function(r){return r.dias>120;});
+    else if(antig==='alto') data=data.filter(function(r){return r.dias>60&&r.dias<=120;});
+    else if(antig==='medio') data=data.filter(function(r){return r.dias>30&&r.dias<=60;});
+    else if(antig==='normal') data=data.filter(function(r){return r.dias<=30;});
   }
 
-  // Ordenação
-  data.sort((a,b)=>{
-    const vals={dias:[a.dias,b.dias],valor:[a.valor,b.valor],pedido:[a.ped,b.ped],fornecedor:[a.forn,b.forn],emissao:[a.emissao,b.emissao]};
-    const [va,vb]=vals[abSortCol]||[a.dias,b.dias];
-    if(typeof va==='string')return abSortDir==='desc'?vb.localeCompare(va):va.localeCompare(vb);
-    return abSortDir==='desc'?vb-va:va-vb;
-  });
+  data.sort(function(a,b){ return b.dias-a.dias; });
 
-  const total=data.length;
-  const show=data.slice(0,15);
+  var total=data.length;
+  var show=data.slice(0,20);
+  var totalVal=0,maxDias=0,sumDias=0;
+  for(var k=0;k<data.length;k++){
+    totalVal+=data[k].valor||0;
+    if((data[k].dias||0)>maxDias) maxDias=data[k].dias;
+    sumDias+=data[k].dias||0;
+  }
+  var avgDias=data.length?Math.round(sumDias/data.length):0;
 
-  // Atualizar KPIs do painel
-  const totalVal=data.reduce((a,r)=>a+r.valor,0);
-  const maxDias=data.length?Math.max(...data.map(r=>r.dias)):0;
-  const avgDias=data.length?Math.round(data.reduce((a,r)=>a+r.dias,0)/data.length):0;
-  document.getElementById('abTotalVal').textContent=fmt(totalVal);
-  document.getElementById('abQtd').textContent=total;
-  document.getElementById('abMaxDias').textContent=maxDias+' dias';
-  document.getElementById('abMediaDias').textContent=avgDias+' dias';
-  document.getElementById('abShowCount').textContent=Math.min(15,total);
-  document.getElementById('abTotalCount').textContent=total;
+  var e1=document.getElementById('abTotalVal'); if(e1) e1.textContent='R$ '+(totalVal).toLocaleString('pt-BR',{minimumFractionDigits:2});
+  var e2=document.getElementById('abQtd');      if(e2) e2.textContent=total;
+  var e3=document.getElementById('abMaxDias');  if(e3) e3.textContent=maxDias+' dias';
+  var e4=document.getElementById('abMediaDias');if(e4) e4.textContent=avgDias+' dias';
+  var e5=document.getElementById('abShowCount');if(e5) e5.textContent=Math.min(20,total);
+  var e6=document.getElementById('abTotalCount');if(e6) e6.textContent=total;
 
-  const body=document.getElementById('abertosBody');
-  const empty=document.getElementById('abEmpty');
   body.innerHTML='';
+  if(!show.length){ if(empty) empty.style.display='block'; return; }
+  if(empty) empty.style.display='none';
 
-  if(!show.length){empty.style.display='block';return;}
-  empty.style.display='none';
-
-  show.forEach(r=>{
-    const cls=diasClass(r.dias);
-    const isLate=r.dias>120;
-    const tr=document.createElement('tr');
-    tr.innerHTML=`
-      <td><span class="dias-badge ${cls}">${r.dias}d</span></td>
-      <td style="font-weight:700;color:var(--teal)">${r.ped}</td>
-      <td class="prod-nome" title="${r.prod}">${r.prod}</td>
-      <td style="font-size:.75rem">${r.forn.length>32?r.forn.substring(0,32)+'…':r.forn}</td>
-      <td style="font-size:.72rem;color:var(--muted)">${r.grupo}</td>
-      <td style="font-size:.75rem">${r.emissao}</td>
-      <td style="font-size:.75rem;color:${isLate?'var(--rose)':'var(--muted)'};font-weight:${isLate?700:400}">${r.prevEntrega}</td>
-      <td style="font-weight:700">${fmtF(r.valor)}</td>
-      <td style="text-align:center;color:var(--text-muted)">${r.qtAberto}</td>
-      <td style="font-size:.72rem;color:var(--muted)" title="${r.natureza}">${r.natureza.length>26?r.natureza.substring(0,26)+'…':r.natureza}</td>`;
+  for(var j=0;j<show.length;j++){
+    var r=show[j];
+    var cls=r.dias>120?'dias-critico':r.dias>60?'dias-alto':r.dias>30?'dias-medio':'dias-normal';
+    var late=r.dias>120;
+    var forn=(r.forn||'').length>35?(r.forn||'').substring(0,35)+'...':r.forn||'';
+    var nat=(r.natureza||'').length>30?(r.natureza||'').substring(0,30)+'...':r.natureza||'';
+    var tr=document.createElement('tr');
+    tr.innerHTML=
+      '<td><span class="dias-badge '+cls+'">'+r.dias+'d</span></td>'+
+      '<td style="font-weight:700">'+r.ped+'</td>'+
+      '<td title="'+(r.prod||'')+'">'+r.prod+'</td>'+
+      '<td>'+forn+'</td>'+
+      '<td style="font-size:.72rem">'+r.grupo+'</td>'+
+      '<td>'+r.emissao+'</td>'+
+      '<td style="color:'+(late?'var(--rose)':'var(--muted)')+'">'+r.prevEntrega+'</td>'+
+      '<td style="font-weight:700">R$ '+(r.valor||0).toLocaleString('pt-BR',{minimumFractionDigits:2})+'</td>'+
+      '<td>'+r.qtAberto+'</td>'+
+      '<td title="'+(r.natureza||'')+'">'+nat+'</td>';
     body.appendChild(tr);
-  });
+  }
 }
 
 // ── Carregar dados salvos do localStorage ──
